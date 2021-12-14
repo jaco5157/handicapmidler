@@ -1,0 +1,21 @@
+name: Deploy to FTP
+on:
+  # Triggers workflow when pushing to main
+  push:
+    branches: [ main ]
+
+jobs:
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest code
+        uses: actions/checkout@v2
+        
+      # TODO: Lint CSS and js
+      
+      # TODO: Minify css and js before deploy
+
+      - name: Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.2.0
+        # TODO: Exclude non-minified versions
