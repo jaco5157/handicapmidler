@@ -1,5 +1,5 @@
 # handicapmidler
-GitHub repository for Handicapmidler.dk for handling .js and .css.
+GitHub repository for Handicapmidler.dk for handling JS and CSS.
 
 When files are pushed to release, they are automatically minfied and deployed.
 
