@@ -12,7 +12,7 @@ jobs:
     steps:
       # Checks-out your repository
       - name: Get codebase
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
 
