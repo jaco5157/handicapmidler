@@ -25,9 +25,6 @@ jobs:
         with:
           commit_message: "refactor: Minify source code"
           branch: ${{ github.ref }}
-          
-      - name: Get latest code
-        uses: actions/checkout@v2
     
       - name: Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.2.0
