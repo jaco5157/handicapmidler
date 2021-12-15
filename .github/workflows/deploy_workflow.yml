@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:    
-  minify-code:
+  deploy-code:
     name: Deploy assets
     runs-on: ubuntu-latest
     steps:
