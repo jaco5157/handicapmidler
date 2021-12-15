@@ -7,7 +7,7 @@ on:
 
 jobs:    
   minify-code:
-    name: Minify JS and CSS
+    name: Deploy assets
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository
@@ -25,19 +25,15 @@ jobs:
         with:
           commit_message: "refactor: Minify source code"
           branch: ${{ github.ref }}
-
-  web-deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    steps:
-    - name: Get latest code
-      uses: actions/checkout@v2
+          
+      - name: Get latest code
+        uses: actions/checkout@v2
     
-    - name: Sync files
-      uses: SamKirkland/FTP-Deploy-Action@4.2.0
-      with:
-        server: ${{ secrets.ftp_server }}
-        username: ${{ secrets.ftp_username }}
-        password: ${{ secrets.ftp_password }}
-        local-dir: ./deploy/
-        server-dir: assets/
+      - name: Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.2.0
+        with:
+          server: ${{ secrets.ftp_server }}
+          username: ${{ secrets.ftp_username }}
+          password: ${{ secrets.ftp_password }}
+          local-dir: ./deploy/
+          server-dir: assets/
