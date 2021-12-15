@@ -7,7 +7,7 @@ on:
 
 jobs:    
   minify-code:
-    name: Minify
+    name: Minify JS and CSS
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository
@@ -16,11 +16,15 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Minify Action
-        uses: anthonyftwang/minify-action@v1.0.1
+      - name: Minify files
+        uses: nizarmah/auto-minify@v2.1
+        with:
+          output: 'mini'
 
       # Auto-commit to repository
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - name: Commit files
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Minify source code
+          repository: 'mini'
+          commit_message: "refactor: Minify source code"
           branch: ${{ github.ref }}
