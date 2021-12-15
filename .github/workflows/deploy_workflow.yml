@@ -18,13 +18,10 @@ jobs:
 
       - name: Minify files
         uses: nizarmah/auto-minify@v2.1
-        with:
-          output: 'mini'
 
       # Auto-commit to repository
       - name: Commit files
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          repository: 'mini'
           commit_message: "refactor: Minify source code"
           branch: ${{ github.ref }}
