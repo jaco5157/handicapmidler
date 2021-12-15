@@ -11,13 +11,14 @@ jobs:
     name: Lint 
     runs-on: ubuntu-latest
     steps:
-    - name: Get codebase
-      uses: actions/checkout@v2
-    - name: Setup node
-      uses: actions/setup-node@v2
+    - uses: actions/checkout@v1
+    - name: install node v12
+      uses: actions/setup-node@v1
       with:
-        node-version: 16
-    - name: Install modules
-      run: yarn
-    - name: Run ESLint
-      run: eslint . --ext .js
+        node-version: 12
+    - name: yarn install
+      run: yarn install
+    - name: eslint
+      uses: icrawl/action-eslint@v1
+      with:
+        custom-glob: js
