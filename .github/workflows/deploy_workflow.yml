@@ -17,7 +17,7 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Minify files
-        uses: nizarmah/auto-minify@v2.1
+        uses: docker://devatherock/minify-js:1.0.3
 
       # Auto-commit to repository
       - name: Commit files
