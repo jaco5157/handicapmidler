@@ -10,7 +10,17 @@ jobs:
     name: Minify
     runs-on: ubuntu-latest
     steps:
+      # Checks-out your repository
       - name: Get codebase
-        uses: actions/checkout@v2
-      - name: HTML/CSS/JS Minifier
-        uses: docker://devatherock/minify-js:1.0.3
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Minify Action
+        uses: anthonyftwang/minify-action@v1.0.1
+
+      # Auto-commit to repository
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Minify source code
+          branch: ${{ github.ref }}
