@@ -5,6 +5,3 @@ obj
 components
 .DS_Store
 **/.vs/**/*
-
-# Ignore minified files
-mini/
