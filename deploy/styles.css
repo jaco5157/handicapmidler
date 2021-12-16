@@ -57,7 +57,7 @@ div.CookiePolicyText{display:flex;padding:0 10px;flex-direction:column;text-alig
 
 /* =================== HEADER =================== */
 header {width:100%;background: url("/images/skins/Nordic Spring/images/bg_html.png") no-repeat top center;background-color: #fff;background-size: 100% 5px;}
-header .contactBar {display: none;}
+.contactBar {display: none;}
 #logo {width:280px;}
 #logo .logo_img {float:right}
 span.logo {text-decoration:none;font-size:27px;display:inline-block;margin:20px 0 0 0}
@@ -390,9 +390,10 @@ div.CookiePolicyCenterText {margin: 10px auto 20px;padding: 0;box-shadow: none;}
 .cookie-policy-consents-area label div > span {width: 25px;height: 25px;}
 
 header {border-bottom: 1px solid #d0d0d0;}
-header .contactBar {display:block; border-bottom: 1px solid #d0d0d0;padding-top: 5px;}
-header .contactBar .ean {border-right: 1px solid #d0d0d0;padding-right: 20px;margin-right: 10px;}
-header .contactBar a {text-decoration: none;}
+.contactBar {display:block; border-bottom: 1px solid #d0d0d0;padding-top: 5px;}
+.contactBar .message {display: none;}
+.contactBar .ean {border-right: 1px solid #d0d0d0;padding-right: 20px;margin-right: 10px;}
+.contactBar a {text-decoration: none;}
 #logo {padding:10px 0 10px 25px} 
 span.logo {margin: 0; font-size: 32px; line-height: 36px;}
 #logo .logo_img {float: left; padding-left: 150px;}
@@ -469,6 +470,7 @@ footer ul a {padding: 2px 0;}
 }
 
 @media screen and (min-width: 1180px) {
+header .message {display: block;}
 #Product_Rating_Container {display: block;}
 .Product_Rating_Symbols_Container div {background-color:transparent;background-image:url("/images/logo/stars24.png");width:14px;height:28px;float:left}
 .Product_Rating_Symbols_Idle_Left {background-position:0px 0px;}
