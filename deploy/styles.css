@@ -470,7 +470,7 @@ footer ul a {padding: 2px 0;}
 }
 
 @media screen and (min-width: 1180px) {
-header .message {display: block;}
+.contactBar .message {display: block;}
 #Product_Rating_Container {display: block;}
 .Product_Rating_Symbols_Container div {background-color:transparent;background-image:url("/images/logo/stars24.png");width:14px;height:28px;float:left}
 .Product_Rating_Symbols_Idle_Left {background-position:0px 0px;}
