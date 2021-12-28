@@ -132,7 +132,7 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .prodInfo .VariantGroupLabel {font-size: 20px; font-weight: normal;margin-bottom: 4px;display: block;}
 .VariantGroup, .Variants select {width: 100%;}
 .warning {color: #721c24;background-color: #f8d7da;border: 1px solid #f5c6cb;margin: 10px 0 5px;}
-.moreInfoButton a {color: #4583ed;text-decoration: underline;}
+.moreInfoButton a {color: #4583ed}
 .Related_Custom_DIV{border:1px solid #d0d0d0;border-radius:5px;background-color:#fff}
 .Related_Custom_DIV div:not(:last-child) > .addon{border-bottom:1px solid #d0d0d0}
 .addon label{padding:5px;display:block;cursor:pointer}
