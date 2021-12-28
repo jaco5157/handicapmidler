@@ -64,7 +64,7 @@ if(document.querySelector(".webshop-productinfo")){
 
   var amount = document.getElementById("amount");
 
-  if(!amount.disabled && document.getElementById("moreInfo").innerHTML.trim()) document.getElementById("moreInfoButton").style.display = "block"; 
+  if(!amount.disabled && document.getElementById("moreInfo").innerHTML.trim()) document.querySelector(".moreInfoButton").style.display = "block"; 
 
   //Change look of amount selector
   var minus = document.createElement('button');
