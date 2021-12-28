@@ -58,9 +58,9 @@ $(window).resize(function() {
 });
 
 //Scripts to be run on product page
-if(document.querySelector(".webshop-productinfo") !== null){
+if(document.querySelector(".webshop-productinfo")){
   
-  if(document.querySelector(".selectors") !== null) document.querySelector(".selectors").firstElementChild.className += " active";
+  if(document.querySelector(".selectors")) document.querySelector(".selectors").firstElementChild.className += " active";
 
   var amount = document.getElementById("amount");
 
@@ -167,7 +167,7 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " active";
 }
 
-if(document.querySelector(".webshop-productlist") !== null){
+if(document.querySelector(".webshop-productlist")){
   document.getElementsByClassName("BuyButton_ProductList").forEach(function (item){
     if(item.type == "text") item.setAttribute("aria-label", "Indtast antal produkter til køb");
     if(item.type == "image") item.setAttribute("aria-label", "Læg i kurv");
@@ -181,10 +181,10 @@ if(document.querySelector(".webshop-productlist") !== null){
 }
 
 //Add another button to OrderStep1 and OrderStep2
-if(document.querySelector(".webshop-orderstep1") !== null){
+if(document.querySelector(".webshop-orderstep1")){
   document.querySelector(".halfColumn").insertAdjacentElement('afterend',document.querySelector(".OrderStep1_Next_TD").cloneNode(true))
 }
 
-if(document.querySelector(".webshop-orderstep2") !== null){
+if(document.querySelector(".webshop-orderstep2")){
   document.querySelector(".BackgroundColor1_OrderStep2 tbody tr").insertAdjacentElement('afterend',document.querySelector(".OrderStep2_Methods_Next_TD").parentElement.cloneNode(true));
 }
