@@ -64,6 +64,8 @@ if(document.querySelector(".webshop-productinfo")){
 
   var amount = document.getElementById("amount");
 
+  if(!amount.disabled && document.getElementById("moreInfo").innerHTML.trim()) document.getElementById("moreInfoButton").style.display = "block"; 
+
   //Change look of amount selector
   var minus = document.createElement('button');
   minus.id = "minus";
@@ -112,13 +114,13 @@ if(document.querySelector(".webshop-productinfo")){
   img.setAttribute("width", "100");
   img.setAttribute("height", "100");
   document.getElementsByClassName("documentation").forEach(function(item){
-    if(item.firstChild !== null){
+    if(item.firstChild){
       item.insertAdjacentElement("afterbegin", img.cloneNode(true))};
     }
   );
 
   //Replace links with child element for addons
-  if(document.querySelector(".Related_Custom_DIV") !== null){
+  if(document.querySelector(".Related_Custom_DIV")){
     document.querySelector(".Related_Custom_DIV").querySelectorAll("a").forEach(function (item){
       item.insertAdjacentElement('beforebegin',item.firstChild);
       item.remove();
