@@ -79,8 +79,7 @@ if(document.querySelector(".webshop-productinfo")){
 
   if(document.querySelector(".Choose_Variant")){
     document.querySelector(".Choose_Variant").addEventListener("click", function(evt){
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
+      window.location.hash = "#prodInfo";
       document.querySelector(".Variants").style.border = "1px solid #4583ed";
       document.querySelector(".Variants").style.borderRadius = "7px";
       document.querySelector(".VariantGroupLabel").style.padding = "5px";
