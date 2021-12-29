@@ -108,8 +108,8 @@ h2{font-size:1.3em;margin:10px 0 5px;font-family:Trebuchet MS,Helvetica,sans-ser
 h3{font-size:1.05em;margin:10px 0 5px;font-family:Trebuchet MS,Helvetica,sans-serif}
 h4,h5,h6{font-size:1em;margin:10px 0 5px}
 p{padding:7px 0 22px}
-a{text-decoration:underline; color:#000000;}
-a:hover, a:active{text-decoration:none; color:#4583ed;}
+a, .Choose_Variant{text-decoration:underline; color:#000000;}
+a:hover, a:active, .Choose_Variant:hover{text-decoration:none; color:#4583ed;}
 pre{width:88%;color:#a8c75e;overflow:auto;font-family:monospace;background-color:#333;margin:0 3% 25px;padding:1em 3%}
 pre a,pre a:hover{color:#99C}
 hr{border:none}
@@ -199,7 +199,7 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .prodinfoimg .image_toilet img {width: 100%;}
 .prodinfoimg .table_toilet {width: 40%;float: right;}
 .prodinfoimg .table_toilet table {border: 1px solid #d0d0d0}
-.Choose_Variant {font-weight: bold; padding: 8px;}
+.Choose_Variant {font-weight: bold; padding: 8px; cursor: pointer;}
 #guides {font-size: 22px; line-height: 40px;}
 .documentation {flex-direction: column}
 .documentation:empty {display: none;}
