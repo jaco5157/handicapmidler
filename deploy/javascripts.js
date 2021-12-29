@@ -77,6 +77,15 @@ if(document.querySelector(".webshop-productinfo")){
   plus.setAttribute("type", "button");
   amount.parentNode.append(minus, amount, plus);
 
+  if(document.querySelector(".Choose_Variant")){
+    document.querySelector(".Choose_Variant").addEventListener("click", function(evt){
+      window.location.hash = "#prodInfo";
+      document.querySelector(".Variants").style.border = "1px solid #4583ed";
+      document.querySelector(".Variants").style.borderRadius = "7px";
+      document.querySelector(".VariantGroupLabel").style.padding = "5px";
+    })
+  }
+
   var warningBox = document.getElementById("warning");
   minus.addEventListener("click", function(evt){
     if(!amount.disabled) amount.stepDown();
