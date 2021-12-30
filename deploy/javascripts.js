@@ -68,13 +68,15 @@ if(document.querySelector(".webshop-productinfo")){
   //Change look of amount selector
   var minus = document.createElement('button');
   minus.id = "minus";
-  minus.setAttribute("aria-label", "Fjern mængde");
+  minus.setAttribute("aria-label", "Dekrementer mængde");
   minus.setAttribute("type", "button");
   var plus = document.createElement('button');
   plus.id = "plus";
-  plus.setAttribute("aria-label", "Tilføj mængde");
+  plus.setAttribute("aria-label", "Inkrementer mængde");
   plus.setAttribute("type", "button");
   amount.parentNode.append(minus, amount, plus);
+
+  document.querySelector(".buyWrapper input").setAttribute("alt", "Læg i kurv");
 
   if(document.querySelector(".Choose_Variant")){
     document.querySelector(".Choose_Variant").addEventListener("click", function(evt){
@@ -116,6 +118,7 @@ if(document.querySelector(".webshop-productinfo")){
   img.setAttribute("height", "100");
   document.getElementsByClassName("documentation").forEach(function(item){
     if(item.firstChild){
+      item.firstChild.setAttribute("title", "Download dokumentation");
       item.insertAdjacentElement("afterbegin", img.cloneNode(true))};
     }
   );
