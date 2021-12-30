@@ -214,7 +214,7 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .product .image a {display: block;height: 100%;padding: 10px; box-sizing: border-box;}
 .product .Element_Overlay_ProdList_SpecialOfferDIV {height: 100%;}
 .product .image img{max-height: 100%;transition: all 200ms ease-in-out;}
-.product .image img:hover{scale: 1.05}
+.product .image img:hover{transform: scale(1.05)}
 .product .listprodinfo {height:173px;position:relative;} 
 .product .listprodinfo .prodheader {height:45px;border-bottom:1px dashed #d0d0d0;margin:0;overflow: hidden;}
 .product .listprodinfo .prodheader a {font-size:1.2em;font-family:Trebuchet MS,Helvetica,sans-serif;font-weight: bold;text-decoration: none;}
