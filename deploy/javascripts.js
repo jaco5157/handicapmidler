@@ -60,10 +60,9 @@ $(window).resize(function() {
 //Scripts to be run on product page
 if(document.querySelector(".webshop-productinfo")){
   
-  if(document.querySelector(".selectors")) document.querySelector(".selectors").firstElementChild.className += " active";
-
   var amount = document.getElementById("amount");
 
+  if(document.querySelector(".selectors")) document.querySelector(".selectors").firstElementChild.className += " active";
   if(!amount.disabled && document.getElementById("moreInfo").innerHTML.trim()) document.querySelector(".moreInfoButton").style.display = "block"; 
 
   //Change look of amount selector
@@ -97,24 +96,17 @@ if(document.querySelector(".webshop-productinfo")){
   })
 
   //Check if tabs are empty. If so, remove, click the first tab
-  var i, tabs, tabContent, tabLinks;
+  var tabs, tabContent, tabLinks;
   tabs = document.querySelector(".tab");
   tabContent = document.getElementsByClassName("tabContent");
   tabLinks = document.getElementsByClassName("tabLinks");
-  for (i = 0; i < tabLinks.length; i++) {
-    if(tabContent[i].textContent.trim() == ""){
-      tabLinks[i].remove();
-      tabLinks.splice(i,1);
-      tabContent[i].remove();
-      tabContent.splice(i,1);
-      i--;
-    }
+  for (let i = tabLinks.length - 1; i >= 0; i--) {
+    if(tabContent[i].textContent.trim()) continue
+    tabLinks[i].remove();
+    tabContent[i].remove();
   }
-  if(tabs.firstElementChild == null){
-    tabs.remove();
-  } else {
-    tabLinks[0].click();
-  }
+  if(tabs.textContent.trim()) tabLinks[0].click();
+  else tabs.remove();
 
   //Check if documentation exists. If true, add image
   var img = document.createElement('img');
