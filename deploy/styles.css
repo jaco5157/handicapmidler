@@ -8,7 +8,6 @@ body {text-align:left;color: #1D1D1D;font-family: Helvetica, sans-serif; font-si
 /* =================== GUIDECLASSES =================== */	
 .nomargin{margin:0!important}
 .nopadding{padding:0!important}
-.hidden{display:none}
 .right{float:right}
 .left{float:left}
 .center{display:block;margin:0 auto}
@@ -35,6 +34,25 @@ body {text-align:left;color: #1D1D1D;font-family: Helvetica, sans-serif; font-si
 .col-1-2,
 .col-1-3{width: 100%;}
 
+.hidden,
+.cookie-policy-consents-area input,
+#Trustpilot,
+#cart .NumberProduct_Basket,
+#cart #viewbasket,
+#ProductMenu_List #ActiveCategory_A,
+.addon .addonCheckBox,
+#ShippingMethodsContainer #GLS_ParselShops_54,
+.contactBar,
+#Product_Rating_Container,
+.addon img, 
+.amountWrapperHeadline,
+.documentation:empty,
+#ProductFilter-Container:empty,
+.pagingOrder,
+.Heading_OrderStep1_TBL br,.OrderStep2_Methods_Header_TD br,.OrderStep3_Methods_Header_TD .canBeHidden,
+#PayMethodsContainer tr td:nth-child(3) br:last-child, #PayMethodsContainer tr td:nth-child(3) br:nth-last-child(2), #ShippingMethodsContainer tr td:nth-child(3) br:last-child,
+#adminbar-placeholder {display:none}
+
 /* =================== COOKIES =================== */
 .fixed-bottom{position:fixed;bottom:0;top:auto;}
 div#CookiePolicy{height:100%;display:block;overflow:auto;background-color: #0000006e;}
@@ -42,7 +60,6 @@ div.CookiePolicyCenterText{background-color: #f2f2f2;padding: 20px 0;box-shadow:
 div.CookiePolicyText{display:flex;padding:0 10px;flex-direction:column;text-align:center}
 .cookie-policy-consents-container{order:5;display:flex;flex-wrap: wrap;background-color:#fff;border-radius:5px}
 .cookie-policy-consents-area{width:50%;}
-.cookie-policy-consents-area input{display:none}
 .cookie-policy-consents-area label{display:flex;flex-direction:column;align-items:center;padding: 10px;border: solid 1px #d0d0d0;}
 .cookie-policy-consents-area label div{border-radius:25px;width:53px;margin:7px 0 0;background-color:#d0d0d0;padding:4px;display:flex;justify-content:flex-start;cursor:pointer}
 .cookie-policy-consents-area input:checked + label div{justify-content:flex-end;background-color:#78BD3F}
@@ -57,7 +74,6 @@ div.CookiePolicyText{display:flex;padding:0 10px;flex-direction:column;text-alig
 
 /* =================== HEADER =================== */
 header {width:100%;background: url("/images/skins/Nordic Spring/images/bg_html.png") no-repeat top center;background-color: #fff;background-size: 100% 5px;}
-.contactBar {display: none;}
 #logo {width:280px;}
 #logo .logo_img {float:right}
 span.logo {text-decoration:none;font-size:27px;display:inline-block;margin:20px 0 0 0}
@@ -69,14 +85,11 @@ span.logo span {font-weight:bold;border-bottom:3px solid #ff9100}
 #search.SearchPage_TD-open .SearchField_SearchPage {border:1px solid #d0d0d0;border-radius: 0;}
 #search .nbsp {width: 48px;height: 48px;display: block;position: absolute;right: 0;top: 0;z-index: 90;border-radius: 25px;cursor: pointer;-webkit-transition: border-radius 0.3s;-moz-transition: border-radius 0.3s;transition: border-radius 0.3s;background: url("/images/logo/sprites.svg#search") no-repeat 17px 17px #f8991d;background-size: 16px;}
 #search.SearchPage_TD-open .nbsp {border-radius: 0px;}
-#Trustpilot {display:none}
 
 /* =================== LEFTCOL CART =================== */
 #leftcol{width:100%;background-color:#fff;position:relative;}
 #cart{position:absolute;right:49px;width:48px;background-color:#78BD3F;font-size:14px;border-radius: 25px;}
 #cart .Heading_Basket{padding:0 25px;height:48px;background: url("/images/logo/sprites.svg#cart") no-repeat 13px 14px;background-size: 21px;text-align: center;}
-#cart .NumberProduct_Basket{display:none}
-#cart #viewbasket{display:none}
 
 /* =================== LEFTCOL CATEGORYES =================== */
 #categoryes{-moz-box-shadow:0 10px 6px -6px #aaa;-webkit-box-shadow:0 10px 6px -6px #aaa;box-shadow:0 10px 6px -6px #aaa;}
@@ -91,7 +104,6 @@ span.logo span {font-weight:bold;border-bottom:3px solid #ff9100}
 #ProductMenu_List a{text-decoration:none;display:block;padding:12px 18px;transition: 0.3s;}
 #ProductMenu_List a:hover{text-decoration:underline}
 #ProductMenu_List .ProductMenu_MenuItemBold{font-weight:400}
-#ProductMenu_List #ActiveCategory_A{display:none}
 #ProductMenu_List .CategoryLink1_Productmenu {border-left: 1px solid #d0d0d0;margin-left: 20px;}
 #ProductMenu_List .CategoryLink2_Productmenu {border-left: 1px solid #d0d0d0;margin-left: 40px;}
 
@@ -127,7 +139,6 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .pictures .selectors img{margin: auto;max-width: 100%;max-height: 100%;display: block;}
 .prodInfo {height:100%;flex-grow: 0;background-color: #e9e9e9;border-radius: 10px;border: 1px solid #d0d0d0;}
 .prodInfo .prodInfoWrapper {width: 100%;}
-#Product_Rating_Container {display: none;}
 .prodInfo .priceLeft,
 .prodInfo .VariantGroupLabel {font-size: 20px; font-weight: normal;margin-bottom: 4px;display: block;}
 .VariantGroup, .Variants select {width: 100%;}
@@ -154,7 +165,6 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .Related_Custom_DIV{border:1px solid #d0d0d0;border-radius:5px;background-color:#fff}
 .Related_Custom_DIV div:not(:last-child) > .addon{border-bottom:1px solid #d0d0d0}
 .addon label{padding:5px;display:block;cursor:pointer}
-.addon .addonCheckBox{display:none}
 .addonCheck{display:inline-block;border:1px solid #d0d0d0;border-radius:5px;background:#e9e9e9;width:50px;height:35px;transition:background .5s ease;position:relative;vertical-align:middle}
 .addonCheck:hover{background-color:#d0d0d0}
 .addonCheck:after,.addonCheck:before{content:"";position:absolute;width:22px;height:3px;border-radius:2px;background:#595959;transition:all .15s ease,background .5s ease;top:16px;right:14px;}
@@ -162,14 +172,12 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .addon .addonCheckBox:checked ~ .addonCheck{background:#78BD3F;border:1px solid #78BD3F}
 .addon .addonCheckBox:checked ~ .addonCheck:before{right:10px;transform:rotate(135deg);background:#fff}
 .addon .addonCheckBox:checked ~ .addonCheck:after{margin:3px 13px 0 0;width:13px;right:12px;transform:rotate(45deg);background:#fff}
-.addon img{display: none;}
 .addon a{text-decoration:none;font-size:16px}
 .addon a:hover{color:#000}
 .addon .RelatedProdName{display:inline-block;width:calc(100% - 148px);height:22px;padding-left: 5px;overflow:hidden;vertical-align:middle;font-size:16px}
 .addon .addonPrice{float:right;line-height:40px}
 .prodInfo #BUYSECTION {display: flex; flex-wrap: wrap; justify-content: center;}
 .amountWrapper {border: 2px solid #d0d0d0; border-radius: 25px; margin: 5px;display: inline-flex; background-color: #fff;}
-.amountWrapperHeadline {display: none;}
 .amountWrapper input {-webkit-appearance: textfield;-moz-appearance: textfield;appearance: textfield; border: solid #d0d0d0; border-width: 0 2px; box-sizing: border-box; padding: 10px; max-width: 60px; font-size: 16px;text-align: center;}
 .amountWrapper input::-webkit-inner-spin-button, 
 .amountWrapper input::-webkit-outer-spin-button { -webkit-appearance: none;}
@@ -201,7 +209,6 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .Choose_Variant {font-weight: bold; padding: 8px; cursor: pointer;}
 #guides {font-size: 22px; line-height: 40px;}
 .documentation {flex-direction: column}
-.documentation:empty {display: none;}
 .documentation a {order: 3}
 .documentation a img {width: 200px;height: 40px;}
 
@@ -233,7 +240,6 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .productlistTable .prodTable300 {width: 100%;max-width: 300px;display: inline;}
 .productlistTable .BuyButton_ProductList{height: 38px;vertical-align: middle;}
 #ProductFilter-Container {background-color: #e9e9e9;padding: 5px;}
-#ProductFilter-Container:empty {display: none;}
 .product-filter-column-container-3 {display: inline-block;width: 100%;}
 .product-filter-column {float: left;width: 100% !important;}
 .product-filter-container {margin: 5px 0;background-color: #fff;overflow: hidden;padding: 5px;border-radius: 5px;border: 1px solid #d0d0d0;}
@@ -314,8 +320,6 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .subcat .more::after {position:absolute;bottom: 15px;right: 45px;content: "Læs mere...";color:#4583ed;font-weight:bold;text-decoration:underline;}
   
 /* =================== SEARCH AND ORDER =================== */
-.pagingOrder {display: none;}
-.Heading_OrderStep1_TBL br,.OrderStep2_Methods_Header_TD br,.OrderStep3_Methods_Header_TD .canBeHidden {display: none;}
 .Heading_OrderStep1_TBL a {text-decoration: none;}
 .Heading_OrderStep1_TBL a:hover {color:#000;}
 .halfColumn, #Orderstep1_AlternativeDelivery_Fields_TD{margin:0 0 20px; float:left;width:100%!important}
@@ -344,9 +348,7 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 #PayMethodsContainer table, #ShippingMethodsContainer table{width: 100%;}
 #PayMethodsContainer .checkout-payment-method,#ShippingMethodsContainer tr{background-color:#fff;margin:10px 0 0;width:100%;padding:10px 0;border:1px solid #d0d0d0;border-radius:5px;overflow:hidden}
 #PayMethodsContainer tr td:nth-child(2), #ShippingMethodsContainer tr td:nth-child(2),#ShippingMethodsContainer #OrderStep2_GLS_Table tr td:nth-child(1){vertical-align: middle;}
-#PayMethodsContainer tr td:nth-child(3) br:last-child, #PayMethodsContainer tr td:nth-child(3) br:nth-last-child(2), #ShippingMethodsContainer tr td:nth-child(3) br:last-child{display: none;}
 .OrderStep2_ShippingMethods_Header_TD{margin-top:20px}
-#ShippingMethodsContainer #GLS_ParselShops_54{display:none}
 #ShippingMethodsContainer #GLS_ParselShops_55{margin-top:-10px;border-top:0}
 #ShippingMethodsContainer .gls-parsel-shops--container{padding:0 30px}
 #ShippingMethodsContainer #OrderStep2_GLS_Table tr{display: inline-block;float: none;}
@@ -392,7 +394,6 @@ footer #social{margin:13px auto;display:table}
 footer #social .left {margin: .5em;}
 footer #copyright{border-top:1px solid #a7a7a7;margin:20px 0 0}
 footer #copyright #rights{margin:20px 0 0;color:#444;font-size:13px}
-#adminbar-placeholder {display: none;}
 
 /* =================== MEDIA =================== */
 @media only screen and (max-width: 800px) { 
@@ -486,7 +487,7 @@ footer ul a {padding: 2px 0;}
 }
 
 @media screen and (min-width: 1180px) {
-.contactBar .message {display: block;}
+.contactBar .message, 
 #Product_Rating_Container {display: block;}
 .Product_Rating_Symbols_Container div {background-color:transparent;background-image:url("/images/logo/stars24.png");width:14px;height:28px;float:left}
 .Product_Rating_Symbols_Idle_Left {background-position:0px 0px;}
