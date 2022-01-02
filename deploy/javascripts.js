@@ -63,8 +63,7 @@ if(document.querySelector(".webshop-productinfo")){
   var amount = document.getElementById("amount");
 
   if(document.querySelector(".selectors")) document.querySelector(".selectors").firstElementChild.className += " active";
-  if(!amount.disabled && document.getElementById("moreInfo").innerHTML.trim()) document.querySelector(".moreInfoButton").style.display = "block"; 
-
+  
   //Change look of amount selector
   var minus = document.createElement('button');
   minus.id = "minus";
@@ -107,7 +106,10 @@ if(document.querySelector(".webshop-productinfo")){
     tabLinks[i].remove();
     tabContent[i].remove();
   }
-  if(tabs.textContent.trim()) tabLinks[0].click();
+  if(tabs.textContent.trim()) {
+    tabLinks[0].click();
+    if(!amount.disabled) document.querySelector(".moreInfoButton").style.display = "block"; 
+  }
   else tabs.remove();
 
   //Check if documentation exists. If true, add image
