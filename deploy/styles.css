@@ -36,13 +36,10 @@ body {text-align:left;color: #1D1D1D;font-family: Helvetica, sans-serif; font-si
 
 .hidden,
 .cookie-policy-consents-area input,
-#Trustpilot,
 #cart .NumberProduct_Basket,
 #cart #viewbasket,
 #ProductMenu_List #ActiveCategory_A,
-.addon .addonCheckBox,
 #ShippingMethodsContainer #GLS_ParselShops_54,
-.contactBar,
 #Product_Rating_Container,
 .addon img, 
 .amountWrapperHeadline,
@@ -410,7 +407,6 @@ div.CookiePolicyCenterText {margin: 10px auto 20px;padding: 0;box-shadow: none;}
 
 header {border-bottom: 1px solid #d0d0d0;}
 .contactBar {display:block; border-bottom: 1px solid #d0d0d0;padding-top: 5px;}
-.contactBar .message {display: none;}
 .contactBar .ean {border-right: 1px solid #d0d0d0;padding-right: 20px;margin-right: 10px;}
 .contactBar a {text-decoration: none;}
 #logo {padding:10px 0 10px 25px} 
