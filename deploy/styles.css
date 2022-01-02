@@ -163,7 +163,6 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .addon .addonCheckBox:checked ~ .addonCheck:before{right:10px;transform:rotate(135deg);background:#fff}
 .addon .addonCheckBox:checked ~ .addonCheck:after{margin:3px 13px 0 0;width:13px;right:12px;transform:rotate(45deg);background:#fff}
 .addon img{display: none;}
-.addon .addonNumber{display:none}
 .addon a{text-decoration:none;font-size:16px}
 .addon a:hover{color:#000}
 .addon .RelatedProdName{display:inline-block;width:calc(100% - 148px);height:22px;padding-left: 5px;overflow:hidden;vertical-align:middle;font-size:16px}
