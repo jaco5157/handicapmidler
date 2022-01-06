@@ -1,9 +1,9 @@
 /* =================== HTML BODY =================== */
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, ins, img, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, label, table, caption, tbody, tfoot, thead, tr, th, td {margin: 0;padding: 0;border: 0}
-	
 table {border-spacing: 0}
 
 body {text-align:left;color: #1D1D1D;font-family: Helvetica, sans-serif; font-size: 15px;line-height: 22px;background-color: #e9e9e9;}
+html{scroll-behavior:smooth}
 
 /* =================== GUIDECLASSES =================== */	
 .nomargin{margin:0!important}
