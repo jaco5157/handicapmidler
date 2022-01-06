@@ -411,7 +411,7 @@ header {border-bottom: 1px solid #d0d0d0;}
 .contactBar a {text-decoration: none;}
 #logo {padding:10px 0 10px 25px} 
 span.logo {margin: 0; font-size: 32px; line-height: 36px;}
-#logo .logo_img {float: left; padding-left: 150px;}
+#logo .logo_img {float: left; padding-left: 148px;}
 #menu {max-width: 465px;padding: 20px 25px 10px 0;width: auto;}
 #search {position: relative;top:0px;width: 100%;} 
 #search .SearchField_SearchPage {border:1px solid #d0d0d0;height: 40px;border-radius: 5px;}
