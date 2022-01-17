@@ -406,9 +406,9 @@ div.CookiePolicyCenterText {margin: 10px auto 20px;padding: 0;box-shadow: none;}
 .cookie-policy-consents-area label div > span {width: 25px;height: 25px;}
 
 header {border-bottom: 1px solid #d0d0d0;}
-.contactBar {display:block; border-bottom: 1px solid #d0d0d0;padding-top: 5px;}
-.contactBar .ean {border-right: 1px solid #d0d0d0;padding-right: 20px;margin-right: 10px;}
-.contactBar a {text-decoration: none;}
+.headerBar {display:block; border-bottom: 1px solid #d0d0d0;padding-top: 5px;}
+.headerBar .ean {border-right: 1px solid #d0d0d0;padding-right: 20px;margin-right: 10px;}
+.headerBar a {text-decoration: none;}
 #logo {padding:10px 0 10px 25px} 
 span.logo {margin: 0; font-size: 32px; line-height: 36px;}
 #logo .logo_img {float: left; padding-left: 148px;}
