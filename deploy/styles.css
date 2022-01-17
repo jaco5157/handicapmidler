@@ -17,7 +17,7 @@ html{scroll-behavior:smooth}
 .flexWrap {flex-wrap: wrap;}
 .flexSize {flex: 1 1 430px;}
 .wrapper{width:100%;max-width:1400px;margin:0 auto;display:table}
-.inlineImage{vertical-align:middle;}
+.inlineImage{vertical-align:top;}
 .margin5px{margin:5px;}
 .margin10px{margin:10px}
 .padding5px{padding:5px}
@@ -76,7 +76,7 @@ header {width:100%;background: url("/images/skins/Nordic Spring/images/bg_html.p
 span.logo {text-decoration:none;font-size:27px;display:inline-block;margin:20px 0 0 0}
 span.logo span {font-weight:bold;border-bottom:3px solid #ff9100}
 #quicknav {width: 289px;}
-#search {position: absolute;top: 70px;right: 0;width: 0%;min-width: 48px;height: 48px;float: right;overflow: hidden;-webkit-transition: width 0.3s;-moz-transition: width 0.3s;transition: width 0.3s;backface-visibility: hidden;-webkit-backface-visibility: hidden;}
+#search {position: absolute;top: 75px;right: 0;width: 0%;min-width: 48px;height: 48px;float: right;overflow: hidden;-webkit-transition: width 0.3s;-moz-transition: width 0.3s;transition: width 0.3s;backface-visibility: hidden;-webkit-backface-visibility: hidden;}
 #search.SearchPage_TD-open{width: 100%;}
 #search .SearchField_SearchPage {position: absolute;top: 0;right: 0;border:0px;width: 100%!important;height: 48px;margin: 0;z-index: 10;padding: 10px 65px 10px 20px;font-family: inherit;font-size: 18px;color: #2c3e50;}
 #search.SearchPage_TD-open .SearchField_SearchPage {border:1px solid #d0d0d0;border-radius: 0;}
@@ -105,7 +105,7 @@ span.logo span {font-weight:bold;border-bottom:3px solid #ff9100}
 #ProductMenu_List .CategoryLink2_Productmenu {border-left: 1px solid #d0d0d0;margin-left: 40px;}
 
 /* =================== RIGHTCOL =================== */
-#rightcol {/*! margin: 10px; */padding: 10px;/*! border-radius: 3px; */width: 100%;background-color: #fff;box-sizing: border-box;}
+#rightcol {padding: 10px;width: 100%;background-color: #fff;box-sizing: border-box;}
 #rightcol .productinfo,
 #rightcol .productactions {margin: 20px 0 0 0}
 #rightcol .breadcrumbs {list-style-type:none;}
@@ -405,10 +405,27 @@ div.CookiePolicyCenterText {margin: 10px auto 20px;padding: 0;box-shadow: none;}
 .cookie-policy-consents-area label {padding: 10px 10px 15px}
 .cookie-policy-consents-area label div > span {width: 25px;height: 25px;}
 
-header {border-bottom: 1px solid #d0d0d0;}
-.contactBar {display:block; border-bottom: 1px solid #d0d0d0;padding-top: 5px;}
-.contactBar .ean {border-right: 1px solid #d0d0d0;padding-right: 20px;margin-right: 10px;}
-.contactBar a {text-decoration: none;}
+header > div {border-bottom: 1px solid #d0d0d0;}
+.headerBar {display:block; border-bottom: 1px solid #d0d0d0}
+.headerBar .ean {border-right: 1px solid #d0d0d0;padding-right: 20px;margin-right: 10px;}
+.headerBar a {text-decoration: none;}
+.usps {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+}
+.usp {
+    padding: 10px;
+    flex: 1;
+    text-align: center;
+    transition: all 200ms;
+}
+.usp:hover {
+    background: #e0e0e0;
+}
+.usp .inlineImage {
+    padding-right: 5px;
+}
 #logo {padding:10px 0 10px 25px} 
 span.logo {margin: 0; font-size: 32px; line-height: 36px;}
 #logo .logo_img {float: left; padding-left: 148px;}
