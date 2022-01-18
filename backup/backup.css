@@ -1,0 +1,14 @@
+.cookie-policy-consents-container{order:5;display:flex;flex-wrap: wrap;background-color:#fff;border-radius:5px}
+.cookie-policy-consents-area{width:50%;}
+.cookie-policy-consents-area label{display:flex;flex-direction:column;align-items:center;padding: 10px;border: solid 1px #d0d0d0;}
+.cookie-policy-consents-area label div{border-radius:25px;width:53px;margin:7px 0 0;background-color:#d0d0d0;padding:4px;display:flex;justify-content:flex-start;cursor:pointer}
+.cookie-policy-consents-area input:checked + label div{justify-content:flex-end;background-color:#78BD3F}
+.cookie-policy-consents-area input:checked:disabled + label div{opacity:.7;cursor:default}
+.cookie-policy-consents-area label div > span{width:20px;height:20px;border-radius:50%;background-color:#fff}
+
+@media screen and (min-width: 800px) { 
+    .cookie-policy-consents-container {flex-wrap: nowrap;}
+    .cookie-policy-consents-area:not(:last-child) label {border-right: none;}
+    .cookie-policy-consents-area label {padding: 10px 10px 15px}
+    .cookie-policy-consents-area label div > span {width: 25px;height: 25px;}
+}
