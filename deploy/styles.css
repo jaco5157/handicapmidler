@@ -258,7 +258,8 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .lineAmount img {margin: 0 10px;}
 .linePrice {padding-top: 17px;text-align: right;font-weight: bold;font-size: 17px;}
 .linePrice img {position: absolute;right: 5px;top: 20px;}
-.basketTotal {padding: 20px 0;border-bottom: 1px solid #D9D9D9;font-weight: bold;font-size: 17px;}
+.basketTotal {padding: 20px 0;border-bottom: 1px solid #D9D9D9;font-size: 17px;}
+.basketPrice {font-weight: bold;}
 .Order_back_basket img{width: 130px;height: 32px;}
 .Basket_Order img{width: 156px; height: 32px;}
 .Basket_tb {margin-top: 10px}
