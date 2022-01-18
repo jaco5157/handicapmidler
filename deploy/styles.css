@@ -55,13 +55,7 @@ html{scroll-behavior:smooth}
 div#CookiePolicy{height:100%;display:block;overflow:auto;background-color: #0000006e;}
 div.CookiePolicyCenterText{background-color: #f2f2f2;padding: 20px 0;box-shadow: 0 0 10px #ccc;}
 div.CookiePolicyText{display:flex;padding:0 10px;flex-direction:column;text-align:center}
-.cookie-policy-consents-container{order:5;display:flex;flex-wrap: wrap;background-color:#fff;border-radius:5px}
-.cookie-policy-consents-area{width:50%;}
-.cookie-policy-consents-area label{display:flex;flex-direction:column;align-items:center;padding: 10px;border: solid 1px #d0d0d0;}
-.cookie-policy-consents-area label div{border-radius:25px;width:53px;margin:7px 0 0;background-color:#d0d0d0;padding:4px;display:flex;justify-content:flex-start;cursor:pointer}
-.cookie-policy-consents-area input:checked + label div{justify-content:flex-end;background-color:#78BD3F}
-.cookie-policy-consents-area input:checked:disabled + label div{opacity:.7;cursor:default}
-.cookie-policy-consents-area label div > span{width:20px;height:20px;border-radius:50%;background-color:#fff}
+.cookie-policy-consents-container {display: none;}
 .cookie-policy-details-link-container{order:3;padding:0 0 15px}
 .cookie-policy-details-container{order:4;display:none;overflow:auto;max-height:400px;margin-bottom: 20px;}
 .cookie-policy-accept-buttons-container{display:flex;justify-content:center;flex-wrap:wrap;}
@@ -400,10 +394,6 @@ footer #copyright #rights{margin:20px 0 0;color:#444;font-size:13px}
 @media screen and (min-width: 800px) { 
 div#CookiePolicy{background-color: #f2f2f2; max-height: 90%;height: auto;box-shadow: 0 0 10px #ccc;}
 div.CookiePolicyCenterText {margin: 10px auto 20px;padding: 0;box-shadow: none;}
-.cookie-policy-consents-container {flex-wrap: nowrap;}
-.cookie-policy-consents-area:not(:last-child) label {border-right: none;}
-.cookie-policy-consents-area label {padding: 10px 10px 15px}
-.cookie-policy-consents-area label div > span {width: 25px;height: 25px;}
 
 header > div {border-bottom: 1px solid #d0d0d0;}
 .headerBar {display:block; border-bottom: 1px solid #d0d0d0}
