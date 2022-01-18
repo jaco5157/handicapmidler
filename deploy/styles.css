@@ -70,7 +70,7 @@ div.CookiePolicyText{display:flex;padding:0 10px;flex-direction:column;text-alig
 .cookie-policy-accept-all{background-color:#78BD3F;color:#fff;}
 
 /* =================== HEADER =================== */
-header {width:100%;background: url("/images/skins/Nordic Spring/images/bg_html.png") no-repeat top center;background-color: #fff;background-size: 100% 5px;}
+header {width:100%;background: url("/images/skins/Nordic Spring/images/bg_html.png") no-repeat top center;background-color: #fff;background-size: 100% 5px;padding-top:5px}
 #logo {width:280px;}
 #logo .logo_img {float:right}
 span.logo {text-decoration:none;font-size:27px;display:inline-block;margin:20px 0 0 0}
@@ -415,7 +415,6 @@ header > div {border-bottom: 1px solid #d0d0d0;}
     display: flex;
 }
 .usp {
-    padding: 10px;
     flex: 1;
     text-align: center;
     transition: all 200ms;
