@@ -258,7 +258,8 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .lineAmount img {margin: 0 10px;}
 .linePrice {padding-top: 17px;text-align: right;font-weight: bold;font-size: 17px;}
 .linePrice img {position: absolute;right: 5px;top: 20px;}
-.basketTotal {padding: 20px 0;border-bottom: 1px solid #D9D9D9;font-weight: bold;font-size: 17px;}
+.basketTotal {padding: 20px 0;border-bottom: 1px solid #D9D9D9;font-size: 17px;}
+.basketPrice {font-weight: bold;}
 .Order_back_basket img{width: 130px;height: 32px;}
 .Basket_Order img{width: 156px; height: 32px;}
 .Basket_tb {margin-top: 10px}
@@ -268,9 +269,7 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .Basket_tb_header {font-size: 20px;width: 100%;display: block}
 .Problems_Payment .Basket_tb_header {text-decoration: underline;}
 .Basket_list {margin-left: 20px}
-.Basket_img {margin-top: 20px; display: inline-block}
-.Basket_img span {font-weight:bold}
-.Basket_img img {max-width:100%;height:auto;clear: both;}
+.remaining{font-weight: bold;font-size: 16px;}
 
 /* =================== FORSIDE =================== */
 .frontpage #rightcol{padding:0 0 20px;background-color:#fff}
