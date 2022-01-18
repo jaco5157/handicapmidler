@@ -269,9 +269,7 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .Basket_tb_header {font-size: 20px;width: 100%;display: block}
 .Problems_Payment .Basket_tb_header {text-decoration: underline;}
 .Basket_list {margin-left: 20px}
-.Basket_img {margin-top: 20px; display: inline-block}
-.Basket_img span {font-weight:bold}
-.Basket_img img {max-width:100%;height:auto;clear: both;}
+.remaining{font-weight: bold;font-size: 16px;}
 
 /* =================== FORSIDE =================== */
 .frontpage #rightcol{padding:0 0 20px;background-color:#fff}
