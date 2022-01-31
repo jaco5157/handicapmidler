@@ -350,9 +350,10 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 
 /* =================== UNDERSIDER =================== */
 .Heading_Profile_Wrapper,.Heading_Terms_Wrapper {display:inline-block}
-.videoWrapper {max-width: 661px;}
+.videoWrapper {position:relative; max-width: 661px;}
 .video {overflow: hidden;padding-bottom: 56.25%;position: relative;height: 0;}
 .video iframe{left:0;top:0;height:100%;width:100%;position:absolute;}
+.videoOverlay {position: absolute;width: 100%;top: 0;}
 .index_about OL {counter-reset: item}
 .index_about OL>LI {display: block}
 .index_about LI:before { content: counters(item,".") ". "; counter-increment: item }
