@@ -1,0 +1,181 @@
+<style>
+
+body{width:100%;max-width: 600px;margin:0 auto; font-family: arial;line-height:22px}
+.left{float:left}
+.right{float:right}
+p{margin:0}
+
+.emailLogo{
+    width: 410px;
+    margin: 20px auto 40px;
+    text-align: center;
+}
+.logo {
+  text-decoration: none;
+  font-size: 40px;
+  display: inline-block;
+  margin: 22px 0 0 0;
+}
+.logo span {
+  font-weight: 700;
+  border-bottom: 3px solid #ff9100;
+}
+.confirmation{text-align: center;background-color:#d0d0d0; padding: 20px 20px 30px;border-radius:5px}
+.details{text-align: center;padding:20px 20px 30px}
+.lines {border-bottom:1px solid #d9d9d9}
+.lines * {box-sizing:border-box}
+.productLine {
+  display: flex;
+  border-top:1px solid #d9d9d9;
+  padding:20px 0;
+  overflow:hidden;
+  min-height:115px
+}
+.lineImage{
+  flex: 70px 0 0;
+}
+.lineDesc {
+    padding: 5px 10px;
+    flex: 600px 1 1;
+}
+.lineName{
+    font-weight: 700;
+}
+.lineAmount {
+  display: flex;
+}
+.linePrice {
+    padding-top: 17px;
+    text-align: right;
+    font-weight: 700;
+    font-size: 17px;
+    flex: 140px 0 0;
+}
+.total{overflow: hidden; }
+.basketTotal {
+  width: 100%;
+  padding:20px 0;
+  border-bottom:1px solid #d9d9d9;
+  font-size:17px
+}
+.shippingPrice{overflow: hidden}
+.basketPrice {font-weight:700}
+.customerInfo h1{text-align: center;}
+.adresses{display: flex;flex-wrap: wrap;justify-content: center;max-width: 440px;margin: 0 auto;}
+.adresses div{flex: 220px 0 0; padding: 20px 0}
+.adresses span,
+.contactAdress span {
+  width: 100%;
+  display: block;
+}
+.adressesHeader {
+    font-size: 17px;
+    font-weight: 700;
+}
+.contact{text-align: center;background-color:#d0d0d0; border-radius: 5px; padding: 20px 20px 30px;}
+
+.contactSoMe{
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+.social {padding: 5px;}
+</style>
+
+<div class="emailLogo">
+    <img class="right" alt="Handicapmidler.dk" src="https://www.handicapmidler.dk/images/logo/sprites.svg#wheelchair" width="60" height="60">
+    <span class="logo">handicap<span>midler</span>.dk</span>
+</div>
+<div class="confirmation">
+    <h1>Ordrebekræftelse</h1>
+    <p>Kære <span class="customerName">[[CUSTOMERNAME]]</span>, tak for din ordre!</p>
+    <p>Vi har modtaget din ordre og vil kontakte dig så snart pakken er afsendt. Nedenfor finder du informationer om dit køb hos os.</p>
+</div>
+<div class="summary">
+    <div class="details">
+        <h1>Detaljer</h1>
+        [[ORDREDATOTXT]]: [[ORDREDATO]]<br />
+        [[ORDRENRTXT]]: [[ORDRENR]]
+    </div>
+    <div class="lines">
+        [[testLinjer]]
+    </div>
+    <div class="total">
+        <div class="right col-1-2 basketTotal">
+            <div class="shippingPrice overflow">
+              <div class="left">
+                [[FORSENDELSGEBYRTXT]]
+              </div>
+              <div class="right">
+                <span>[[FORSENDELSGEBYR]]</span>&nbsp;[[VALUTA]]
+              </div>
+            </div>
+            <div class="shippingPrice overflow">
+                <div class="left">
+                    [[TOTALEXMOMSTXT]]
+                </div>
+                <div class="right">
+                  <span>[[TOTALEXMOMS]]</span>&nbsp;[[VALUTA]]
+                </div>
+            </div>
+            <div class="basketPrice">
+              <div class="left">
+                [[TOTALINMOMSTXT]]
+              </div>
+              <div class="right">
+                <span>[[TOTALINMOMS]]</span>&nbsp;[[VALUTA]]
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="customerInfo">
+    <h1>Betaling og levering</h1>
+    <div class="adresses">
+        <div class="billing">
+            <span class="adressesHeader">Faktureringsadresse:</span>
+            <span>[[CUSTOMERNAME]]</span>
+            <span>[[CUSTOMERCOMPANY]]</span>
+            <span>[[CUSTOMERCVRNR]]</span>
+            <span>[[CUSTOMERADRESS]]</span>
+            <span>[[CUSTOMERCITY]]</span>
+            <span>[[CUSTOMERZIPCODE]]</span>
+            <span>[[CUSTOMEREMAIL]]</span>
+            <span>[[CUSTOMERPHONE]]</span>
+        </div>
+        <div class="shipping">
+            <span class="adressesHeader">Leveringsadresse:</span>
+            <span>[[DELIVERTONAME]]</span>
+            <span>[[DELIVERTOCOMPANY]]</span>
+            <span>[[DELIVERTOADRESS]]</span>
+            <span>[[DELIVERTOCITY]]</span>
+            <span>[[DELIVERTOZIPCODE]]</span>
+            <span>[[DELIVERTOEMAIL]]</span>
+            <span>[[DELIVERTOPHONE]]</span>
+        </div>
+        <div class="paymentMethod">
+            <span class="adressesHeader">[[BETALINGSMETODETXT]]</span>
+            <span>[[BETALINGSMETODE]]</span>
+        </div>
+        <div class="shippingMethod">
+            <span class="adressesHeader">[[FORSENDELSMETODETXT]]</span>
+            <span>[[FORSENDELSMETODE]]</span>
+            <span>[[TEKST]]</span>
+        </div>
+    </div>
+</div>
+<div class="contact">
+    <div class="contactAdress">
+        <span class="adressesHeader">Handicapmidler.dk</span>
+        <span>FNP Hjælpemidler</span>
+        <span>Borgmesterløkken 7b</span>
+        <span>6200 Aabenraa</span>
+        <span>CVR: 18449943</span>
+        <span>+45 5058 7506</span>
+        <span><a href="mailto:kundeservice@handicapmidler.dk" target="_blank">Send en email til os!</a></span>
+    </div>
+    <div class="contactSoMe">
+        <div class="social"><a href="https://www.facebook.com/handicapmidler/" title="Facebook" target="_blank"><img alt="Kontakt os på Facebook" src="https://www.handicapmidler.dk/images/logo/sprites.svg#facebook" width="56" height="56"></a></div>
+        <div class="social"><a href="https://www.youtube.com/channel/UCYD6GNXwOU4S_aOybhEuFVA" title="YouTube" target="_blank"><img alt="Følg vores YouTube kanal" src="https://www.handicapmidler.dk/images/logo/sprites.svg#youtube" width="56" height="56"></a></div>
+    </div>
+</div>

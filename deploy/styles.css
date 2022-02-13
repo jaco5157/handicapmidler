@@ -252,7 +252,7 @@ input[type=text]:focus, input[type=tel]:focus, select:focus {border-color: #4583
 .ShowBasket_Custom_DIV{border-bottom: 1px solid #D9D9D9;}
 .ShowBasket_Custom_DIV * {box-sizing: border-box;}
 .productLine {border-top: 1px solid #D9D9D9;padding: 30px 0;position: relative;overflow: hidden;min-height: 115px;}
-.lineDesc {float: left;width: 75%;padding-left: 100px;}
+.lineDesc {float: left;width: 70%;padding-left: 100px;}
 .ProductImage_ShowBasket {position: absolute;top: 15px;left: 10px;}
 .lineAmount {margin: 10px 0 0 -10px;font-weight: bold;}
 .lineAmount img {margin: 0 10px;}
