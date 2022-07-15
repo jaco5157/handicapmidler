@@ -1,4 +1,8 @@
 //Seachbar
+if(true){
+  console.log("This is a test");
+}
+
 $(function() {
   var submitIcon = $(".nbsp");
   var submitButton = $(".SubmitButton_SearchPage");
