@@ -1,5 +1,6 @@
 # Ignore generated files
 .vscode
+.idea
 bin
 obj
 components
