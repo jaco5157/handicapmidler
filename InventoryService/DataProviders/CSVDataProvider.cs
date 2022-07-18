@@ -13,6 +13,12 @@ public class CSVDataProvider: IDataProvider
 
     public IEnumerable<InventoryItemDTO> ConvertToDTO(IEnumerable<InventoryItemCSV>? items)
     {
-        throw new NotImplementedException();
+        var result = Enumerable.Empty<InventoryItemDTO>();
+        if (items != null)
+            result = items.Aggregate(result,
+                (current, item) => current.Concat(new[]
+                    {new InventoryItemDTO(item.ProductNumber, item.StockCount, item.DeliveryTime)}));
+
+        return result;
     }
 }
