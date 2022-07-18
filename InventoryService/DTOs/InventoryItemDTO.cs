@@ -2,7 +2,7 @@ namespace InventoryService.DTOs;
 
 public class InventoryItemDTO
 {
-    public InventoryItemDTO(string productNumber, string stockCount, string? deliveryTime)
+    public InventoryItemDTO(string productNumber, int stockCount, int? deliveryTime)
     {
         ProductNumber = productNumber;
         StockCount = stockCount;
@@ -10,6 +10,6 @@ public class InventoryItemDTO
     }
 
     public string ProductNumber { get; set; }
-    public string StockCount { get; set; }
-    public string? DeliveryTime { get; set; }
+    public int StockCount { get; set; }
+    public int? DeliveryTime { get; set; }
 }
