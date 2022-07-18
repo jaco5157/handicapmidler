@@ -1,8 +1,8 @@
-namespace InventoryService.Models;
+namespace InventoryService.DTOs;
 
-public class InventoryItem
+public class InventoryItemDTO
 {
-    public InventoryItem(string productNumber, string stockCount, string? deliveryTime)
+    public InventoryItemDTO(string productNumber, string stockCount, string? deliveryTime)
     {
         ProductNumber = productNumber;
         StockCount = stockCount;

@@ -1,4 +1,4 @@
-using InventoryService.Models;
+using InventoryService.DTOs;
 
 namespace InventoryService.Interfaces;
 
@@ -10,5 +10,5 @@ public interface IDataProvider
     /// <returns>
     ///     A list of InventoryItems.
     /// </returns>
-    public IEnumerable<InventoryItem> GetInventoryItems();
+    public IEnumerable<InventoryItemDTO> GetInventoryItems();
 }
