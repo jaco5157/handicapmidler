@@ -12,5 +12,8 @@ public interface IDataProvider
     /// </returns>
     public IEnumerable<InventoryItemDTO> GetInventoryItems();
     
-    public void GenerateInventory();
+    /// <summary>
+    ///     Used to generate a file based on a list of InventoryItems.
+    /// </summary>
+    public void GenerateInventoryFile();
 }
