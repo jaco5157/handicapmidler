@@ -11,4 +11,6 @@ public interface IDataProvider
     ///     A list of InventoryItems.
     /// </returns>
     public IEnumerable<InventoryItemDTO> GetInventoryItems();
+    
+    public void GenerateInventory();
 }
