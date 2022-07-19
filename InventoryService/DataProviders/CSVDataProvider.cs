@@ -18,20 +18,14 @@ public class CSVDataProvider: IDataProvider
         parser.TextFieldType = FieldType.Delimited;
         parser.SetDelimiters(";");
 
-        int i = 0;
-        
         while (!parser.EndOfData)
         {
             string[] row = parser.ReadFields();
+            
             if (row is not {Length: > 1}) continue;
-            Console.WriteLine(row[0] + " added.");
             items.Add(row[0], new InventoryItemCSV(row[1]));
-            i++;
         }
-        
-        Console.WriteLine(i + " items added.");
-        i = 0;
-        
+
         parser = new TextFieldParser(inventoryFile);
         parser.TextFieldType = FieldType.Delimited;
         parser.SetDelimiters(";");
@@ -44,8 +38,6 @@ public class CSVDataProvider: IDataProvider
                 try
                 {
                     items[row[0]].StockCount = int.Parse(row[1]);
-                    Console.WriteLine(row[0] + " has " + row[1] + " items.");
-                    i++;
                 }
                 catch
                 {
@@ -54,9 +46,12 @@ public class CSVDataProvider: IDataProvider
             }
         }
         
-        Console.WriteLine(i + " items added.");
-        
         return ConvertToDTO(items);
+    }
+
+    public void GenerateInventoryFile(IEnumerable<InventoryItemDTO> items)
+    {
+        throw new NotImplementedException();
     }
 
     public IEnumerable<InventoryItemDTO> ConvertToDTO(Dictionary<string, InventoryItemCSV>? items)
