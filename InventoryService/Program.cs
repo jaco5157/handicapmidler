@@ -11,7 +11,5 @@ IEnumerable<InventoryItemDTO> inventoryItems;
 IDataProvider dataProvider = new CSVDataProvider();
 inventoryItems = dataProvider.GetInventoryItems();
 
-foreach (var inventoryItem in inventoryItems)
-{
-    Console.WriteLine("Product number: " + inventoryItem.ProductNumber + " has " + inventoryItem.StockCount + " items left");
-}
+IDataProvider xmlWriter = new XMLDataProvider();
+xmlWriter.GenerateInventoryFile(inventoryItems);

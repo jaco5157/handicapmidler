@@ -49,7 +49,7 @@ public class CSVDataProvider: IDataProvider
         return ConvertToDTO(items);
     }
 
-    public void GenerateInventory()
+    public void GenerateInventoryFile(IEnumerable<InventoryItemDTO> items)
     {
         throw new NotImplementedException();
     }
