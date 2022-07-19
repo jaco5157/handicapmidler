@@ -8,4 +8,23 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Data" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Data\LAGERBEHOLD.LST" />
+    <Resource Include="Data\LAGERBEHOLD.LST">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\LAGERBEVAEG.LST" />
+    <Resource Include="Data\LAGERBEVAEG.LST">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="Data\VARER.LST" />
+    <Resource Include="Data\VARER.LST">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
 </Project>
