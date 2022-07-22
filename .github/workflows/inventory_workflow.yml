@@ -13,10 +13,11 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Download inventory files
-        run: mkdir data
-        run: curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/LAGERBEHOLD.LST --user ${{ secrets.ftp_username }}:${{ secrets.ftp_password }} -s -o data/lagerbehold.LST
-        run: curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/LAGERBEVAEG.LST --user ${{ secrets.ftp_username }}:${{ secrets.ftp_password }} -s -o data/lagerbevaeg.LST
-        run: curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/VARER.LST --user ${{ secrets.ftp_username }}:${{ secrets.ftp_password }} -s -o data/varer.LST
+        run: |
+          mkdir data
+          curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/LAGERBEHOLD.LST --user ${{ secrets.ftp_username }}:${{ secrets.ftp_password }} -s -o data/lagerbehold.LST
+          curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/LAGERBEVAEG.LST --user ${{ secrets.ftp_username }}:${{ secrets.ftp_password }} -s -o data/lagerbevaeg.LST
+          curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/VARER.LST --user ${{ secrets.ftp_username }}:${{ secrets.ftp_password }} -s -o data/varer.LST
 
       - name: Dotnet restore
         run: dotnet restore "InventoryService/InventoryService.csproj"
