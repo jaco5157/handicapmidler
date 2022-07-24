@@ -18,6 +18,7 @@ jobs:
           curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/LAGERBEHOLD.LST --user "${{ secrets.ftp_username }}":"${{ secrets.ftp_password }}" -v -o data/lagerbehold.LST
           curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/LAGERBEVAEG.LST --user "${{ secrets.ftp_username }}":"${{ secrets.ftp_password }}" -v -o data/lagerbevaeg.LST
           curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/VARER.LST --user "${{ secrets.ftp_username }}":"${{ secrets.ftp_password }}" -v -o data/varer.LST
+          readlink -f data/varer.LST
 
       - name: Dotnet run
         run: dotnet run --project InventoryService
