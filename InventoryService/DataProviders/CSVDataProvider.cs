@@ -8,8 +8,8 @@ namespace InventoryService.DataProviders;
 
 public class CSVDataProvider: IDataProvider
 {
-    private string productsFile => Path.Combine("data", "VARER.LST");
-    private string inventoryFile => Path.Combine("data", "LAGERBEHOLD.LST");
+    private string productsFile => Path.Combine("data", "varer.LST");
+    private string inventoryFile => Path.Combine("data", "lagerbehold.LST");
     public IEnumerable<InventoryItemDTO> GetInventoryItems()
     {
         var items = new Dictionary<string, InventoryItemCSV>();
