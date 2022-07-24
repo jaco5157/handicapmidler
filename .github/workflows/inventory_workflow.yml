@@ -19,15 +19,6 @@ jobs:
           curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/LAGERBEVAEG.LST --user "${{ secrets.ftp_username }}":"${{ secrets.ftp_password }}" -s -o data/lagerbevaeg.LST
           curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/VARER.LST --user "${{ secrets.ftp_username }}":"${{ secrets.ftp_password }}" -s -o data/varer.LST
 
-      - name: Dotnet restore
-        run: dotnet restore "InventoryService/InventoryService.csproj"
-
-      - name: Dotnet build
-        run: dotnet build "InventoryService/InventoryService.csproj" -c Release -o /app/build
-
-      - name: Dotnet publish
-        run: dotnet publish "InventoryService/InventoryService.csproj" -c Release -o /app/publish
-
       - name: Dotnet run
         run: dotnet run --project InventoryService
 
