@@ -419,10 +419,9 @@ header > div {border-bottom: 1px solid #d0d0d0;}
 span.logo {margin: 0; font-size: 32px; line-height: 36px;}
 #logo .logo_img {float: left; padding-left: 148px;}
 #menu {max-width: 465px;padding: 33px 25px 25px 0;width: auto;}
-#search {position: relative;top:0px;width: 100%;} 
+#search {position: relative;top:0px;width: 100%;overflow: visible;} 
 #search.SearchPage_TD .SearchField_SearchPage {border:1px solid #d0d0d0;height: 40px;border-radius: 5px;}
 #search.SearchPage_TD .nbsp {width: 40px;height: 40px;background-color: #f08900;background-position:13px 13px;border-radius: 0 5px 5px 0;}
-#search .SubmitButton_SearchPage {display: none;}
 #Trustpilot {display:block;width: 100%;}
 
 #content {margin-top: 20px;}
