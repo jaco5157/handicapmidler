@@ -36,6 +36,7 @@ html{scroll-behavior:smooth}
 
 .hidden,
 .SubmitButton_SearchPage,
+.cookie-policy-consents-container,
 #cart .NumberProduct_Basket,
 #cart #viewbasket,
 #ProductMenu_List #ActiveCategory_A,
@@ -55,7 +56,6 @@ html{scroll-behavior:smooth}
 div#CookiePolicy{height:100%;display:block;overflow:auto;background-color: #0000006e;}
 div.CookiePolicyCenterText{background-color: #f2f2f2;padding: 20px 0;box-shadow: 0 0 10px #ccc;}
 div.CookiePolicyText{display:flex;padding:0 10px;flex-direction:column;text-align:center}
-.cookie-policy-consents-container {display: none;}
 .cookie-policy-details-link-container{order:3;padding:0 0 15px}
 .cookie-policy-details-container{order:4;display:none;overflow:auto;max-height:400px;margin-bottom: 20px;}
 .cookie-policy-accept-buttons-container{display:flex;justify-content:center;flex-wrap:wrap;}
