@@ -86,6 +86,7 @@ if(document.querySelector(".webshop-productinfo")){
       window.location.hash = "#prodInfo";
       document.querySelector(".Variants").style.border = "1px solid #4583ed";
       document.querySelector(".Variants").style.borderRadius = "7px";
+      document.querySelector(".Variants").style.boxShadow = "0 0 2px #4583ed";
       document.querySelector(".VariantGroupLabel").style.padding = "5px";
     })
   }
