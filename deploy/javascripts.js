@@ -9,15 +9,16 @@ $(function() {
   var inputBox = $(".SearchField_SearchPage");
   var searchBox = $(".SearchPage_TD");
   var isOpen = false;
+  inputBox.attr("placeholder", "Søg på Handicapmidler"); 
   submitIcon.click(function() {
     var inputVal = $(".SearchField_SearchPage").val();
     inputVal = $.trim(inputVal).length;
-    if (isOpen === false) {
+    if (inputVal !== 0) {
+      submitButton.click();
+    } else if (isOpen === false) {
       searchBox.addClass("SearchPage_TD-open");
       inputBox.focus();
       isOpen = true;
-    } else if (inputVal !== 0) {
-      submitButton.click();
     } else {
       searchBox.removeClass("SearchPage_TD-open");
       inputBox.focusout();

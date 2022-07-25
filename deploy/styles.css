@@ -71,7 +71,7 @@ span.logo span {font-weight:bold;border-bottom:3px solid #ff9100}
 #quicknav {width: 289px;}
 #search {position: absolute;top: 75px;right: 0;width: 0%;min-width: 48px;height: 48px;float: right;overflow: hidden;-webkit-transition: width 0.3s;-moz-transition: width 0.3s;transition: width 0.3s;backface-visibility: hidden;-webkit-backface-visibility: hidden;}
 #search.SearchPage_TD-open{width: 100%;}
-#search .SearchField_SearchPage {position: absolute;top: 0;right: 0;border:0px;width: 100%!important;height: 48px;margin: 0;z-index: 10;padding: 10px 65px 10px 20px;font-family: inherit;font-size: 18px;color: #2c3e50;}
+#search .SearchField_SearchPage {position: absolute;top: 0;right: 0;border:0px;width: 100%!important;height: 48px;margin: 0;z-index: 10;padding: 10px 65px 10px 20px;font-family: inherit;font-size: 16px;color: #2c3e50;}
 #search.SearchPage_TD-open .SearchField_SearchPage {border:1px solid #d0d0d0;border-radius: 0;}
 #search .nbsp {width: 48px;height: 48px;display: block;position: absolute;right: 0;top: 0;z-index: 90;border-radius: 25px;cursor: pointer;-webkit-transition: border-radius 0.3s;-moz-transition: border-radius 0.3s;transition: border-radius 0.3s;background: url("/images/logo/sprites.svg#search") no-repeat 17px 17px #f8991d;background-size: 16px;}
 #search.SearchPage_TD-open .nbsp {border-radius: 0px;}
@@ -418,10 +418,11 @@ header > div {border-bottom: 1px solid #d0d0d0;}
 #logo {padding:10px 0 10px 25px} 
 span.logo {margin: 0; font-size: 32px; line-height: 36px;}
 #logo .logo_img {float: left; padding-left: 148px;}
-#menu {max-width: 465px;padding: 20px 25px 10px 0;width: auto;}
+#menu {max-width: 465px;padding: 33px 25px 25px 0;width: auto;}
 #search {position: relative;top:0px;width: 100%;} 
-#search .SearchField_SearchPage {border:1px solid #d0d0d0;height: 40px;border-radius: 5px;}
-#search .nbsp {width: 40px;height: 40px;background-color: #f08900;background-position:13px 13px;border-radius: 0 5px 5px 0;}
+#search.SearchPage_TD .SearchField_SearchPage {border:1px solid #d0d0d0;height: 40px;border-radius: 5px;}
+#search.SearchPage_TD .nbsp {width: 40px;height: 40px;background-color: #f08900;background-position:13px 13px;border-radius: 0 5px 5px 0;}
+#search .SubmitButton_SearchPage {display: none;}
 #Trustpilot {display:block;width: 100%;}
 
 #content {margin-top: 20px;}
