@@ -16,6 +16,7 @@ $(function() {
         inputBox.focus();
       }
     } else if(isOpen === false){
+      inputBox.val("");
       searchBox.addClass("SearchPage_TD-open");
       inputBox.focus();
       isOpen = true; 
@@ -37,6 +38,7 @@ $(function() {
   $(document).mouseup(function() {
     if (isOpen === true) {
       searchBox.removeClass("SearchPage_TD-open");
+      isOpen = false;
     }
   });
 });
