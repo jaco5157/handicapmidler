@@ -1,8 +1,4 @@
 //Seachbar
-if(true){
-  console.log("This is a test");
-}
-
 $(function() {
   var submitIcon = $(".nbsp");
   var submitButton = $(".SubmitButton_SearchPage");
@@ -13,12 +9,18 @@ $(function() {
   submitIcon.click(function() {
     var inputVal = $(".SearchField_SearchPage").val();
     inputVal = $.trim(inputVal).length;
-    if (inputVal !== 0) {
-      submitButton.click();
-    } else if (isOpen === false) {
+    if($("body").width() >= 800){
+      if (inputVal !== 0) {
+        submitButton.click();
+      } else {
+        inputBox.focus();
+      }
+    } else if(isOpen === false){
       searchBox.addClass("SearchPage_TD-open");
       inputBox.focus();
-      isOpen = true;
+      isOpen = true; 
+    } else if (inputVal !== 0) {
+      submitButton.click();
     } else {
       searchBox.removeClass("SearchPage_TD-open");
       inputBox.focusout();
