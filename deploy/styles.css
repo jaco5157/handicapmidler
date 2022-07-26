@@ -560,7 +560,8 @@ input[type=text]:focus,
 input[type=tel]:focus,
 select:focus,
 .subcat:hover,
-.product:hover {
+#rightcol .product:hover,
+#search.SearchPage_TD .SearchField_SearchPage:focus {
     border-color: #4583ed;
     box-shadow: 0 0 3px #4583ed;
     outline: none;
@@ -633,23 +634,20 @@ select:focus,
 
 .stock-item {
     border: 1px solid #78bd3f;
-    width: 50%;
     border-radius: 5px;
     box-sizing: border-box;
-    flex: 0 1 210px;
-    padding: 10px 10px 5px;
+    flex: 1 0 210px;
+    padding: 5px 10px 3px;
     background-color: #fff;
-    box-shadow: 0 0 2px #78bd3f;
 }
 
 .stock-container {
-    margin: 10px 0;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: stretch;
     font-size: 14px;
+    gap: 10px;
 }
 
 .stock-item-header {
@@ -955,7 +953,7 @@ select:focus,
     width: 100%;
 }
 
-.product {
+#rightcol .product {
     text-align: center;
     background-color: #fff;
     border: 1px solid #d0d0d0;
