@@ -312,7 +312,7 @@ span.logo span {
 }
 
 #quicknav {
-    width: 289px;
+    width: 360px;
 }
 
 #search {
@@ -542,20 +542,6 @@ pre a:hover {
 
 hr {
     border: none
-}
-
-#banner img {
-    display: block;
-    padding-top: 15px
-}
-
-#banner .slider-wrapper {
-    padding-top: 15px
-}
-
-#banner .slider-wrapper img {
-    display: block;
-    padding-top: 0
 }
 
 input[type=text],
@@ -1323,7 +1309,8 @@ font .CategoryFooterContent .figur {
 }
 
 .banner .image img {
-    max-width: 350px
+    max-width: 350px;
+    height: auto;
 }
 
 .tbWrapper {
@@ -1941,7 +1928,7 @@ footer #copyright #rights {
 
     #menu {
         max-width: 465px;
-        padding: 33px 25px 25px 0;
+        padding: 29px 25px 29px 0;
         width: auto;
     }
 
@@ -1954,16 +1941,13 @@ footer #copyright #rights {
 
     #search.SearchPage_TD .SearchField_SearchPage {
         border: 1px solid #d0d0d0;
-        height: 40px;
-        border-radius: 5px;
+        border-radius: 24px;
     }
 
     #search.SearchPage_TD .nbsp {
-        width: 40px;
-        height: 40px;
         background-color: #f08900;
-        background-position: 13px 13px;
-        border-radius: 0 5px 5px 0;
+        background-position: 14px 16px;
+        border-radius: 2px 24px 24px 2px;
     }
 
     #Trustpilot {
