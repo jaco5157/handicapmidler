@@ -5,7 +5,7 @@ $(function() {
   var inputBox = $(".SearchField_SearchPage");
   var searchBox = $(".SearchPage_TD");
   var isOpen = false;
-  inputBox.attr("placeholder", "Søg på Handicapmidler"); 
+  inputBox.attr("placeholder", "Søg på Handicapmidler.dk"); 
   submitIcon.click(function() {
     var inputVal = $(".SearchField_SearchPage").val();
     inputVal = $.trim(inputVal).length;
@@ -86,6 +86,7 @@ if(document.querySelector(".webshop-productinfo")){
       window.location.hash = "#prodInfo";
       document.querySelector(".Variants").style.border = "1px solid #4583ed";
       document.querySelector(".Variants").style.borderRadius = "7px";
+      document.querySelector(".Variants").style.boxShadow = "0 0 2px #4583ed";
       document.querySelector(".VariantGroupLabel").style.padding = "5px";
     })
   }
