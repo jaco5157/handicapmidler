@@ -558,10 +558,13 @@ select {
 
 input[type=text]:focus,
 input[type=tel]:focus,
-select:focus {
+select:focus,
+.subcat:hover,
+.product:hover {
     border-color: #4583ed;
-    box-shadow: 0 0 2px #4583ed;
+    box-shadow: 0 0 3px #4583ed;
     outline: none;
+    transition: all .15s;
 }
 
 /* =================== VAREKORT =================== */
@@ -952,20 +955,13 @@ select:focus {
     width: 100%;
 }
 
-#rightcol .product {
+.product {
     text-align: center;
     background-color: #fff;
-    outline: 1px solid #ccc;
-    -webkit-transition: box-shadow .15s;
-    transition: box-shadow .15s;
+    border: 1px solid #d0d0d0;
     margin: auto;
     max-width: 400px;
     border-radius: 5px;
-}
-
-#rightcol .product:hover {
-    -webkit-box-shadow: 0 0 9px 3px #ccc;
-    box-shadow: 0 0 9px 3px #ccc
 }
 
 .product .image {
@@ -988,7 +984,7 @@ select:focus {
     transition: all 200ms ease-in-out;
 }
 
-.product .image img:hover {
+.product .image:hover img {
     transform: scale(1.05)
 }
 
@@ -1411,17 +1407,12 @@ font .CategoryFooterContent .figur {
     width: calc(100% - 16px);
 }
 
-.subcat:hover {
-    border-color: #d0d0d0;
-    box-shadow: 0 0 2px #4583ed;
-}
-
 .subcat .header {
     letter-spacing: 0.3px;
     border-bottom: 1px solid #d0d0d0;
     background-color: #e9e9e9;
     padding: 10px 0 5px;
-    border-radius: 10px 10px 0 0;
+    border-radius: 11px 11px 0 0;
     transition: background-color 0.3s ease;
 }
 
