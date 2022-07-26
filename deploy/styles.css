@@ -200,7 +200,6 @@ html {
 #cart #viewbasket,
 #ProductMenu_List #ActiveCategory_A,
 #ShippingMethodsContainer #GLS_ParselShops_54,
-#Product_Rating_Container,
 .addon img,
 .amountWrapperHeadline,
 .documentation:empty,
@@ -212,7 +211,8 @@ html {
 #PayMethodsContainer tr td:nth-child(3) br:last-child,
 #PayMethodsContainer tr td:nth-child(3) br:nth-last-child(2),
 #ShippingMethodsContainer tr td:nth-child(3) br:last-child,
-#adminbar-placeholder {
+#adminbar-placeholder,
+.hiddenTablet {
     display: none
 }
 
@@ -632,6 +632,16 @@ select:focus,
 
 
 
+
+.stock-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    font-size: 14px;
+    gap: 10px;
+}
+
 .stock-item {
     border: 1px solid #78bd3f;
     border-radius: 5px;
@@ -641,13 +651,8 @@ select:focus,
     background-color: #fff;
 }
 
-.stock-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    font-size: 14px;
-    gap: 10px;
+.stock-item-freight {
+    border-color: #4583ed;
 }
 
 .stock-item-header {
@@ -659,6 +664,7 @@ select:focus,
     padding-top: 10px;
     color: #646464;
 }
+
 
 .moreInfoButton {
     position: relative;
@@ -2216,7 +2222,7 @@ footer #copyright #rights {
 @media screen and (min-width: 1180px) {
 
     .contactBar .message,
-    #Product_Rating_Container {
+    .hiddenTablet {
         display: block;
     }
 
