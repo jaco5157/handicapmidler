@@ -633,7 +633,7 @@ select:focus,
 
 
 
-.stock-container {
+.inventoryContainer {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -642,7 +642,7 @@ select:focus,
     gap: 10px;
 }
 
-.stock-item {
+.inventoryItem {
     border: 1px solid #78bd3f;
     border-radius: 5px;
     box-sizing: border-box;
@@ -651,15 +651,15 @@ select:focus,
     background-color: #fff;
 }
 
-.stock-item-freight {
+.inventoryItemFreight {
     border-color: #4583ed;
 }
 
-.stock-item-header {
+.inventoryItemHeader {
     font-weight: bold;
 }
 
-.stock-smalltext {
+.inventorySmalltext {
     font-size: 12px;
     padding-top: 10px;
     color: #646464;
