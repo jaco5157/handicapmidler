@@ -1087,26 +1087,28 @@ img.Related_BuyButton_IMG {
 
 #ProductFilter-Container {
     background-color: #e9e9e9;
-    padding: 5px;
+    margin: 0 0 10px;
+    border: 1px solid #d0d0d0;
+    border-radius: 5px;
+    padding: 7px 7px 0;
 }
 
 .product-filter-column-container-3 {
     display: inline-block;
-    width: 100%;
+    width: 100%
 }
 
 .product-filter-column {
     float: left;
-    width: 100% !important;
+    width: 100% !important
 }
 
 .product-filter-container {
-    margin: 5px 0;
     background-color: #fff;
     overflow: hidden;
     padding: 5px;
     border-radius: 5px;
-    border: 1px solid #d0d0d0;
+    border: 1px solid #d0d0d0
 }
 
 .product-filter-header-text {
@@ -2056,10 +2058,6 @@ footer #copyright #rights {
 
     .product-filter-column:nth-child(1) .product-filter-container {
         margin-right: 5px
-    }
-
-    .product-filter-column-container-3 {
-        margin: 10px 0
     }
 
     .product-filter-column {
