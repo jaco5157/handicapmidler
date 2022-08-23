@@ -205,13 +205,16 @@ if(document.querySelector(".webshop-orderstep2")){
 
 function addClickBox() {
   document.querySelectorAll(".checkout-payment-method, #ShippingMethod_54, #ShippingMethod_55, #GLS_ParselShops_55 tr").forEach(function (item){
-    item.addEventListener("click", function(evt){
+    item.addEventListener("click", function(event){
       item.querySelector("input").click();
+      event.stopPropagation();
     })
   })
 }
 addClickBox();
 
-document.querySelector(".webshop-orderstep2").addEventListener("click", () => {
+document.querySelector(".webshop-orderstep2").addEventListener("click", function(event) {
   addClickBox();
+  event.target.click();
+  event.stopPropagation();
 })
