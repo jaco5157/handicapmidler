@@ -1253,12 +1253,12 @@ font .CategoryFooterContent .figur {
     background-position: 90% 30%;
 }
 
-.Delivery_Price {
-    background-image: url("/images/logo/sprites.svg#basketDelivery")
+.deliveryPrice {
+    background-image: url(/images/logo/delivery.svg)
 }
 
-.Safe_Payment {
-    background-image: url("/images/logo/sprites.svg#basketPayment")
+.deliveryFree {
+    background-image: url(/images/logo/deliveryFree.svg)
 }
 
 .Basket_tb_header {
