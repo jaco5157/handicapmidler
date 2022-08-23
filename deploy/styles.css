@@ -1591,6 +1591,10 @@ font .CategoryFooterContent .figur {
     overflow: hidden
 }
 
+#PayMethodsContainer .checkout-payment-method, #ShippingMethod_54, #ShippingMethod_55, #GLS_ParselShops_55 tr {
+    cursor: pointer;
+}
+
 #PayMethodsContainer tr td:nth-child(2),
 #ShippingMethodsContainer tr td:nth-child(2),
 #ShippingMethodsContainer #OrderStep2_GLS_Table tr td:nth-child(1) {
