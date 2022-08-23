@@ -200,9 +200,23 @@ if(document.querySelector(".webshop-orderstep1")){
 
 if(document.querySelector(".webshop-orderstep2")){
   document.querySelector(".BackgroundColor1_OrderStep2 tbody tr").insertAdjacentElement('afterend',document.querySelector(".OrderStep2_Methods_Next_TD").parentElement.cloneNode(true));
-  document.querySelectorAll(".checkout-payment-method").forEach(function (item){
-    item.addEventListener("click", function(evt){
-      item.querySelector("input").click();
-    })
+  
+}
+
+function addClickBox() {
+  document.querySelectorAll(".checkout-payment-method, #ShippingMethod_54, #ShippingMethod_55, #GLS_ParselShops_55 tr").forEach(function (item){
+    wrap(item, document.createElement('label'))
   })
+}
+function wrap(el, wrapper) {
+  el.parentNode.insertBefore(wrapper, el);
+  wrapper.appendChild(el);
+}
+
+addClickBox();
+
+var OldGetMethods = GetMethods;
+GetMethods =  function(u, e, p, t, h){
+  OldGetMethods(u, e, p, t, h);
+  addClickBox();
 }
