@@ -200,4 +200,9 @@ if(document.querySelector(".webshop-orderstep1")){
 
 if(document.querySelector(".webshop-orderstep2")){
   document.querySelector(".BackgroundColor1_OrderStep2 tbody tr").insertAdjacentElement('afterend',document.querySelector(".OrderStep2_Methods_Next_TD").parentElement.cloneNode(true));
+  document.querySelectorAll(".checkout-payment-method").forEach(function (item){
+    item.addEventListener("click", function(evt){
+      item.querySelector("input").click();
+    })
+  })
 }
