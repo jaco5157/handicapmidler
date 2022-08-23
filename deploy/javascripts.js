@@ -200,7 +200,13 @@ if(document.querySelector(".webshop-orderstep1")){
 
 if(document.querySelector(".webshop-orderstep2")){
   document.querySelector(".BackgroundColor1_OrderStep2 tbody tr").insertAdjacentElement('afterend',document.querySelector(".OrderStep2_Methods_Next_TD").parentElement.cloneNode(true));
-  
+
+  addClickBox();
+  document.querySelector(".webshop-orderstep2").addEventListener("click", function(event) {
+    addClickBox();
+    event.target.click();
+    event.stopPropagation();
+  })
 }
 
 function addClickBox() {
@@ -211,10 +217,3 @@ function addClickBox() {
     })
   })
 }
-addClickBox();
-
-document.querySelector(".webshop-orderstep2").addEventListener("click", function(event) {
-  addClickBox();
-  event.target.click();
-  event.stopPropagation();
-})
