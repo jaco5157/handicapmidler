@@ -59,7 +59,7 @@ public class CSVDataProvider: IDataProvider
                 if (items[row[0]].StockCount > 0) continue;
                 try
                 {
-                    items[row[0]].Movements.Add(new InventoryMovement(DateTime.Parse(row[2]), int.Parse(row[3])));
+                    items[row[0]].Movements.Add(new InventoryMovement(DateTime.ParseExact(row[2],"dd-MM-yy",null), int.Parse(row[3])));
                 }
                 catch
                 {
