@@ -10,6 +10,7 @@ public class CSVDataProvider: IDataProvider
 {
     private string productsFile => Path.Combine("data", "varer.LST");
     private string inventoryFile => Path.Combine("data", "lagerbehold.LST");
+    private string movementFile => Path.Combine("data", "lagerbevaeg.LST");
     public IEnumerable<InventoryItemDTO> GetInventoryItems()
     {
         var items = new Dictionary<string, InventoryItemCSV>();
