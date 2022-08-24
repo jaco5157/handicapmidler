@@ -6,7 +6,7 @@ namespace InventoryService.DTOs;
 
 public class InventoryItemDTO
 {
-    public InventoryItemDTO(string productNumber, int stockCount, int? deliveryTime)
+    public InventoryItemDTO(string productNumber, int stockCount, DateTime deliveryTime)
     {
         ProductNumber = productNumber;
         StockCount = stockCount;
@@ -19,7 +19,7 @@ public class InventoryItemDTO
 
     public string ProductNumber { get; set; }
     public int StockCount { get; set; }
-    public int? DeliveryTime { get; set; }
+    public DateTime DeliveryTime { get; set; }
     
     public XElement ToXML() => new("PRODUCT", 
         new XElement("GENERAL", 

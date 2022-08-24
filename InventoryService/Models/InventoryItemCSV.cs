@@ -31,5 +31,5 @@ public class InventoryItemCSV
     public string ProductNumber { get; set; }
     public int StockCount { get; set; }
     public List<InventoryMovement> Movements { get; set; }
-    public int DeliveryTime { get; set; }
+    public DateTime DeliveryTime { get; set; }
 }
