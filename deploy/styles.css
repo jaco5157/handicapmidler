@@ -568,7 +568,9 @@ select:focus,
 #PayMethodsContainer .checkout-payment-method:hover,
 #ShippingMethod_54:hover,
 #ShippingMethod_55:hover,
-#ShippingMethod_55:hover ~ #GLS_ParselShops_55 {
+#ShippingMethod_55:hover ~ #GLS_ParselShops_55,
+#ShippingMethod_56:hover,
+#ShippingMethod_57:hover {
     border-color: #4583ed;
     box-shadow: 0 0 3px #4583ed;
     outline: none;
@@ -1605,7 +1607,7 @@ font .CategoryFooterContent .figur {
     box-sizing: border-box
 }
 
-#PayMethodsContainer .checkout-payment-method, #ShippingMethod_54, #ShippingMethod_55, #GLS_ParselShops_55 tr {
+#PayMethodsContainer .checkout-payment-method, #ShippingMethod_54, #ShippingMethod_55, #ShippingMethod_56  #ShippingMethod_57, #GLS_ParselShops_55 tr {
     cursor: pointer;
 }
 
