@@ -47,6 +47,27 @@ public class CSVDataProvider: IDataProvider
             }
         }
         
+        parser = new TextFieldParser(movementFile);
+        parser.TextFieldType = FieldType.Delimited;
+        parser.SetDelimiters(";");
+        
+        while (!parser.EndOfData)
+        {
+            string[] row = parser.ReadFields();
+            if (row is {Length: > 1} && items.ContainsKey(row[0]))
+            {
+                if (items[row[0]].StockCount > 0) continue;
+                try
+                {
+                    items[row[0]].Movements.Add(new InventoryMovement(DateTime.Parse(row[2]), int.Parse(row[3])));
+                }
+                catch
+                {
+                    // ignored
+                }
+            }
+        }
+        
         return ConvertToDTO(items);
     }
 
