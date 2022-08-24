@@ -9,6 +9,7 @@ public class InventoryItemCSV
     public InventoryItemCSV(string productNumber)
     {
         ProductNumber = productNumber;
+        Movements = new List<InventoryMovement>();
     }
 
     public DateTime CalculateDeliveryDate()
@@ -18,8 +19,10 @@ public class InventoryItemCSV
         var stock = StockCount;
         foreach (var movement in Movements)
         {
+            var oldStock = stock;
             stock += movement.Amount;
-            positiveStockDate = stock <= 0 ? DateTime.MinValue : movement.MovementDate;
+            if (stock <= 0) positiveStockDate = DateTime.MinValue;
+            else if (oldStock <= 0) positiveStockDate = movement.MovementDate;
         }
 
         return positiveStockDate;
@@ -27,7 +30,6 @@ public class InventoryItemCSV
     
     public string ProductNumber { get; set; }
     public int StockCount { get; set; }
-    
     public List<InventoryMovement> Movements { get; set; }
     public int DeliveryTime { get; set; }
 }
