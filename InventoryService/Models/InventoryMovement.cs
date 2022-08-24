@@ -1,6 +1,6 @@
 namespace InventoryService.Models;
 
-public class InventoryMovement
+public class InventoryMovement : IComparable<InventoryMovement>
 {
     public InventoryMovement(DateTime movementDate, int amount)
     {
@@ -10,15 +10,11 @@ public class InventoryMovement
 
     public DateTime MovementDate { get; set; }
     public int Amount { get; set; }
-}
 
-public class DateComparer : IComparer<InventoryMovement>
-{
-    public int Compare(InventoryMovement x, InventoryMovement y)
+    public int CompareTo(InventoryMovement? other)
     {
-        if (ReferenceEquals(x, y)) return 0;
-        if (ReferenceEquals(null, y)) return 1;
-        if (ReferenceEquals(null, x)) return -1;
-        return x.MovementDate.CompareTo(y.MovementDate);
+        if (ReferenceEquals(this, other)) return 0;
+        if (ReferenceEquals(null, other)) return 1;
+        return MovementDate.CompareTo(other.MovementDate);
     }
 }
