@@ -547,7 +547,8 @@ hr {
 input[type=text],
 input[type=tel],
 .SubmitButton_AdvancedSearchPage,
-select {
+select,
+textarea {
     box-sizing: border-box;
     border: 1px solid #d0d0d0;
     border-radius: 5px;
@@ -558,14 +559,24 @@ select {
 
 input[type=text]:focus,
 input[type=tel]:focus,
+textarea:focus,
 select:focus,
 .subcat:hover,
 #rightcol .product:hover,
-#search.SearchPage_TD .SearchField_SearchPage:focus {
+#search.SearchPage_TD .SearchField_SearchPage:focus,
+#GLS_ParselShops_55 tr:hover,
+#PayMethodsContainer .checkout-payment-method:hover,
+#ShippingMethod_54:hover,
+#ShippingMethod_55:hover,
+#ShippingMethod_55:hover ~ #GLS_ParselShops_55 {
     border-color: #4583ed;
     box-shadow: 0 0 3px #4583ed;
     outline: none;
     transition: all .15s;
+}
+
+#ShippingMethod_55:hover ~ #GLS_ParselShops_55{
+    box-shadow: 0 3px 3px #4583ed;
 }
 
 /* =================== VAREKORT =================== */
@@ -1486,6 +1497,7 @@ font .CategoryFooterContent .figur {
 .TextInputField_OrderStep1 {
     width: 100%;
     float: left;
+    resize: none
 }
 
 #rightcol .LabelColumn {
@@ -1566,7 +1578,8 @@ font .CategoryFooterContent .figur {
 .OrderStep2_ShippingMethods_Header_TD {
     border-radius: 10px 10px 0 0;
     border-bottom: 0;
-    font-size: 20px
+    font-size: 20px;
+    padding: 20px 10px 0 10px
 }
 
 .OrderStep2_PayMethods_TD,
@@ -1588,7 +1601,8 @@ font .CategoryFooterContent .figur {
     padding: 10px 0;
     border: 1px solid #d0d0d0;
     border-radius: 5px;
-    overflow: hidden
+    overflow: hidden;
+    box-sizing: border-box
 }
 
 #PayMethodsContainer .checkout-payment-method, #ShippingMethod_54, #ShippingMethod_55, #GLS_ParselShops_55 tr {
@@ -1606,8 +1620,9 @@ font .CategoryFooterContent .figur {
 }
 
 #ShippingMethodsContainer #GLS_ParselShops_55 {
-    margin-top: -10px;
-    border-top: 0
+    margin-top: -6px;
+    border-top: 0;
+    border-radius: 0 0 5px 5px
 }
 
 #ShippingMethodsContainer .gls-parsel-shops--container {
