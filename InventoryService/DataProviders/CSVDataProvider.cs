@@ -86,7 +86,7 @@ public class CSVDataProvider: IDataProvider
                 {
                     new InventoryItemDTO(item.Value.ProductNumber,
                         item.Value.StockCount,
-                        item.Value.DeliveryTime)
+                        item.Value.CalculateDeliveryDate())
                 }));
         return result;
     }

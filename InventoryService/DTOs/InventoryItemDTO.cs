@@ -27,6 +27,6 @@ public class InventoryItemDTO
             new XElement("LANGUAGE_ID", 26)), 
         new XElement("STOCK",
             new XElement("STOCK_COUNT", this.StockCount), 
-            new XElement("PROD_DELIVERY_NOT_IN_STOCK", 0)) //TODO: Calculate how many days until new delivery arrives 
+            new XElement("PROD_DELIVERY_NOT_IN_STOCK", this.DeliveryTime))
     );
 }
