@@ -4,7 +4,7 @@ namespace InventoryService.Models;
 
 public class InventoryItemXML
 {
-    public InventoryItemXML(string productNumber, int stockCount, int deliveryTime)
+    public InventoryItemXML(string productNumber, int stockCount, DateTime deliveryTime)
     {
         ProductNumber = productNumber;
         StockCount = stockCount;
@@ -13,7 +13,7 @@ public class InventoryItemXML
 
     public string ProductNumber { get; set; }
     public int StockCount { get; set; }
-    public int DeliveryTime { get; set; }
+    public DateTime DeliveryTime { get; set; }
 
     public XElement ToXML() => new("PRODUCT", 
         new XElement("GENERAL", 

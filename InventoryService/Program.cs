@@ -5,8 +5,6 @@ using InventoryService.DataProviders;
 using InventoryService.DTOs;
 using InventoryService.Interfaces;
 
-Console.WriteLine("Hello, World!");
-
 IEnumerable<InventoryItemDTO> inventoryItems;
 IDataProvider dataProvider = new CSVDataProvider();
 inventoryItems = dataProvider.GetInventoryItems();

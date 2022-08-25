@@ -10,6 +10,7 @@ public class CSVDataProvider: IDataProvider
 {
     private string productsFile => Path.Combine("data", "varer.LST");
     private string inventoryFile => Path.Combine("data", "lagerbehold.LST");
+    private string movementFile => Path.Combine("data", "lagerbevaeg.LST");
     public IEnumerable<InventoryItemDTO> GetInventoryItems()
     {
         var items = new Dictionary<string, InventoryItemCSV>();
@@ -46,6 +47,27 @@ public class CSVDataProvider: IDataProvider
             }
         }
         
+        parser = new TextFieldParser(movementFile);
+        parser.TextFieldType = FieldType.Delimited;
+        parser.SetDelimiters(";");
+        
+        while (!parser.EndOfData)
+        {
+            string[] row = parser.ReadFields();
+            if (row is {Length: > 1} && items.ContainsKey(row[0]))
+            {
+                if (items[row[0]].StockCount > 0) continue;
+                try
+                {
+                    items[row[0]].Movements.Add(new InventoryMovement(DateTime.ParseExact(row[2],"dd-MM-yy",null), int.Parse(row[3])));
+                }
+                catch
+                {
+                    // ignored
+                }
+            }
+        }
+        
         return ConvertToDTO(items);
     }
 
@@ -64,7 +86,7 @@ public class CSVDataProvider: IDataProvider
                 {
                     new InventoryItemDTO(item.Value.ProductNumber,
                         item.Value.StockCount,
-                        item.Value.DeliveryTime)
+                        item.Value.CalculateDeliveryDate())
                 }));
         return result;
     }
