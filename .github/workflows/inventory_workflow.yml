@@ -22,6 +22,12 @@ jobs:
 
       - name: Dotnet run
         run: dotnet run --project InventoryService
-
-      - name: Update Inventory
-        run: curl --location --request POST '${{ secrets.api_upload_endpoint }}?file=Inventory/document.xml&response=1&updateonly=1' --form 'user="${{ secrets.api_username }}"' --form 'password="${{ secrets.api_password }}"'
+        
+      - name: Sync inventory file
+        uses: SamKirkland/FTP-Deploy-Action@4.2.0
+        with:
+          server: ${{ secrets.ftp_server }}
+          username: ${{ secrets.ftp_username }}
+          password: ${{ secrets.ftp_password }}
+          local-dir: ./data/
+          server-dir: images/ImportExport/Inventory/
