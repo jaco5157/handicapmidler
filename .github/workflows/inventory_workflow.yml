@@ -24,4 +24,4 @@ jobs:
         run: dotnet run --project InventoryService
 
       - name: Update Inventory
-        run: curl --location --request POST '${{ secrets.api_update_endpoint }}?file=Inventory/document.xml&response=1' --form 'user="${{ secrets.api_username }}"' --form 'password="${{ secrets.api_password }}"'
+        run: curl --location --request POST '${{ secrets.api_upload_endpoint }}?file=Inventory/document.xml&response=1' --form 'user="${{ secrets.api_username }}"' --form 'password="${{ secrets.api_password }}"'
