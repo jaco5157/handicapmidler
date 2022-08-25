@@ -28,7 +28,7 @@ public class XMLDataProvider: IDataProvider
                 elements)
             );
 
-        doc.Save(Directory.GetCurrentDirectory() + "//document.xml");
+        doc.Save(Directory.GetCurrentDirectory() + "//data//document.xml");
     }
     
     public IEnumerable<InventoryItemDTO> ConvertToDTO(IEnumerable<InventoryItemXML> items)
