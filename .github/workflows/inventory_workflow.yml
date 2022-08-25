@@ -30,4 +30,4 @@ jobs:
           username: ${{ secrets.ftp_username }}
           password: ${{ secrets.ftp_password }}
           local-dir: ./data/
-          server-dir: images/ImportExport/Inventory/Updated
+          server-dir: images/ImportExport/Inventory/Updated/
