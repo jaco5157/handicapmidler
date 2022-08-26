@@ -84,7 +84,7 @@ if(document.querySelector(".webshop-productinfo")){
   if(document.querySelector(".inventoryContainer")){
     if(document.querySelector(".inventoryItemHeader").textContent.trim() == "Ikke på lager"){
       var expectedDeliveryDate = document.querySelector("#deliveryTime");
-      if(expectedDeliveryDate.textContent.trim() == "0001-01-01T00:01:00"){
+      if(expectedDeliveryDate.textContent.trim() == "0001-01-01T00:00:00"){
         expectedDeliveryDate.textContent = "Kan ikke beregne leveringsdato"
       } else {
         expectedDeliveryDate.textContent = "På lager d. " + new Date(expectedDeliveryDate.textContent.trim()).toLocaleDateString("da-DK", {year: 'numeric', month: 'long', day: 'numeric' })
