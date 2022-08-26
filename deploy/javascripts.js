@@ -83,8 +83,11 @@ if(document.querySelector(".webshop-productinfo")){
 
   if(document.querySelector(".inventoryContainer")){
     var inventoryItem = document.querySelector(".inventoryItemStock .inventoryItemHeader");
-    if(inventoryItem.textContent.trim() == "Ikke på lager"){
-      inventoryItem.parentNode.className += "inventoryItemNotInStock";
+    var inventoryAmount = document.getElementById("inventoryAmount"); 
+    if(inventoryAmount.textContent > 100) inventoryAmount.textContent = "100+";
+    if(inventoryAmount.textContent < 10 && inventoryAmount.textContent > 0) inventoryItem.parentNode.className += " inventoryItemLowStock";
+    if(inventoryAmount.textContent <= 0){
+      inventoryItem.parentNode.className += " inventoryItemNotInStock";
       var expectedDeliveryDate = document.querySelector("#deliveryTime");
       if(expectedDeliveryDate.textContent.trim() == "0001-01-01T00:00:00"){
         expectedDeliveryDate.textContent = "Kan ikke beregne leveringsdato"
@@ -92,8 +95,6 @@ if(document.querySelector(".webshop-productinfo")){
         expectedDeliveryDate.textContent = "På lager d. " + new Date(expectedDeliveryDate.textContent.trim()).toLocaleDateString("da-DK", {year: 'numeric', month: 'long', day: 'numeric' })
       }
     }
-    var inventoryAmount = document.getElementById("inventoryAmount"); 
-    if(inventoryAmount.textContent > 100) inventoryAmount.textContent = "100+";
   }
 
   if(document.querySelector(".Choose_Variant")){
