@@ -81,6 +81,17 @@ if(document.querySelector(".webshop-productinfo")){
 
   document.querySelector(".buyWrapper input").setAttribute("alt", "Læg i kurv");
 
+  if(document.querySelector(".inventoryContainer")){
+    if(document.querySelector(".inventoryItemHeader").textContent.trim() == "Ikke på lager"){
+      var expectedDeliveryDate = document.querySelector("#deliveryTime");
+      if(expectedDeliveryDate.textContent.trim() == "0001-01-01T00:01:00"){
+        expectedDeliveryDate.textContent = "Kan ikke beregne leveringsdato"
+      } else {
+        expectedDeliveryDate.textContent = "På lager d. " + new Date(expectedDeliveryDate.textContent.trim()).toLocaleDateString("da-DK", {year: 'numeric', month: 'long', day: 'numeric' })
+      }
+    }
+  }
+
   if(document.querySelector(".Choose_Variant")){
     document.querySelector(".Choose_Variant").addEventListener("click", function(evt){
       window.location.hash = "#prodInfo";
@@ -210,7 +221,7 @@ if(document.querySelector(".webshop-orderstep2")){
 }
 
 function addClickBox() {
-  document.querySelectorAll(".checkout-payment-method, #ShippingMethod_54, #ShippingMethod_55, #ShippingMethod_57, #GLS_ParselShops_55 tr").forEach(function (item){
+  document.querySelectorAll(".checkout-payment-method, #ShippingMethod_54, #ShippingMethod_55, #ShippingMethod_56, #ShippingMethod_57, #GLS_ParselShops_55 tr").forEach(function (item){
     item.addEventListener("click", function(event){
       item.querySelector("input").click();
       event.stopPropagation();

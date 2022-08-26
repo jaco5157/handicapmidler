@@ -107,6 +107,11 @@ html {
     text-align: center;
 }
 
+.smallText {
+    font-size: 12px;
+    color: #646464;
+}
+
 .flex {
     display: flex;
 }
@@ -673,9 +678,7 @@ select:focus,
 }
 
 .inventorySmalltext {
-    font-size: 12px;
     padding-top: 10px;
-    color: #646464;
 }
 
 
