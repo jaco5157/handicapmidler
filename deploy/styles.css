@@ -669,6 +669,14 @@ select:focus,
     background-color: #fff;
 }
 
+.inventoryItemLowStock {
+    border-color: #ff9100;
+}
+
+.inventoryItemNotInStock {
+    border-color: #721c24;
+}
+
 .inventoryItemFreight {
     border-color: #4583ed;
 }
