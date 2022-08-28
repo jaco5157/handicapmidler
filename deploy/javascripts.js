@@ -214,16 +214,18 @@ if(document.querySelector(".webshop-orderstep1")){
   document.querySelector(".halfColumn").insertAdjacentElement('afterend',document.querySelector(".OrderStep1_Next_TD").cloneNode(true))
 }
 
-if(document.querySelector(".webshop-orderstep2")){
-  document.querySelector(".BackgroundColor1_OrderStep2 tbody tr").insertAdjacentElement('afterend',document.querySelector(".OrderStep2_Methods_Next_TD").parentElement.cloneNode(true));
-
-  addClickBox();
-  document.querySelector(".webshop-orderstep2").addEventListener("click", function(event) {
+window.onload = (event) => {
+  if(document.querySelector(".webshop-orderstep2")){
+    document.querySelector(".BackgroundColor1_OrderStep2 tbody tr").insertAdjacentElement('afterend',document.querySelector(".OrderStep2_Methods_Next_TD").parentElement.cloneNode(true));
+  
     addClickBox();
-    event.target.click();
-    event.stopPropagation();
-  })
-}
+    document.querySelector(".webshop-orderstep2").addEventListener("click", function(event) {
+      addClickBox();
+      event.target.click();
+      event.stopPropagation();
+    })
+  }
+};
 
 function addClickBox() {
   document.querySelectorAll(".checkout-payment-method, #ShippingMethod_54, #ShippingMethod_55, #ShippingMethod_56, #ShippingMethod_57, #GLS_ParselShops_55 tr").forEach(function (item){
