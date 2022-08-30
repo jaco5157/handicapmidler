@@ -525,7 +525,9 @@ a,
 
 a:hover,
 a:active,
-.Choose_Variant:hover {
+.Choose_Variant:hover,
+.ProductList_Custom_DIV .product:hover a,
+.CustomersAlsoBought_Custom_DIV .product:hover a {
     text-decoration: none;
     color: #4583ed;
 }
@@ -1012,7 +1014,7 @@ select:focus,
     transition: all 200ms ease-in-out;
 }
 
-.product .image:hover img {
+.product:hover .image img {
     transform: scale(1.05)
 }
 
