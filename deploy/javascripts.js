@@ -214,7 +214,7 @@ function openTab(evt, tabName) {
  PRODUCTLIST SCRIPTS
 */
 function interactableProducts(){
-  if(document.querySelector(".webshop-productlist, .CustomersAlsoBought_Custom_DIV")){
+  if(document.querySelector(".webshop-productlist, .CustomersAlsoBought_Custom_DIV, .webshop-frontpage")){
     // Go to product page when clicking a product
     document.querySelectorAll(".productlist .product, .CustomersAlsoBought_Custom_DIV .product").forEach(function(product){
       product.addEventListener("click", function(event){
