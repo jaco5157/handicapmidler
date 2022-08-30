@@ -213,27 +213,31 @@ function openTab(evt, tabName) {
 /*
  PRODUCTLIST SCRIPTS
 */
-if(document.querySelector(".webshop-productlist, .CustomersAlsoBought_Custom_DIV")){
-  // Go to product page when clicking a product
-  document.querySelectorAll(".productlist .product, .CustomersAlsoBought_Custom_DIV .product").forEach(function(product){
-    product.addEventListener("click", function(event){
-      // Dont do anything if user clicks the add to basket button
-      if(event.target.nodeName == "INPUT" || event.target.nodeName == "IMG") return false;
-      product.querySelector("a").click();
+function interactableProducts(){
+  if(document.querySelector(".webshop-productlist, .CustomersAlsoBought_Custom_DIV")){
+    // Go to product page when clicking a product
+    document.querySelectorAll(".productlist .product, .CustomersAlsoBought_Custom_DIV .product").forEach(function(product){
+      product.addEventListener("click", function(event){
+        // Dont do anything if user clicks the add to basket button
+        if(event.target.nodeName == "INPUT" || event.target.nodeName == "IMG") return false;
+        product.querySelector("a").click();
+      })
     })
-  })
-  // Add attributes to input fields
-  document.getElementsByClassName("BuyButton_ProductList").forEach(function (item){
-    if(item.type == "text") item.setAttribute("aria-label", "Indtast antal produkter til køb");
-    if(item.type == "image") item.setAttribute("aria-label", "Læg i kurv");
-    if(item.nodeName == "IMG") {
-        item.setAttribute("alt","Vælg variant");
-        item.setAttribute("width","317px");
-        item.setAttribute("height","40px");
-        item.parentElement.setAttribute("title","Vælg variant");
-    }
-  })
+    // Add attributes to input fields
+    document.getElementsByClassName("BuyButton_ProductList").forEach(function (item){
+      if(item.type == "text") item.setAttribute("aria-label", "Indtast antal produkter til køb");
+      if(item.type == "image") item.setAttribute("aria-label", "Læg i kurv");
+      if(item.nodeName == "IMG") {
+          item.setAttribute("alt","Vælg variant");
+          item.setAttribute("width","317px");
+          item.setAttribute("height","40px");
+          item.parentElement.setAttribute("title","Vælg variant");
+      }
+    })
+  }
 }
+interactableProducts();
+
 /*
  END OF PRODUCTLIST SCRIPTS
 */

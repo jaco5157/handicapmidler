@@ -992,6 +992,7 @@ select:focus,
     margin: auto;
     max-width: 400px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .product .image {
