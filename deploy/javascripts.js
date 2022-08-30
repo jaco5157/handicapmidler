@@ -1,3 +1,6 @@
+/*
+ GENERAL SCRIPTS
+*/
 //Seachbar
 $(function() {
   var submitIcon = $(".nbsp");
@@ -60,8 +63,13 @@ $(window).resize(function() {
   }
   currentWidth = $("body").width();
 });
+/*
+ END OF GENERAL SCRIPTS
+*/
 
-//Scripts to be run on product page
+/*
+ PRODUCT PAGE SCRIPTS
+*/
 if(document.querySelector(".webshop-productinfo")){
   
   var amount = document.getElementById("amount");
@@ -127,6 +135,7 @@ if(document.querySelector(".webshop-productinfo")){
     tabLinks[i].remove();
     tabContent[i].remove();
   }
+  tabLinks = document.getElementsByClassName("tabLinks");
   if(tabs.textContent.trim()) {
     tabLinks[0].click();
     if(!amount.disabled) document.querySelector(".moreInfoButton").style.display = "block"; 
@@ -196,7 +205,24 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " active";
 }
 
-if(document.querySelector(".webshop-productlist")){
+/*
+  END OF PRODUCT PAGE SCRIPTS
+*/
+
+
+/*
+ PRODUCTLIST SCRIPTS
+*/
+if(document.querySelector(".webshop-productlist, .CustomersAlsoBought_Custom_DIV")){
+  // Go to product page when clicking a product
+  document.querySelectorAll(".productlist .product, .CustomersAlsoBought_Custom_DIV .product").forEach(function(product){
+    product.addEventListener("click", function(event){
+      // Dont do anything if user clicks the add to basket button
+      if(event.target.nodeName == "INPUT" || event.target.nodeName == "IMG") return false;
+      product.querySelector("a").click();
+    })
+  })
+  // Add attributes to input fields
   document.getElementsByClassName("BuyButton_ProductList").forEach(function (item){
     if(item.type == "text") item.setAttribute("aria-label", "Indtast antal produkter til køb");
     if(item.type == "image") item.setAttribute("aria-label", "Læg i kurv");
@@ -208,7 +234,13 @@ if(document.querySelector(".webshop-productlist")){
     }
   })
 }
+/*
+ END OF PRODUCTLIST SCRIPTS
+*/
 
+/*
+ ORDERSTEP SCRIPTS
+*/
 //Add another button to OrderStep1 and OrderStep2
 if(document.querySelector(".webshop-orderstep1")){
   document.querySelector(".halfColumn").insertAdjacentElement('afterend',document.querySelector(".OrderStep1_Next_TD").cloneNode(true))
@@ -235,3 +267,6 @@ function addClickBox() {
     })
   })
 }
+/*
+ END OF ORDERSTEP SCRIPTS
+*/
