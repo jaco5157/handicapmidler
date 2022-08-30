@@ -219,7 +219,7 @@ function interactableProducts(){
     document.querySelectorAll(".productlist .product, .CustomersAlsoBought_Custom_DIV .product").forEach(function(product){
       product.addEventListener("click", function(event){
         // Dont do anything if user clicks the add to basket button
-        if(event.target.nodeName == "INPUT" || event.target.nodeName == "IMG") return false;
+        if(event.target.nodeName == "INPUT" || event.target.nodeName == "IMG"  || event.target.nodeName == "SELECT") return false;
         product.querySelector("a").click();
       })
     })
