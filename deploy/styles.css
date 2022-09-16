@@ -216,7 +216,6 @@ html {
 #PayMethodsContainer tr td:nth-child(3) br:last-child,
 #PayMethodsContainer tr td:nth-child(3) br:nth-last-child(2),
 #ShippingMethodsContainer tr td:nth-child(3) br:last-child,
-#adminbar-placeholder,
 .hiddenTablet {
     display: none
 }
