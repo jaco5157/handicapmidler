@@ -574,7 +574,7 @@ select:focus,
 #PayMethodsContainer .checkout-payment-method:hover,
 #ShippingMethod_54:hover,
 #ShippingMethod_55:hover,
-#ShippingMethod_55:hover ~ #GLS_ParselShops_55,
+#ShippingMethod_55:hover~#GLS_ParselShops_55,
 #ShippingMethod_56:hover,
 #ShippingMethod_57:hover {
     border-color: #4583ed;
@@ -583,7 +583,7 @@ select:focus,
     transition: all .15s;
 }
 
-#ShippingMethod_55:hover ~ #GLS_ParselShops_55{
+#ShippingMethod_55:hover~#GLS_ParselShops_55 {
     box-shadow: 0 3px 3px #4583ed;
 }
 
@@ -929,7 +929,7 @@ select:focus,
 
 .prodinfoimg {
     width: 100%;
-    max-width: 360px;
+    max-width: 400px;
 }
 
 .prodinfoimg p {
@@ -1620,7 +1620,11 @@ font .CategoryFooterContent .figur {
     box-sizing: border-box
 }
 
-#PayMethodsContainer .checkout-payment-method, #ShippingMethod_54, #ShippingMethod_55, #ShippingMethod_56  #ShippingMethod_57, #GLS_ParselShops_55 tr {
+#PayMethodsContainer .checkout-payment-method,
+#ShippingMethod_54,
+#ShippingMethod_55,
+#ShippingMethod_56 #ShippingMethod_57,
+#GLS_ParselShops_55 tr {
     cursor: pointer;
 }
 
@@ -1747,6 +1751,43 @@ font .CategoryFooterContent .figur {
 
 .about-img img {
     border-radius: 100%;
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+}
+
+.centerBoxWhite {
+    background: #fff;
+}
+
+.centerBox {
+    overflow: hidden;
+    border-radius: 15px;
+    margin-bottom: 40px;
+}
+
+.centerBox .center {
+    max-width: 650px;
+}
+
+.aboutImages {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.large-2.mapContainer {
+    padding: 0;
+}
+
+.mapResponsive {
+    overflow: hidden;
+    height: 300px;
+}
+
+.mapResponsive iframe {
+    height: 500px;
     width: 100%;
 }
 
@@ -2249,7 +2290,12 @@ footer #copyright #rights {
     footer ul a {
         padding: 2px 0;
     }
+
+    .centerBox.banner {
+        padding: 0;
+    }
 }
+
 
 @media screen and (min-width: 1180px) {
 
@@ -2340,5 +2386,9 @@ footer #copyright #rights {
     .textbox {
         border-radius: 5px;
         background-color: #fff
+    }
+
+    .mapResponsive {
+        height: 500px;
     }
 }
