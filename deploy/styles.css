@@ -1763,7 +1763,6 @@ font .CategoryFooterContent .figur {
 .centerBox {
     overflow: hidden;
     border-radius: 15px;
-    margin-bottom: 40px;
 }
 
 .centerBox .center {
@@ -2214,6 +2213,12 @@ footer #copyright #rights {
         padding-left: 3px;
         transition: 150ms ease
     }
+    .centerBox {
+        padding:30px;
+    }
+    .centerBox.banner {
+        padding:0;
+    }
 }
 
 @media screen and (min-width: 960px) {
@@ -2289,10 +2294,6 @@ footer #copyright #rights {
 
     footer ul a {
         padding: 2px 0;
-    }
-
-    .centerBox.banner {
-        padding: 0;
     }
 }
 
