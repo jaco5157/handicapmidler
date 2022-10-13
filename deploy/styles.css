@@ -930,24 +930,16 @@ select:focus,
 .prodinfoimg {
     width: 100%;
     max-width: 400px;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .prodinfoimg p {
     font-weight: bold;
 }
 
-.prodinfoimg .image_toilet {
-    width: 60%;
-    float: left;
-}
-
 .prodinfoimg .image_toilet img {
     width: 100%;
-}
-
-.prodinfoimg .table_toilet {
-    width: 40%;
-    float: right;
 }
 
 .prodinfoimg .table_toilet table {
@@ -2130,6 +2122,11 @@ footer #copyright #rights {
         width: calc(100% - 198px);
     }
 
+    .prodinfoimg .image_toilet {
+        width:60%;
+        float:left;
+    }
+
     .product-filter-column:nth-child(1) .product-filter-container {
         margin-right: 5px
     }
@@ -2213,11 +2210,13 @@ footer #copyright #rights {
         padding-left: 3px;
         transition: 150ms ease
     }
+
     .centerBox {
-        padding:30px;
+        padding: 30px;
     }
+
     .centerBox.banner {
-        padding:0;
+        padding: 0;
     }
 }
 
