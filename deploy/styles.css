@@ -520,6 +520,7 @@ a,
 .Choose_Variant {
     text-decoration: underline;
     color: #000000;
+    cursor: pointer;
 }
 
 a:hover,
@@ -946,10 +947,10 @@ select:focus,
     border: 1px solid #d0d0d0
 }
 
-.Choose_Variant {
+.Choose_Variant,
+.tableInfo {
     font-weight: bold;
     padding: 8px;
-    cursor: pointer;
 }
 
 #guides {
