@@ -162,6 +162,11 @@ html {
     flex: 0 0 auto;
 }
 
+.productlist-cols .CustomersAlsoBought_Custom_DIV form,
+.productlist-cols .ProductList_Custom_DIV form{
+  width: 100%
+}
+
 .col-lg-3, .col-lg-4, .col-lg-6, .col-md-4, .col-md-6, .col-md-8, .col-sm-6, 
 .productlist-cols .ProductList_Custom_DIV > div, 
 .productlist-cols .CustomersAlsoBought_Custom_DIV > div {
@@ -927,6 +932,7 @@ select:focus,
 
 .prodinfotable {
     border-collapse: collapse;
+    width: 100%;
 }
 
 .prodinfotable tr:nth-child(even) {
@@ -1203,7 +1209,7 @@ font .CategoryFooterContent .figur {
     border-bottom: 1px solid #D9D9D9;
 }
 
-.productLine {
+.product-line {
     border-top: 1px solid #D9D9D9;
     padding: 30px 0;
     position: relative;
