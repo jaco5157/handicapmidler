@@ -1324,10 +1324,6 @@ font .CategoryFooterContent .figur {
     height: auto;
 }
 
-.tbWrapper {
-    text-align: center;
-}
-
 .textbox {
     float: left;
     height: 100%;
@@ -1335,7 +1331,7 @@ font .CategoryFooterContent .figur {
     background-color: #fff;
 }
 
-.tbHeader {
+.textbox-header {
     height: 36px;
     position: relative;
     padding: 0 0 0 8px;
@@ -1345,9 +1341,9 @@ font .CategoryFooterContent .figur {
     line-height: 34px
 }
 
-.tbHeader .logo_textbox {
-    height: 58px;
-    width: 58px;
+.textbox-header .textbox-logo {
+    height:46px;
+    width:46px;
     border: 4px solid;
     border-radius: 30px;
     position: absolute;
@@ -1361,11 +1357,11 @@ font .CategoryFooterContent .figur {
     border: 5px solid #4583ed;
 }
 
-.payment .tbHeader {
+.payment .textbox-header {
     background-color: #4583ed;
 }
 
-.payment .tbHeader .logo_textbox {
+.payment .textbox-header .textbox-logo {
     border-color: #4583ed
 }
 
@@ -1373,11 +1369,11 @@ font .CategoryFooterContent .figur {
     border: 5px solid #78BD3F;
 }
 
-.delivery .tbHeader {
+.delivery .textbox-header {
     background-color: #78BD3F;
 }
 
-.delivery .tbHeader .logo_textbox {
+.delivery .textbox-header .textbox-logo {
     border-color: #78BD3F
 }
 
@@ -1385,15 +1381,15 @@ font .CategoryFooterContent .figur {
     border: 5px solid #f8991d;
 }
 
-.help .tbHeader {
+.help .textbox-header {
     background-color: #f8991d;
 }
 
-.help .tbHeader .logo_textbox {
+.help .textbox-header .textbox-logo {
     border-color: #f8991d
 }
 
-.tbContent {
+.textbox-content {
     margin: 0 8px;
 }
 
