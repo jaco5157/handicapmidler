@@ -89,14 +89,14 @@ if(document.querySelector(".webshop-productinfo")){
 
   document.querySelector(".buyWrapper input").setAttribute("alt", "Læg i kurv");
 
-  if(document.querySelector(".inventoryContainer")){
-    var inventoryItem = document.querySelector(".inventoryItemStock .inventoryItemHeader");
-    var inventoryAmount = document.getElementById("inventoryAmount"); 
+  if(document.querySelector(".inventory-container")){
+    var inventoryItem = document.querySelector(".inventory-item-stock .inventory-item-header");
+    var inventoryAmount = document.getElementById("inventory-amount"); 
     if(inventoryAmount.textContent > 100) inventoryAmount.textContent = "100+";
-    if(inventoryAmount.textContent < 10 && inventoryAmount.textContent > 0) inventoryItem.parentNode.className += " inventoryItemLowStock";
+    if(inventoryAmount.textContent < 10 && inventoryAmount.textContent > 0) inventoryItem.parentNode.className += " inventory-item-low-stock";
     if(inventoryAmount.textContent <= 0){
-      inventoryItem.parentNode.className += " inventoryItemNotInStock";
-      var expectedDeliveryDate = document.querySelector("#deliveryTime");
+      inventoryItem.parentNode.className += " inventory-item-no-stock";
+      var expectedDeliveryDate = document.querySelector("#delivery-time");
       if(expectedDeliveryDate.textContent.trim() == "0001-01-01T00:00:00"){
         expectedDeliveryDate.textContent = "Kan ikke beregne leveringsdato"
       } else {
@@ -128,17 +128,17 @@ if(document.querySelector(".webshop-productinfo")){
   //Check if tabs are empty. If so, remove, click the first tab
   var tabs, tabContent, tabLinks;
   tabs = document.querySelector(".tab");
-  tabContent = document.getElementsByClassName("tabContent");
-  tabLinks = document.getElementsByClassName("tabLinks");
+  tabContent = document.getElementsByClassName("tab-content");
+  tabLinks = document.getElementsByClassName("tab-links");
   for (let i = tabLinks.length - 1; i >= 0; i--) {
     if(tabContent[i].textContent.trim()) continue
     tabLinks[i].remove();
     tabContent[i].remove();
   }
-  tabLinks = document.getElementsByClassName("tabLinks");
+  tabLinks = document.getElementsByClassName("tab-links");
   if(tabs.textContent.trim()) {
     tabLinks[0].click();
-    if(!amount.disabled) document.querySelector(".moreInfoButton").style.display = "block"; 
+    if(!amount.disabled) document.querySelector(".more-info-button").style.display = "block"; 
   }
   else tabs.remove();
 
@@ -176,7 +176,7 @@ if(document.querySelector(".webshop-productinfo")){
       var amountParam = "";
       document.getElementsByClassName("addon").forEach(function (item) {
         if(item.querySelector('input').checked){
-          productParam += "|" + item.querySelector('span.addonNumber').textContent;
+          productParam += "|" + item.querySelector('span.addon-number').textContent;
           amountParam += "|" + amountVal;
         }
       });
@@ -195,8 +195,8 @@ if(document.querySelector(".webshop-productinfo")){
 //Add active class to tab when clicked
 function openTab(evt, tabName) {
   var i, tabContent, tabLinks;
-  tabContent = document.getElementsByClassName("tabContent");
-  tabLinks = document.getElementsByClassName("tabLinks");
+  tabContent = document.getElementsByClassName("tab-content");
+  tabLinks = document.getElementsByClassName("tab-links");
   for (i = 0; i < tabContent.length; i++) {
     tabContent[i].className = tabContent[i].className.replace(" active", "");
     tabLinks[i].className = tabLinks[i].className.replace(" active", "");
