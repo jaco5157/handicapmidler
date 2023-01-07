@@ -167,7 +167,7 @@ html {
   width: 100%
 }
 
-.col-lg-3, .col-lg-4, .col-lg-6, .col-md-4, .col-md-6, .col-md-8, .col-sm-6, 
+.col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-md-4, .col-md-6, .col-md-8, .col-sm-6, 
 .productlist-cols .ProductList_Custom_DIV > div, 
 .productlist-cols .CustomersAlsoBought_Custom_DIV > div {
     --columns: 12;
@@ -656,6 +656,7 @@ select:focus,
     background-color: #e9e9e9;
     border-radius: 10px;
     border: 1px solid #d0d0d0;
+    height: fit-content;
 }
 
 .product-info .product-info-wrapper {
@@ -933,6 +934,7 @@ select:focus,
 .prodinfotable {
     border-collapse: collapse;
     width: 100%;
+    border-bottom: 1px solid #d0d0d0;
 }
 
 .prodinfotable tr:nth-child(even) {
@@ -942,6 +944,7 @@ select:focus,
 .prodinfotable td,
 .prodinfotable th {
     padding: 8px;
+    width: 50%;
 }
 
 .prodinfotable td:nth-child(1),
@@ -2308,8 +2311,17 @@ footer #copyright #rights {
     .productlist-cols .CustomersAlsoBought_Custom_DIV > div {
         --columns: 4;
     }
+
+    .col-lg-5{
+        --columns: 5;
+    }
+
     .col-lg-6{
         --columns: 6;
+    }
+
+    .col-lg-7{
+        --columns: 7;
     }
 
      .productlistTable .prodTableName {
