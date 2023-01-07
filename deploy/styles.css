@@ -106,7 +106,6 @@ html {
 }
 
 .center {
-    display: block;
     margin: 0 auto
 }
 
@@ -934,7 +933,6 @@ select:focus,
 .prodinfotable {
     border-collapse: collapse;
     width: 100%;
-    border-bottom: 1px solid #d0d0d0;
 }
 
 .prodinfotable tr:nth-child(even) {
