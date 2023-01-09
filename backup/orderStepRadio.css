@@ -1,0 +1,27 @@
+
+.checkout-payment-method td:nth-child(2):after {
+    content: "";
+    display:block;
+    width: 22px;
+    height: 22px;
+    background: #e9e9e9;
+    border-radius: 12px;
+    border: 1px solid #d0d0d0;
+    margin-right: 15px;
+  }
+  
+  .checkout-payment-method:hover td:nth-child(2):after {
+    background-color: #dcdcdc;
+  }
+  
+  .checkout-payment-method input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  .checkout-payment-method input:checked ~ :after {
+    background-color: blue;
+  }

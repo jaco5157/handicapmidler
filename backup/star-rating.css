@@ -1,0 +1,35 @@
+.Product_Rating_Symbols_Container div {
+    background-color: transparent;
+    background-image: url("/images/logo/stars24.png");
+    width: 14px;
+    height: 28px;
+    float: left
+}
+
+.Product_Rating_Symbols_Idle_Left {
+    background-position: 0px 0px;
+}
+
+.Product_Rating_Symbols_Idle_Right {
+    background-position: 14px 0px;
+}
+
+.Product_Rating_Symbols_Active_Left {
+    background-position: 0px 28px;
+}
+
+.Product_Rating_Symbols_Active_Right {
+    background-position: 14px 28px;
+}
+
+.Product_Rating_Symbols_Hover_Left {
+    background-position: 0px 56px;
+}
+
+.Product_Rating_Symbols_Hover_Right {
+    background-position: 14px 56px;
+}
+
+.Product_Rating_Symbols_Clear {
+    clear: both;
+}

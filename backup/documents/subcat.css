@@ -1,0 +1,35 @@
+.subcat_links a {
+    text-decoration: none;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    --gap: 0.1px;
+}
+
+.flex-gap {
+    --gap: 10px;
+    gap: var(--gap);
+}
+
+.col {
+    width: calc((100% / (12 / var(--columns))) - var(--gap) + (var(--gap) / (12 / var(--columns))));
+    flex: 0 0 auto;
+}
+
+.col-4 {
+    --columns: 4;
+}
+
+.col-6 {
+    --columns: 6;
+}
+
+.col-8 {
+    --columns: 8;
+}
+
+.col-12 {
+    --columns: 12;
+}

@@ -1,0 +1,31 @@
+<div class="wrapper flex-container">
+    <div class="flex col col-lg-4">
+        <div class="margin5px padding10px delivery-card delivery-price">
+            <span class="delivery-card-header">Hurtig levering</span>
+            <ul class="list">
+                <li>kr. 49 for levering til pakkeshop.</li>
+                <li>kr. 59 for levering til dør.</li>
+            </ul>
+            Levering sker inden for 1-3 hverdage derefter.
+            Pakken vil blive sendt fra Mobilex, og det vil stå på besked fra GLS
+        </div>
+    </div>
+    <div class="flex col col-lg-4">
+        <div class="margin5px padding10px delivery-card delivery-free">
+            <span class="delivery-card-header">Fri fragt</span>
+            <ul class="list">
+                <li>Fri fragt ved køb fra 1000 kr. - kun private
+                </li>
+            </ul>
+            <span class="remaining-text">Du har handlet for over 1000 kr. og har derfor opnået fri fragt!</span>
+        </div>
+    </div>
+</div>
+<script>
+    if (document.querySelector(".basket-price span").textContent.replace('.', '').replace(',', '.') - 1 * document.querySelector(".shipping-price span").textContent.replace(',', '.') >= 1000) {
+        document.querySelector(".remaining-text").textContent = "Du har handlet for over 1000 kr. og har derfor opnået fri fragt!"
+    } else {
+        var remaining = 1000 - 1 * document.querySelector(".basket-price span").textContent.replace('.', '').replace(',', '.') + 1 * document.querySelector(".shipping-price span").textContent.replace(',', '.') + " kr";
+        document.querySelector(".delivery-free .remaining").textContent = remaining.replace('.', ',') + ".";
+    }
+</script>
