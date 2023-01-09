@@ -174,7 +174,7 @@ if(document.querySelector(".webshop-productinfo")){
       }
       var productParam = "";
       var amountParam = "";
-      document.getElementsByClassName("addon").forEach(function (item) {
+      document.querySelectorAll(".addon").forEach(function (item) {
         if(item.querySelector('input').checked){
           productParam += "|" + item.querySelector('span.addon-number').textContent;
           amountParam += "|" + amountVal;
