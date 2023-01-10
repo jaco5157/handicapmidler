@@ -530,7 +530,7 @@ h6 {
 }
 
 p {
-    padding: 7px 0 22px
+    padding: 10px 0
 }
 
 a,
@@ -1300,6 +1300,21 @@ figure img {
     width: 100%;
     float: left;
     resize: none
+}
+
+#cvrnr.TextInputField_OrderStep1 {
+    margin-right: 0;
+    width: calc(100% - 70px);
+    border-radius: 5px 0 0 5px;
+}
+
+button.TextInputField_OrderStep1 {
+    width: 70px;
+    height: 40.5px;
+    margin-left: 0;
+    border-radius: 0 5px 5px 0;
+    border: 1px solid #d0d0d0;
+    border-left: 0;
 }
 
 #rightcol .LabelColumn {
@@ -2121,8 +2136,12 @@ footer #copyright #rights {
     .OptionSelect_OrderStep1,
     .TextInputField_OrderStep1,
     .TextInputField_AdvancedSearchPage {
-        width: 90%;
+        width: calc(100% - 20px);
         margin: 5px 10px;
+    }
+
+    #cvrnr.TextInputField_OrderStep1 {
+        width: calc(100% - 90px);
     }
 
     .SubmitButton_OrderStep1_Position {
