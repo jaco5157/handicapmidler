@@ -1289,6 +1289,16 @@ figure img {
     width: 100% !important
 }
 
+
+#rightcol .LabelColumn,
+#rightcol .InputFieldColumn,
+.OptionSelect_OrderStep1,
+.TextInputField_OrderStep1 {
+    width: 100%;
+    float: left;
+    height: 42px
+}
+
 #rightcol .LabelColumn {
     margin-top: 12px;
     height: auto;
@@ -1299,14 +1309,6 @@ figure img {
     height: 0px;
 }
 
-#rightcol .LabelColumn,
-#rightcol .InputFieldColumn,
-.OptionSelect_OrderStep1,
-.TextInputField_OrderStep1 {
-    width: 100%;
-    float: left
-}
-
 #cvrnr.TextInputField_OrderStep1 {
     margin-right: 0;
     width: calc(100% - 70px);
@@ -1315,7 +1317,6 @@ figure img {
 
 button.TextInputField_OrderStep1 {
     width: 70px;
-    height: 40.5px;
     margin-left: 0;
     border-radius: 0 5px 5px 0;
     border: 1px solid #d0d0d0;
