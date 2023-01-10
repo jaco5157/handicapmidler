@@ -2127,9 +2127,10 @@ footer #copyright #rights {
         width: 50% !important
     }
 
-    #rightcol .LabelColumn,
+    #rightcol .LabelColumn{
+        width: 100px;
+    }
     #rightcol .InputFieldColumn {
-        width: auto;
         float: none;
     }
 
