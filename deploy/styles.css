@@ -1289,8 +1289,13 @@ figure img {
     width: 100% !important
 }
 
-.CustomerData_OrderStep1_TBL tr td {
-    vertical-align: middle;
+#rightcol .LabelColumn {
+    margin-top: 12px;
+    height: auto;
+}
+
+#rightcol .warning-field .LabelColumn {
+    height: 0px;
 }
 
 #rightcol .LabelColumn,
@@ -1298,8 +1303,7 @@ figure img {
 .OptionSelect_OrderStep1,
 .TextInputField_OrderStep1 {
     width: 100%;
-    float: left;
-    resize: none
+    float: left
 }
 
 #cvrnr.TextInputField_OrderStep1 {
@@ -1317,9 +1321,6 @@ button.TextInputField_OrderStep1 {
     border-left: 0;
 }
 
-#rightcol .LabelColumn {
-    margin-top: 8px;
-}
 
 .OptionSelect_AdvancedSearchPage,
 .TextInputField_AdvancedSearchPage,
@@ -2119,7 +2120,7 @@ footer #copyright #rights {
     }
 
     .halfColumn {
-        margin: 30px 0 0;
+        margin: 42px 0 0;
     }
 
     .halfColumn,
@@ -2127,11 +2128,14 @@ footer #copyright #rights {
         width: 50% !important
     }
 
-    #rightcol .LabelColumn{
-        width: 100px;
-    }
+    #rightcol .LabelColumn, 
     #rightcol .InputFieldColumn {
         float: none;
+        vertical-align: middle;
+    }
+
+    #rightcol .LabelColumn{
+        width: 100px;
     }
 
     .OptionSelect_OrderStep1,
