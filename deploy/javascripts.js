@@ -2,27 +2,27 @@
  GENERAL SCRIPTS
 */
 //Seachbar
-$(function() {
+$(function () {
   var submitIcon = $(".nbsp");
   var submitButton = $(".SubmitButton_SearchPage");
   var inputBox = $(".SearchField_SearchPage");
   var searchBox = $(".SearchPage_TD");
   var isOpen = false;
-  inputBox.attr("placeholder", "Søg på Handicapmidler.dk"); 
-  submitIcon.click(function() {
+  inputBox.attr("placeholder", "Søg på Handicapmidler.dk");
+  submitIcon.click(function () {
     var inputVal = $(".SearchField_SearchPage").val();
     inputVal = $.trim(inputVal).length;
-    if($("body").width() >= 800){
+    if ($("body").width() >= 800) {
       if (inputVal !== 0) {
         submitButton.click();
       } else {
         inputBox.focus();
       }
-    } else if(isOpen === false){
+    } else if (isOpen === false) {
       inputBox.val("");
       searchBox.addClass("SearchPage_TD-open");
       inputBox.focus();
-      isOpen = true; 
+      isOpen = true;
     } else if (inputVal !== 0) {
       submitButton.click();
     } else {
@@ -32,13 +32,13 @@ $(function() {
     }
   });
   //When clicking anywhere other than the searchbox, close the box
-  submitIcon.mouseup(function() {
+  submitIcon.mouseup(function () {
     return false;
   });
-  searchBox.mouseup(function() {
+  searchBox.mouseup(function () {
     return false;
   });
-  $(document).mouseup(function() {
+  $(document).mouseup(function () {
     if (isOpen === true) {
       searchBox.removeClass("SearchPage_TD-open");
       isOpen = false;
@@ -48,15 +48,15 @@ $(function() {
 
 //Productmenu slidetoggle
 var currentWidth = $("body").width();
-$('.Heading_Productmenu').click(function() {
-  if(currentWidth < 800){
+$('.Heading_Productmenu').click(function () {
+  if (currentWidth < 800) {
     $('#ProductMenu_List').slideToggle();
   }
 });
-$(window).resize(function() {
-  if(currentWidth === $("body").width()) {
+$(window).resize(function () {
+  if (currentWidth === $("body").width()) {
     return false;
-  } else if($("body").width() < 800){
+  } else if ($("body").width() < 800) {
     $('#ProductMenu_List').slideUp();
   } else {
     $('#ProductMenu_List').slideDown();
@@ -70,12 +70,12 @@ $(window).resize(function() {
 /*
  PRODUCT PAGE SCRIPTS
 */
-if(document.querySelector(".webshop-productinfo")){
-  
+if (document.querySelector(".webshop-productinfo")) {
+
   var amount = document.getElementById("amount");
 
-  if(document.querySelector(".selectors")) document.querySelector(".selectors").firstElementChild.className += " active";
-  
+  if (document.querySelector(".selectors")) document.querySelector(".selectors").firstElementChild.className += " active";
+
   //Change look of amount selector
   var minus = document.createElement('button');
   minus.id = "minus";
@@ -89,24 +89,24 @@ if(document.querySelector(".webshop-productinfo")){
 
   document.querySelector(".buyWrapper input").setAttribute("alt", "Læg i kurv");
 
-  if(document.querySelector(".inventory-container")){
+  if (document.querySelector(".inventory-container")) {
     var inventoryItem = document.querySelector(".inventory-item-stock .inventory-item-header");
-    var inventoryAmount = document.getElementById("inventory-amount"); 
-    if(inventoryAmount.textContent > 100) inventoryAmount.textContent = "100+";
-    if(inventoryAmount.textContent < 10 && inventoryAmount.textContent > 0) inventoryItem.parentNode.className += " inventory-item-low-stock";
-    if(inventoryAmount.textContent <= 0){
+    var inventoryAmount = document.getElementById("inventory-amount");
+    if (inventoryAmount.textContent > 100) inventoryAmount.textContent = "100+";
+    if (inventoryAmount.textContent < 10 && inventoryAmount.textContent > 0) inventoryItem.parentNode.className += " inventory-item-low-stock";
+    if (inventoryAmount.textContent <= 0) {
       inventoryItem.parentNode.className += " inventory-item-no-stock";
       var expectedDeliveryDate = document.querySelector("#delivery-time");
-      if(expectedDeliveryDate.textContent.trim() == "0001-01-01T00:00:00"){
+      if (expectedDeliveryDate.textContent.trim() == "0001-01-01T00:00:00") {
         expectedDeliveryDate.textContent = "Kan ikke beregne leveringsdato"
       } else {
-        expectedDeliveryDate.textContent = "På lager d. " + new Date(expectedDeliveryDate.textContent.trim()).toLocaleDateString("da-DK", {year: 'numeric', month: 'long', day: 'numeric' })
+        expectedDeliveryDate.textContent = "På lager d. " + new Date(expectedDeliveryDate.textContent.trim()).toLocaleDateString("da-DK", { year: 'numeric', month: 'long', day: 'numeric' })
       }
     }
   }
 
-  if(document.querySelector(".Choose_Variant")){
-    document.querySelector(".Choose_Variant").addEventListener("click", function(evt){
+  if (document.querySelector(".Choose_Variant")) {
+    document.querySelector(".Choose_Variant").addEventListener("click", function (evt) {
       window.location.hash = "#prodInfo";
       document.querySelector(".Variants").style.border = "1px solid #4583ed";
       document.querySelector(".Variants").style.borderRadius = "7px";
@@ -116,13 +116,13 @@ if(document.querySelector(".webshop-productinfo")){
   }
 
   var warningBox = document.getElementById("warning");
-  minus.addEventListener("click", function(evt){
-    if(!amount.disabled) amount.stepDown();
-    else warningBox.style.display = "block"; 
+  minus.addEventListener("click", function (evt) {
+    if (!amount.disabled) amount.stepDown();
+    else warningBox.style.display = "block";
   })
-  plus.addEventListener("click", function(evt){
-    if(!amount.disabled) amount.stepUp();
-    else warningBox.style.display = "block"; 
+  plus.addEventListener("click", function (evt) {
+    if (!amount.disabled) amount.stepUp();
+    else warningBox.style.display = "block";
   })
 
   //Check if tabs are empty. If so, remove, click the first tab
@@ -131,14 +131,14 @@ if(document.querySelector(".webshop-productinfo")){
   tabContent = document.getElementsByClassName("tab-content");
   tabLinks = document.getElementsByClassName("tab-links");
   for (let i = tabLinks.length - 1; i >= 0; i--) {
-    if(tabContent[i].textContent.trim()) continue
+    if (tabContent[i].textContent.trim()) continue
     tabLinks[i].remove();
     tabContent[i].remove();
   }
   tabLinks = document.getElementsByClassName("tab-links");
-  if(tabs.textContent.trim()) {
+  if (tabs.textContent.trim()) {
     tabLinks[0].click();
-    if(!amount.disabled) document.querySelector(".more-info-button").style.display = "block"; 
+    if (!amount.disabled) document.querySelector(".more-info-button").style.display = "block";
   }
   else tabs.remove();
 
@@ -148,17 +148,18 @@ if(document.querySelector(".webshop-productinfo")){
   img.setAttribute("src", "/images/logo/sprites.svg#pdf");
   img.setAttribute("width", "100");
   img.setAttribute("height", "100");
-  document.getElementsByClassName("documentation").forEach(function(item){
-    if(item.firstChild){
+  document.getElementsByClassName("documentation").forEach(function (item) {
+    if (item.firstChild) {
       item.firstChild.setAttribute("title", "Download dokumentation");
-      item.insertAdjacentElement("afterbegin", img.cloneNode(true))};
-    }
+      item.insertAdjacentElement("afterbegin", img.cloneNode(true))
+    };
+  }
   );
 
   //Replace links with child element for addons
-  if(document.querySelector(".Related_Custom_DIV")){
-    document.querySelector(".Related_Custom_DIV").querySelectorAll("a").forEach(function (item){
-      item.insertAdjacentElement('beforebegin',item.firstChild);
+  if (document.querySelector(".Related_Custom_DIV")) {
+    document.querySelector(".Related_Custom_DIV").querySelectorAll("a").forEach(function (item) {
+      item.insertAdjacentElement('beforebegin', item.firstChild);
       item.remove();
     });
   }
@@ -167,15 +168,15 @@ if(document.querySelector(".webshop-productinfo")){
   document.querySelector(".buyWrapper input").addEventListener('click', async function (e) {
     e.preventDefault();
     var amountVal = amount.value;
-    try{
-      if(amount.disabled) {
-        warningBox.style.display = "block"; 
+    try {
+      if (amount.disabled) {
+        warningBox.style.display = "block";
         return;
       }
       var productParam = "";
       var amountParam = "";
       document.querySelectorAll(".addon").forEach(function (item) {
-        if(item.querySelector('input').checked){
+        if (item.querySelector('input').checked) {
           productParam += "|" + item.querySelector('span.addon-number').textContent;
           amountParam += "|" + amountVal;
         }
@@ -185,9 +186,9 @@ if(document.querySelector(".webshop-productinfo")){
         if (!response.ok) throw new Error('Der opstod en fejl, prøv venligst igen.');
         document.querySelector('form[name="myform"]').submit();
       })
-    } catch(err) {
+    } catch (err) {
       warningBox.textContent = err;
-      warningBox.style.display = "block"; 
+      warningBox.style.display = "block";
     }
   });
 }
@@ -213,25 +214,25 @@ function openTab(evt, tabName) {
 /*
  PRODUCTLIST SCRIPTS
 */
-function interactableProducts(){
-  if(document.querySelector(".webshop-productlist, .CustomersAlsoBought_Custom_DIV, .webshop-frontpage")){
+function interactableProducts() {
+  if (document.querySelector(".webshop-productlist, .CustomersAlsoBought_Custom_DIV, .webshop-frontpage")) {
     // Go to product page when clicking a product
-    document.querySelectorAll(".productlist .product, .CustomersAlsoBought_Custom_DIV .product").forEach(function(product){
-      product.addEventListener("click", function(event){
+    document.querySelectorAll(".productlist .product, .CustomersAlsoBought_Custom_DIV .product").forEach(function (product) {
+      product.addEventListener("click", function (event) {
         // Dont do anything if user clicks the add to basket button
-        if(event.target.nodeName == "INPUT" || event.target.nodeName == "IMG"  || event.target.nodeName == "SELECT") return false;
+        if (event.target.nodeName == "INPUT" || event.target.nodeName == "IMG" || event.target.nodeName == "SELECT") return false;
         product.querySelector("a").click();
       })
     })
     // Add attributes to input fields
-    document.getElementsByClassName("BuyButton_ProductList").forEach(function (item){
-      if(item.type == "text") item.setAttribute("aria-label", "Indtast antal produkter til køb");
-      if(item.type == "image") item.setAttribute("aria-label", "Læg i kurv");
-      if(item.nodeName == "IMG") {
-          item.setAttribute("alt","Vælg variant");
-          item.setAttribute("width","317px");
-          item.setAttribute("height","40px");
-          item.parentElement.setAttribute("title","Vælg variant");
+    document.getElementsByClassName("BuyButton_ProductList").forEach(function (item) {
+      if (item.type == "text") item.setAttribute("aria-label", "Indtast antal produkter til køb");
+      if (item.type == "image") item.setAttribute("aria-label", "Læg i kurv");
+      if (item.nodeName == "IMG") {
+        item.setAttribute("alt", "Vælg variant");
+        item.setAttribute("width", "317px");
+        item.setAttribute("height", "40px");
+        item.parentElement.setAttribute("title", "Vælg variant");
       }
     })
   }
@@ -246,16 +247,55 @@ interactableProducts();
  ORDERSTEP SCRIPTS
 */
 //Add another button to OrderStep1 and OrderStep2
-if(document.querySelector(".webshop-orderstep1")){
-  document.querySelector(".halfColumn").insertAdjacentElement('afterend',document.querySelector(".OrderStep1_Next_TD").cloneNode(true))
+if (document.querySelector(".webshop-orderstep1")) {
+  document.querySelector(".halfColumn").insertAdjacentElement('afterend', document.querySelector(".OrderStep1_Next_TD").cloneNode(true))
+
+  var trWarning = document.createElement("tr");
+  var tdWarning = document.createElement("td");
+  var warningBox = document.getElementById("warning");
+  var cvrButton = document.getElementById("cvr-button");
+  trWarning.append(tdWarning);
+  trWarning.append(warningBox);
+  document.getElementById("Field2_4").insertAdjacentElement("afterend", trWarning);
+  document.getElementById("cvrnr").insertAdjacentElement("afterend", cvrButton);
+
+  cvrButton.addEventListener('click', function (e) {
+    e.preventDefault();
+    var cvr = document.getElementById("cvrnr").value.trim();
+    var fetchurl = 'https://cvrapi.dk/api?country=dk&vat=' + cvr;
+    try {
+      if (cvr == '') {
+        warningBox.style.display = "block";
+        return;
+      }
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          var responseData = JSON.parse(this.response);
+          if (responseData["error"]) return;
+          document.getElementById("company").value = responseData["name"];
+          document.getElementById("address").value = responseData["address"];
+          document.getElementById("zipcode").value = responseData["zipcode"];
+          document.getElementById("city").value = responseData["city"];
+          document.getElementById("phone").value = responseData["phone"];
+          document.getElementById("email").value = responseData["email"];
+        }
+        if (this.readyState == 4 && this.status != 200) throw new Error('Der opstod en fejl, prøv venligst igen.');
+      };
+      xhttp.open("GET", fetchurl, true);
+      xhttp.send();
+    } catch (err) {
+      console.log(err)
+    }
+  });
 }
 
 window.onload = (event) => {
-  if(document.querySelector(".webshop-orderstep2")){
-    document.querySelector(".BackgroundColor1_OrderStep2 tbody tr").insertAdjacentElement('afterend',document.querySelector(".OrderStep2_Methods_Next_TD").parentElement.cloneNode(true));
-  
+  if (document.querySelector(".webshop-orderstep2")) {
+    document.querySelector(".BackgroundColor1_OrderStep2 tbody tr").insertAdjacentElement('afterend', document.querySelector(".OrderStep2_Methods_Next_TD").parentElement.cloneNode(true));
+
     addClickBox();
-    document.querySelector(".webshop-orderstep2").addEventListener("click", function(event) {
+    document.querySelector(".webshop-orderstep2").addEventListener("click", function (event) {
       addClickBox();
       event.target.click();
       event.stopPropagation();
@@ -264,8 +304,8 @@ window.onload = (event) => {
 };
 
 function addClickBox() {
-  document.querySelectorAll(".checkout-payment-method, #ShippingMethod_54, #ShippingMethod_55, #ShippingMethod_56, #ShippingMethod_57, #GLS_ParselShops_55 tr").forEach(function (item){
-    item.addEventListener("click", function(event){
+  document.querySelectorAll(".checkout-payment-method, #ShippingMethod_54, #ShippingMethod_55, #ShippingMethod_56, #ShippingMethod_57, #GLS_ParselShops_55 tr").forEach(function (item) {
+    item.addEventListener("click", function (event) {
       item.querySelector("input").click();
       event.stopPropagation();
     })
