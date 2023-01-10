@@ -258,6 +258,7 @@ if (document.querySelector(".webshop-orderstep1")) {
   trWarning.append(warningBox);
   document.getElementById("Field2_4").insertAdjacentElement("afterend", trWarning);
   document.getElementById("cvrnr").insertAdjacentElement("afterend", cvrButton);
+  trWarning.className = "warning-field";
   tdWarning.className = "LabelColumn";
 
   cvrButton.addEventListener('click', function (e) {

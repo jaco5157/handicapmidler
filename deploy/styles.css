@@ -1295,6 +1295,7 @@ figure img {
 }
 
 #rightcol .warning-field .LabelColumn {
+    margin-top: 0;
     height: 0px;
 }
 
