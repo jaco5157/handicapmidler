@@ -1,0 +1,49 @@
+.variant-color {
+  width: 61px;
+}
+
+.variant-color label {
+  height: 42px;
+  width: 42px;
+  background-color: #fff;
+  border-radius: 100%;
+  border: 3px solid #e9e9e9;
+  cursor: pointer;
+  overflow: hidden;
+  transform: rotate(225deg);
+  display: block;
+  margin: 0 auto 3px;
+}
+
+.variant-color label {
+  --hvid: #fff;
+  --sort: #000;
+  --antrasit-grå: #383e42;
+  --brun: #804000;
+  --grå: #666;
+  --metallisk: #aaa9ad;
+  --metallisk-brun: #ac4313;
+  --rød: #b30000;
+  --blå: #000099;
+  --grøn: #00b300;
+}
+
+.variant-color.selected {
+  color: #4583ed;
+  text-decoration: underline;
+}
+
+.variant-color.selected label {
+  box-shadow: 0 0 0 3px #4583ed;
+}
+
+.variant-color span{
+  display: block;
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+
+.variant-color label input {
+  appearance: none;
+}
