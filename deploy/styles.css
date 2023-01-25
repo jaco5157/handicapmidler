@@ -119,7 +119,9 @@ html {
     margin: 20px 0;
 }
 
-.inline, .Text2_Frontpage, .Heading_Terms_Wrapper {
+.inline,
+.Text2_Frontpage,
+.Heading_Terms_Wrapper {
     display: inline-block
 }
 
@@ -567,8 +569,9 @@ textarea {
 }
 
 select {
-    background: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2ZmZjt9LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHJlY3QgY2xhc3M9ImNscy0xIiB3aWR0aD0iNC45NSIgaGVpZ2h0PSIxMCIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIxLjQxIDQuNjcgMi40OCAzLjE4IDMuNTQgNC42NyAxLjQxIDQuNjciLz48cG9seWdvbiBjbGFzcz0iY2xzLTIiIHBvaW50cz0iMy41NCA1LjMzIDIuNDggNi44MiAxLjQxIDUuMzMgMy41NCA1LjMzIi8+PC9zdmc+) no-repeat 95% 50% #fff;
+    background: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2ZmZjt9LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHJlY3QgY2xhc3M9ImNscy0xIiB3aWR0aD0iNC45NSIgaGVpZ2h0PSIxMCIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIxLjQxIDQuNjcgMi40OCAzLjE4IDMuNTQgNC42NyAxLjQxIDQuNjciLz48cG9seWdvbiBjbGFzcz0iY2xzLTIiIHBvaW50cz0iMy41NCA1LjMzIDIuNDggNi44MiAxLjQxIDUuMzMgMy41NCA1LjMzIi8+PC9zdmc+) no-repeat 98% 50% #fff;
     appearance: none;
+    padding-right: 6%;
 }
 
 input[type=text]:focus,
@@ -631,9 +634,12 @@ select:focus,
     height: fit-content;
 }
 
-.product-info .product-info-wrapper {
+.product-info .product-info-wrapper,
+.VariantGroup,
+.Variants select {
     width: 100%;
 }
+
 
 .product-info .price-left,
 .product-info .VariantGroupLabel {
@@ -643,9 +649,66 @@ select:focus,
     display: block;
 }
 
-.VariantGroup,
-.Variants select {
-    width: 100%;
+.VariantGroup {
+    margin-bottom: 10px;
+}
+
+.advanced-variant-item-container {
+    width: 61px;
+}
+
+.advanced-variant-image-active {
+    color: #4583ed;
+    text-decoration: underline;
+}
+
+.variant-color {
+    height: 42px;
+    width: 42px;
+    background-color: #fff;
+    border-radius: 100%;
+    border: 3px solid #d0d0d0;
+    cursor: pointer;
+    overflow: hidden;
+    transform: rotate(225deg);
+    display: block;
+    margin: 0 auto 3px;
+}
+
+.variant-color {
+    --hvid: #fff;
+    --sort: #000;
+    --antrasit-grå: #383e42;
+    --brun: #804000;
+    --grå: #666;
+    --metallisk: #aaa9ad;
+    --metallisk-brun: #ac4313;
+    --rød: #b30000;
+    --blå: #000099;
+    --grøn: #00b300;
+    --gul: #ffcc33;
+    --lilla: #4d004d;
+    --matsort: #28282b;
+    --creme-royal: #d8b374;
+}
+
+.advanced-variant-image-active .variant-color {
+    box-shadow: 0 0 0 3px #4583ed;
+}
+
+.variant-color span {
+    display: block;
+    width: 50%;
+    height: 100%;
+}
+
+.advanced-variant-item-container label {
+    display: block;
+}
+
+.advanced-variant-item-container input {
+    appearance: none;
+    float: left;
 }
 
 .warning {
@@ -857,6 +920,7 @@ select:focus,
     background-color: #fff;
     border: 1px solid #d0d0d0;
     margin: auto;
+    width: 100%;
     max-width: 400px;
     border-radius: 5px;
     cursor: pointer;
@@ -2130,13 +2194,13 @@ footer #copyright #rights {
         width: 50% !important
     }
 
-    #rightcol .LabelColumn, 
+    #rightcol .LabelColumn,
     #rightcol .InputFieldColumn {
         float: none;
         vertical-align: middle;
     }
 
-    #rightcol .LabelColumn{
+    #rightcol .LabelColumn {
         width: 100px;
     }
 
