@@ -74,9 +74,30 @@ if (document.querySelector(".webshop-productinfo")) {
 
   var amount = document.getElementById("amount");
 
+  // Mark first image selector as active
   if (document.querySelector(".selectors")) document.querySelector(".selectors").firstElementChild.className += " active";
 
-  //Change look of amount selector
+  // Create color pickers if any color variants
+  if (avGroups) {
+    selectOther = [];
+    var selectColor;
+    avGroups.forEach(group => {
+      groupIndex = avGroups.indexOf(group);
+      if (group.Name == 'Farve') {
+        selectColor = document.querySelector('.VariantGroupPosition-' + (groupIndex + 1) + ' .RadioButton_Container_ProductInfo');
+        createColorPicker(selectColor);
+      } else {
+        selectOther.push(document.querySelector('.VariantGroupPosition-' + (groupIndex + 1) + ' select.OptionSelect_ProductInfo'));
+      }
+    });
+    if (selectColor) {
+      selectOther.forEach(select => {
+        select.addEventListener('change', () => createColorPicker(selectColor))
+      })
+    }
+  }
+
+  // Change look of amount selector
   var minus = document.createElement('button');
   minus.id = "minus";
   minus.setAttribute("aria-label", "Dekrementer mængde");
@@ -191,6 +212,25 @@ if (document.querySelector(".webshop-productinfo")) {
       warningBox.style.display = "block";
     }
   });
+}
+
+//Create color picker
+function createColorPicker(select) {
+  select.classList.add('flex-container', 'flex-gap', 'centertext')
+  select.querySelectorAll('.advanced-variant-item-container').forEach((option, i) => {
+    var input = option.querySelector('input');
+    value = input.value.toLowerCase().replace(" ", "-").split("/");
+    div = option.querySelector('div');
+    div.classList.add('variant-color');
+    div.setAttribute('style', 'background-color: var(--' + value[0] + ')');
+    option.insertAdjacentElement('afterbegin', div);
+    div.addEventListener('click', () => input.click());
+    if (value[1]) {
+      span = document.createElement('span');
+      span.setAttribute('style', 'background-color: var(--' + value[1] + ')');
+      div.appendChild(span);
+    }
+  })
 }
 
 //Add active class to tab when clicked
