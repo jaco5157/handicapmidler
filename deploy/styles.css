@@ -704,6 +704,7 @@ select:focus,
 
 .advanced-variant-item-container label {
     display: block;
+    cursor: pointer;
 }
 
 .advanced-variant-item-container input {
