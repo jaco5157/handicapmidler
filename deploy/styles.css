@@ -820,7 +820,7 @@ select:focus,
 }
 
 .list {
-    list-style-position: inside;
+    margin-left: 18px;
 }
 
 .tab {
