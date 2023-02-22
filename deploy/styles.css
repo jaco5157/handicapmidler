@@ -1578,6 +1578,10 @@ button.TextInputField_OrderStep1 {
     position: absolute;
 }
 
+.videoOverlay {
+    display: none;
+}
+
 .index_about OL {
     counter-reset: item
 }
@@ -2316,12 +2320,15 @@ footer #copyright #rights {
         margin: 30px 0 8px
     }
 
+    
+
     .textbox {
         border-radius: 5px;
         background-color: #fff
     }
 
     .videoOverlay {
+        display: block;
         position: absolute;
         width: 100%;
         top: 0;
