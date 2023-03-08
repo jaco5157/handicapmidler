@@ -184,7 +184,13 @@ html {
 }
 
 .productlist-cols .CustomersAlsoBought_Custom_DIV form,
-.productlist-cols .ProductList_Custom_DIV form {
+.productlist-cols .ProductList_Custom_DIV form,
+#PayMethodsContainer table,
+#ShippingMethodsContainer table,
+#search.SearchPage_TD-open,
+.product-info .product-info-wrapper,
+.VariantGroup,
+.Variants select {
     width: 100%
 }
 
@@ -357,10 +363,6 @@ span.logo span {
     transition: width 0.3s;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-}
-
-#search.SearchPage_TD-open {
-    width: 100%;
 }
 
 #search .SearchField_SearchPage {
@@ -633,13 +635,6 @@ select:focus,
     border: 1px solid #d0d0d0;
     height: fit-content;
 }
-
-.product-info .product-info-wrapper,
-.VariantGroup,
-.Variants select {
-    width: 100%;
-}
-
 
 .product-info .price-left,
 .product-info .VariantGroupLabel {
@@ -1155,6 +1150,7 @@ figure img {
     background-repeat: no-repeat;
     background-position: 90% 30%;
     min-height: 140px;
+    width: 100%;
 }
 
 .delivery-price {
@@ -1163,6 +1159,10 @@ figure img {
 
 .delivery-free {
     background-image: url(/images/logo/deliveryFree.svg)
+}
+
+.delivery-invoice {
+    background-image: url(/images/logo/invoice.svg)
 }
 
 .delivery-card-header {
@@ -1472,11 +1472,6 @@ button.TextInputField_OrderStep1 {
 .OrderStep2_ShippingMethods_TD {
     border-top: 0;
     border-radius: 0 0 10px 10px
-}
-
-#PayMethodsContainer table,
-#ShippingMethodsContainer table {
-    width: 100%;
 }
 
 #PayMethodsContainer .checkout-payment-method,
