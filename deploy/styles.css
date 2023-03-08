@@ -2180,6 +2180,11 @@ footer #copyright #rights {
         --columns: 12;
     }
 
+    .pictures .product-image-wrapper {
+        height: 525px;
+        overflow: hidden;
+    }
+
     .halfColumn {
         margin: 42px 0 0;
     }
@@ -2315,7 +2320,7 @@ footer #copyright #rights {
         margin: 30px 0 8px
     }
 
-    
+
 
     .textbox {
         border-radius: 5px;
