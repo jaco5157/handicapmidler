@@ -76,3 +76,7 @@ html {
 .product-images .MediaLinkSelected_ProductInfo {
     border-bottom: 2px solid var(--selected);
 }
+
+.Description_Productinfo {
+    color: beige;
+}
