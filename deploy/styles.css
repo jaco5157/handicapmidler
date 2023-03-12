@@ -927,10 +927,12 @@ select:focus,
 }
 
 .product .image a {
-    display: block;
+    display: flex;
     height: 100%;
     box-sizing: border-box;
     padding: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
 .product .image img {
@@ -2180,11 +2182,6 @@ footer #copyright #rights {
         --columns: 12;
     }
 
-    .pictures .product-image-wrapper {
-        height: 525px;
-        overflow: hidden;
-    }
-
     .halfColumn {
         margin: 42px 0 0;
     }
@@ -2293,6 +2290,14 @@ footer #copyright #rights {
     .productlistTable .prodTableBuy {
         width: 60%;
         justify-content: flex-end
+    }
+
+    .pictures .product-image-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 525px;
+        overflow: hidden;
     }
 
     .frontpage #rightcol {
