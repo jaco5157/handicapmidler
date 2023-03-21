@@ -1,16 +1,23 @@
 /* Produktkort */
 
 html {
+    --white: #fff;
+    --black: #000;
+    --graytext: #646464;
     --border: #d0d0d0;
+    --border-warning: #721c24;
     --hover: #e8e8ed;
     --selected: #d2d2d7;
+    --fnp-blue: #4583ed;
+    --fnp-green: #78bd3f;
+    --fnp-orange: #ff9100;
 }
 
 /* Produktkort */
 
 .smalltext {
     font-size: 12px;
-    color: #646464;
+    color: var(--graytext);
 }
 
 .inventory-container {
@@ -18,22 +25,22 @@ html {
 }
 
 .inventory-item {
-    border: 1px solid #78bd3f;
+    border: 1px solid var(--fnp-green);
     border-radius: 5px;
     padding: 5px 10px 3px;
-    background-color: #fff;
+    background-color: var(--white);
 }
 
 .inventory-item-low-stock {
-    border-color: #ff9100;
+    border-color: var(--fnp-orange);
 }
 
 .inventory-item-no-stock {
-    border-color: #721c24;
+    border-color: var(--border-warning);
 }
 
 .inventory-item-freight {
-    border-color: #4583ed;
+    border-color: var(--fnp-blue);
 }
 
 .inventory-item-header {
@@ -75,8 +82,4 @@ html {
 
 .product-images .MediaLinkSelected_ProductInfo {
     border-bottom: 2px solid var(--selected);
-}
-
-.Description_Productinfo {
-    color: beige;
 }
