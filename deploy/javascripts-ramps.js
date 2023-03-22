@@ -43,7 +43,7 @@ if (document.querySelector(".webshop-productinfo")) {
         // If width is greater than than "medium" and image is inside
         if (mediaQuery.matches && imageInside) {
             // Move the image outisde
-            document.querySelector(".inside-section").insertAdjacentElement("afterend", document.querySelector(".product-images"));
+            document.querySelector(".outside-section").insertAdjacentElement("afterbegin", document.querySelector(".product-images"));
             imageInside = false;
         }
     }
