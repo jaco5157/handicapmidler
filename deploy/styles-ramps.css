@@ -52,7 +52,7 @@ html {
 }
 
 .amountWrapper {
-    border: 1px solid #d0d0d0;
+    border: 1px solid var(--border);
     border-radius: .25rem;
     display: inline-flex;
 }
@@ -67,7 +67,7 @@ html {
 }
 
 .amountWrapper button:hover {
-    background-color: #e8e8ed;
+    background-color: var(--hover);
 }
 
 .amountWrapper input {
@@ -75,7 +75,7 @@ html {
     -moz-appearance: textfield;
     appearance: textfield;
     box-sizing: border-box;
-    border: solid #d0d0d0;
+    border: solid var(--border);
     border-width: 0 1px;
     padding: 5px;
     max-width: 60px;
@@ -90,7 +90,7 @@ html {
     content: "";
     width: 12px;
     height: 2px;
-    background-color: #2e2e2e;
+    background-color: var(--graytext);
     transform: translate(-50%, -50%);
 }
 
@@ -98,6 +98,9 @@ html {
     transform: translate(-50%, -50%) rotate(90deg);
 }
 
+.buy-button {
+    cursor: pointer;
+}
 
 
 

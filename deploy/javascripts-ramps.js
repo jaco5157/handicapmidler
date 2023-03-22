@@ -25,6 +25,6 @@ if (document.querySelector(".webshop-productinfo")) {
 
     let buyButton = document.querySelector(".buyWrapper input");
     buyButton.type = "submit";
-    butButton.value = "Læg i kurv" 
-    butButton.className = "btn btn-success"
+    buyButton.value = "Læg i kurv";
+    buyButton.className = "btn btn-success mt-1 buy-button col-sm-7";
 }
