@@ -104,19 +104,18 @@ html {
 
 
 
-.product-images #Canvas {
-    height: 525px;
-}
-
 .product-images #Canvas div {
     display: flex;
     justify-content: center;
 }
 
+.product-images #Canvas img {
+    max-width: 100%;
+}
+
 .product-images #Selector {
     display: flex;
     gap: 5px;
-    height: 200px;
     justify-content: center;
 }
 
@@ -135,4 +134,11 @@ html {
 
 .product-images .MediaLinkSelected_ProductInfo {
     border-bottom: 2px solid var(--selected);
+}
+
+/* Medium devices */
+@media (min-width: 768px) {
+    .product-images #Canvas {
+        height: 525px;
+    }
 }

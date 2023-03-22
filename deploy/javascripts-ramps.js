@@ -26,5 +26,28 @@ if (document.querySelector(".webshop-productinfo")) {
     let buyButton = document.querySelector(".buyWrapper input");
     buyButton.type = "submit";
     buyButton.value = "Læg i kurv";
-    buyButton.className = "btn btn-success mt-1 buy-button col-sm-7";
+    buyButton.className = "btn btn-success mt-1 buy-button col-lg-7";
+
+    var imageInside = true;
+
+    window.addEventListener("resize", placeImage);
+
+    function placeImage() {
+        let mediaQuery = window.matchMedia('(min-width: 768px)')
+        // If width is less than "medium" and image is not inside
+        if (!mediaQuery.matches && !imageInside) {
+            // Move the image inside
+            document.querySelector(".inventory-container").insertAdjacentElement("beforebegin", document.querySelector(".product-images"));
+            imageInside = true;
+        }
+        // If width is greater than than "medium" and image is inside
+        if (mediaQuery.matches && imageInside) {
+            // Move the image outisde
+            document.querySelector(".inside-section").insertAdjacentElement("afterend", document.querySelector(".product-images"));
+            imageInside = false;
+        }
+    }
+
+    // Fire once to correctly place image
+    placeImage();
 }
