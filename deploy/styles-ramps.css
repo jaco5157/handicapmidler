@@ -13,6 +13,12 @@ html {
     --fnp-orange: #ff9100;
 }
 
+/* Topbar */
+.topbar {
+    border-bottom: 1px solid var(--border);
+    height: 75px;
+}
+
 /* Produktkort */
 
 .smalltext {

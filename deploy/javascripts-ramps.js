@@ -51,3 +51,21 @@ if (document.querySelector(".webshop-productinfo")) {
     // Fire once to correctly place image
     placeImage();
 }
+
+window.addEventListener("load", (event) => {
+    let searchForm = document.getElementById("Search_Form");
+    let searchField = searchForm.querySelector(".SearchField_SearchPage");
+    let searchButton = searchForm.querySelector(".SubmitButton_SearchPage");
+
+    searchForm.setAttribute("class", "d-flex me-auto ms-auto");
+    searchForm.setAttribute("role", "search");
+
+    searchField.className += " form-control me-2";
+    searchField.setAttribute("type", "search");
+    searchField.setAttribute("placeholder", "Søg efter produkter...");
+    searchField.setAttribute("aria-label", "Søg efter produkter");
+    searchField.setAttribute("size", "");
+
+    searchButton.className += " btn btn-outline-light";
+    searchButton.value = "Søg";
+});
