@@ -20,7 +20,10 @@ html {
 }
 
 /* Vareliste */
-.productlist-product a {
+.ProductList_Custom_DIV form {
+    height: 100%;
+}
+.productlist-product .card-title a {
     color: var(--bs-card-title-color);
     text-decoration: none;
 }
