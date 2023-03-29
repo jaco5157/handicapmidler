@@ -1,4 +1,4 @@
-if (document.querySelector(".webshop-productinfo")) {
+if (document.querySelector(".webshop-productlist")) {
     let productList = document.querySelector(".ProductList_Custom_DIV");
     productList.classList += " row";
 
