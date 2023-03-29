@@ -26,7 +26,7 @@ if (document.querySelector(".webshop-productinfo")) {
     let buyButton = document.querySelector(".buyWrapper input");
     buyButton.type = "submit";
     buyButton.value = "Læg i kurv";
-    buyButton.className = "btn btn-success mt-1 buy-button col-lg-7";
+    buyButton.className = "btn btn-success mt-1 buy-button col-12 col-lg-8 col-xl-7";
 
     var imageInside = true;
 
