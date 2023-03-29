@@ -1,4 +1,14 @@
 if (document.querySelector(".webshop-productinfo")) {
+    let productList = document.querySelector(".ProductList_Custom_DIV");
+    productList.classList += " row";
+
+    Array.from(productList.children).forEach(function (product) {
+        product.className += " col-sm-12 col-md-6 col-lg-4 col-xl-3";
+        product.querySelector(".product-image img").className += " card-img-top";
+    });
+}
+
+if (document.querySelector(".webshop-productinfo")) {
     // Change look of amount selector
     let amount = document.getElementById("amount");
 
