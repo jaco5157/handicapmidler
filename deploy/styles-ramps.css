@@ -19,7 +19,13 @@ html {
     height: 75px;
 }
 
-/* Produktkort */
+/* Vareliste */
+.productlist-product a {
+    color: var(--bs-card-title-color);
+    text-decoration: none;
+}
+
+/* Varekort */
 
 .smalltext {
     font-size: 12px;
