@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/deploy/styles-ramps.css" />
+    <script type="text/javascript" src="/deploy/javascripts-ramps.js" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header class="navbar bg-primary navbar-expand-lg bd-navbar sticky-top" data-bs-theme="dark">
+        <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap" aria-label="Main navigation">
+            <a class="navbar-brand" href="/shop/frontpage.html">
+                <img alt="" src="https://www.handicapmidler.dk/images/logo/sprites.svg#wheelchair" width="40"
+                    height="40">
+            </a>
+            <div class="navbar-nav d-lg-none">
+                <a class="nav-link" href="/shop/showbasket.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        xmlns:svgjs="http://svgjs.com/svgjs" width="32" height="32" x="0" y="0" viewBox="0 0 24 24"
+                        style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+                        <g>
+                            <path
+                                d="M1 1a1 1 0 1 0 0 2h1.78a.694.694 35.784 0 1 .657.474l3.297 9.893c.147.44.165.912.053 1.362l-.271 1.087C6.117 17.41 7.358 19 9 19h12a1 1 0 1 0 0-2H9c-.39 0-.64-.32-.545-.697l.205-.818A.64.64 142.028 0 1 9.28 15H20a1 1 0 0 0 .95-.684l2.665-8A1 1 0 0 0 22.666 5H6.555a.694.694 35.783 0 1-.658-.474l-.948-2.842A1 1 0 0 0 4 1zm7 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"
+                                paint-order="fill markers stroke" data-original="#000000" class=""
+                                fill="var(--bs-nav-link-color)"></path>
+                        </g>
+                    </svg>
+                </a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Forside</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Produkter</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Om os</a>
+                    </li>
+                </ul>
+                <form id="Search_Form" method="POST" action="/shop/search-1.html" style="margin:0;">
+                    <input type="hidden" name="InitSearch" value="1">
+                    <span class="SearchTitle_SearchPage"></span>
+                    <input type="text" name="Keyword" maxlength="50" size="12" class="SearchField_SearchPage" value="">
+                    <span class="nbsp">&nbsp;</span>
+                    <input type="submit" value="" name="Search" class="SubmitButton_SearchPage"><br>
+                </form>
+            </div>
+            <div class="navbar-nav navbar-cart d-none d-lg-block">
+                <a class="nav-link" href="/shop/showbasket.html">
+                    <div class="row g-0">
+                        <div class="col-md-4 pt-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs"
+                                width="32" height="32" x="0" y="0" viewBox="0 0 24 24"
+                                style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+                                <g>
+                                    <path
+                                        d="M1 1a1 1 0 1 0 0 2h1.78a.694.694 35.784 0 1 .657.474l3.297 9.893c.147.44.165.912.053 1.362l-.271 1.087C6.117 17.41 7.358 19 9 19h12a1 1 0 1 0 0-2H9c-.39 0-.64-.32-.545-.697l.205-.818A.64.64 142.028 0 1 9.28 15H20a1 1 0 0 0 .95-.684l2.665-8A1 1 0 0 0 22.666 5H6.555a.694.694 35.783 0 1-.658-.474l-.948-2.842A1 1 0 0 0 4 1zm7 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"
+                                        paint-order="fill markers stroke" data-original="#000000" class=""
+                                        fill="var(--bs-nav-link-color)"></path>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <p class="card-text">6&nbsp;vare(r)<span class="d-block">636,00&nbsp;DKK</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                [[Content]]
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
