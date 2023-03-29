@@ -11,6 +11,8 @@ html {
     --fnp-blue: #4583ed;
     --fnp-green: #78bd3f;
     --fnp-orange: #ff9100;
+
+    --input-border-radius: 0.375rem;
 }
 
 /* Topbar */
@@ -23,9 +25,20 @@ html {
 .ProductList_Custom_DIV form {
     height: 100%;
 }
+
 .productlist-product .card-title a {
     color: var(--bs-card-title-color);
     text-decoration: none;
+}
+
+.productlist-product .TextInputField_ProductList,
+.productlist-product .ProductListVariantSelector {
+    padding: 5px;
+    height: 38px;
+    width: 100px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--input-border-radius);
 }
 
 /* Varekort */
