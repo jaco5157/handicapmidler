@@ -1,4 +1,4 @@
-if (document.querySelector(".webshop-productlist")) {
+if (document.querySelector(".ProductList_Custom_DIV")) {
     let productList = document.querySelector(".ProductList_Custom_DIV");
     productList.classList += " row";
 
@@ -71,7 +71,7 @@ if (document.querySelector(".webshop-productinfo")) {
     placeImage();
 }
 
-window.addEventListener("load", () => {
+function createSearchBar(){
     let searchForm = document.getElementById("Search_Form");
     let searchField = searchForm.querySelector(".SearchField_SearchPage");
     let searchButton = searchForm.querySelector(".SubmitButton_SearchPage");
@@ -87,4 +87,6 @@ window.addEventListener("load", () => {
 
     searchButton.className += " btn btn-outline-light";
     searchButton.value = "Søg";
-});
+}
+
+createSearchBar();
