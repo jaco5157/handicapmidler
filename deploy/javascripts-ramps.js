@@ -5,6 +5,15 @@ if (document.querySelector(".webshop-productlist")) {
     Array.from(productList.children).forEach(function (product) {
         product.className += " col-sm-12 col-md-6 col-lg-4 col-xl-3";
         product.querySelector(".product-image img").className += " card-img-top";
+        let buyButton = product.querySelector(".product-buy").firstChild;
+        if(buyButton.nodeName == "A"){
+            buyButton.className = "btn btn-primary col-12";
+            buyButton.innerHTML = "Vælg variant";
+        }
+        if(buyButton.nodeName == "INPUT"){
+            buyButton.className = "btn btn-success col-12";
+            buyButton.value = "Læg i kurv";
+        }
     });
 }
 
