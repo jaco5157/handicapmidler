@@ -71,7 +71,7 @@ if (document.querySelector(".webshop-productinfo")) {
     placeImage();
 }
 
-window.addEventListener("load", (event) => {
+window.addEventListener("load", () => {
     let searchForm = document.getElementById("Search_Form");
     let searchField = searchForm.querySelector(".SearchField_SearchPage");
     let searchButton = searchForm.querySelector(".SubmitButton_SearchPage");
