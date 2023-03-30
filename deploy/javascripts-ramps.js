@@ -1,3 +1,23 @@
+function createSearchBar() {
+    let searchForm = document.getElementById("Search_Form");
+    let searchField = searchForm.querySelector(".SearchField_SearchPage");
+    let searchButton = searchForm.querySelector(".SubmitButton_SearchPage");
+
+    searchForm.setAttribute("class", "d-flex me-auto ms-auto");
+    searchForm.setAttribute("role", "search");
+
+    searchField.className += " form-control me-2";
+    searchField.setAttribute("type", "search");
+    searchField.setAttribute("placeholder", "Søg efter produkter...");
+    searchField.setAttribute("aria-label", "Søg efter produkter");
+    searchField.setAttribute("size", "");
+
+    searchButton.className += " btn btn-outline-light";
+    searchButton.value = "Søg";
+}
+
+createSearchBar();
+
 if (document.querySelector(".ProductList_Custom_DIV")) {
     let productList = document.querySelector(".ProductList_Custom_DIV");
     productList.classList += " row";
@@ -5,11 +25,11 @@ if (document.querySelector(".ProductList_Custom_DIV")) {
     Array.from(productList.children).forEach(function (product) {
         product.className += " col-sm-12 col-md-6 col-lg-4 col-xl-3";
         let buyButton = product.querySelector(".product-buy").firstChild;
-        if(buyButton.nodeName == "A"){
+        if (buyButton.nodeName == "A") {
             buyButton.className = "btn btn-primary col-12";
             buyButton.innerHTML = "Vælg variant";
         }
-        if(buyButton.nodeName == "INPUT"){
+        if (buyButton.nodeName == "INPUT") {
             buyButton.className = "btn btn-success col-12";
             buyButton.value = "Læg i kurv";
         }
@@ -70,22 +90,33 @@ if (document.querySelector(".webshop-productinfo")) {
     placeImage();
 }
 
-function createSearchBar(){
-    let searchForm = document.getElementById("Search_Form");
-    let searchField = searchForm.querySelector(".SearchField_SearchPage");
-    let searchButton = searchForm.querySelector(".SubmitButton_SearchPage");
-
-    searchForm.setAttribute("class", "d-flex me-auto ms-auto");
-    searchForm.setAttribute("role", "search");
-
-    searchField.className += " form-control me-2";
-    searchField.setAttribute("type", "search");
-    searchField.setAttribute("placeholder", "Søg efter produkter...");
-    searchField.setAttribute("aria-label", "Søg efter produkter");
-    searchField.setAttribute("size", "");
-
-    searchButton.className += " btn btn-outline-light";
-    searchButton.value = "Søg";
+if (document.querySelector(".webshop-checkout")) {
+    
+    if (document.querySelector(".webshop-checkout")) {
+        Array.from(document.getElementsByClassName("showfield-all")).forEach(function (field) {
+            if (field.querySelector("select")) return;
+            field.querySelector("input").setAttribute("placeholder", field.querySelector("span").textContent);
+        });
+    }
+    
+    function styleShippingMethods(shippingMethods) {
+        shippingMethods.querySelectorAll("label").forEach(function (shippingLabel) {
+            if (!shippingLabel.querySelector("input").checked) {
+                shippingLabel.className = "";
+                return;
+            }
+            shippingLabel.className = "selected-method"
+        })
+    }
+    
+    // Initial styling
+    styleShippingMethods(document.getElementById("shipping-methods"));
+    
+    // Style when changing shipping method
+    document.getElementById("shipping-methods").addEventListener("change", (event) => styleShippingMethods(event.currentTarget));
+    
+    // Style when ZIP changed
+    $(document).ajaxStop(function () {
+        styleShippingMethods(document.getElementById("shipping-methods"));
+    });
 }
-
-createSearchBar();
