@@ -91,32 +91,30 @@ if (document.querySelector(".webshop-productinfo")) {
 }
 
 if (document.querySelector(".webshop-checkout")) {
-    
-    if (document.querySelector(".webshop-checkout")) {
-        Array.from(document.getElementsByClassName("showfield-all")).forEach(function (field) {
-            if (field.querySelector("select")) return;
-            field.querySelector("input").setAttribute("placeholder", field.querySelector("span").textContent);
-        });
-    }
-    
-    function styleShippingMethods(shippingMethods) {
-        shippingMethods.querySelectorAll("label").forEach(function (shippingLabel) {
-            if (!shippingLabel.querySelector("input").checked) {
-                shippingLabel.className = "";
+
+    Array.from(document.getElementsByClassName("showfield-all")).forEach(function (field) {
+        if (field.querySelector("select")) return;
+        field.querySelector("input").setAttribute("placeholder", field.querySelector("span").textContent);
+    });
+
+    function styleShippingAndPaymentMethods(methods) {
+        methods.querySelectorAll("label").forEach(function (inputLabel) {
+            if (!inputLabel.querySelector("input").checked) {
+                inputLabel.className = "";
                 return;
             }
-            shippingLabel.className = "selected-method"
+            inputLabel.className = "selected-method"
         })
     }
-    
+
     // Initial styling
-    styleShippingMethods(document.getElementById("shipping-methods"));
-    
+    styleShippingAndPaymentMethods(document.getElementById("column-shipping-payment"));
+
     // Style when changing shipping method
-    document.getElementById("shipping-methods").addEventListener("change", (event) => styleShippingMethods(event.currentTarget));
-    
+    document.getElementById("column-shipping-payment").addEventListener("change", (event) => styleShippingAndPaymentMethods(event.currentTarget));
+
     // Style when ZIP changed
     $(document).ajaxStop(function () {
-        styleShippingMethods(document.getElementById("shipping-methods"));
+        styleShippingAndPaymentMethods(document.getElementById("column-shipping-payment"));
     });
 }

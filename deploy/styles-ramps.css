@@ -245,7 +245,7 @@ body {
 }
 
 
-#shipping-methods>label {
+#column-shipping-payment label {
     position: relative;
     margin-top: 10px;
     width: 100%;
@@ -255,11 +255,11 @@ body {
     transition-duration: 100ms;
 }
 
-#shipping-methods>label:hover {
+#column-shipping-payment label:hover {
     border-color: var(--bs-primary);
 }
 
-#shipping-methods label.selected-method {
+#column-shipping-payment label.selected-method {
     border-color: var(--bs-primary);
     background-color: var(--bs-primary-bg-subtle);
 }
@@ -285,18 +285,5 @@ body {
     #column-shipping-payment,
     #column-order-summary {
         width: 33.333333%;
-    }
-}
-
-@media (min-width: 1200px) {
-
-    /* col-xl-3 */
-    #column-shipping-payment {
-        width: 25%;
-    }
-
-    /* col-xl-5 */
-    #column-order-summary {
-        width: 41.66666667%;
     }
 }
