@@ -4,7 +4,18 @@ body {
     --input-border-radius: 0.375rem;
 }
 
+.bold {
+    font-weight: bold;
+}
 
+.smalltext {
+    font-size: 12px;
+    color: var(--bs-secondary-color);
+}
+
+.right-align {
+    text-align: right;
+}
 
 
 
@@ -54,11 +65,6 @@ body {
 
 /* ========= VAREKORT ========= */
 
-.smalltext {
-    font-size: 12px;
-    color: var(--bs-secondary-color);
-}
-
 .inventory-container {
     font-size: 14px;
 }
@@ -80,10 +86,6 @@ body {
 
 .inventory-item-freight {
     border-color: var(--bs-primary);
-}
-
-.inventory-item-header {
-    font-weight: bold;
 }
 
 .inventory-smalltext {
@@ -218,7 +220,7 @@ body {
 }
 
 #column-data fieldset>*,
-#customer-data .checkout-row {
+#order-confirm div {
     margin-top: 5px;
 }
 
@@ -262,11 +264,12 @@ body {
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
-.checkout-row {
+#column-data .checkout-row {
     display: flex;
+    margin-top: 10px;
 }
 
-.checkout-checkbox {
+input[type="checkbox"] {
     --bs-form-check-bg: var(--bs-body-bg);
     width: 20px;
     height: 20px;
@@ -282,17 +285,18 @@ body {
     -moz-appearance: none;
     appearance: none;
     border-radius: .25em;
+    cursor: pointer;
 }
 
 #column-data .checkout-text:focus,
 #column-data .checkout-select:focus,
-#column-data .checkout-checkbox:focus {
+input[type="checkbox"]:focus {
     border-color: #86b7fe;
     outline: 0;
     box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
 }
 
-.checkout-checkbox:checked {
+input[type="checkbox"]:checked {
     background-color: #0d6efd;
     border-color: #0d6efd;
     --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
@@ -392,10 +396,6 @@ body {
 
 .basket-line-product {
     border-top: 1px solid var(--bs-border-color);
-}
-
-.right-align {
-    text-align: right;
 }
 
 
