@@ -91,6 +91,10 @@ if (document.querySelector(".webshop-productinfo")) {
 }
 
 if (document.querySelector(".webshop-checkout")) {
+    let checkoutLogin = document.getElementById("customer_lookup_submit");
+    let checkoutComplete = document.getElementById("confirm-complete-button");
+    checkoutLogin.className += " btn btn-success w-100";
+    checkoutComplete.className = "btn btn-success w-100";
 
     Array.from(document.getElementsByClassName("showfield-all")).forEach(function (field) {
         if (field.querySelector("select")) return;
