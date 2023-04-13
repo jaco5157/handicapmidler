@@ -43,8 +43,7 @@ select {
     appearance: none;
 }
 
-input[type=text],
-input[type=amount] {
+input[type=text] {
     display: block;
     width: 100%;
     padding: .375rem .75rem;
@@ -84,7 +83,6 @@ input[type=checkbox] {
 
 select:focus,
 input[type=text]:focus,
-input[type=amount]:focus,
 input[type=checkbox]:focus {
     border-color: #86b7fe;
     outline: 0;
