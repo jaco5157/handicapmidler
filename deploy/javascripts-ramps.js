@@ -26,7 +26,7 @@ if (document.querySelector(".ProductList_Custom_DIV")) {
         product.className += " col-sm-12 col-md-6 col-lg-4 col-xl-3";
         let buyButton = product.querySelector(".product-buy").firstChild;
         if (buyButton.nodeName == "A") {
-            buyButton.className = "btn btn-primary w-100";
+            buyButton.className = "btn btn-success w-100";
             buyButton.innerHTML = "Vælg variant";
         }
         if (buyButton.nodeName == "INPUT") {
