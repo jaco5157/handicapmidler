@@ -390,6 +390,7 @@ input[type=checkbox]:checked {
     display: none;
 }
 
+.ShowBasket_Custom_DIV a,
 .order-summary a {
     color: var(--bs-dark);
     text-decoration: none;
