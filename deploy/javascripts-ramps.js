@@ -19,6 +19,10 @@ function createSearchBar() {
 createSearchBar();
 
 if (document.querySelector(".ProductList_Custom_DIV")) {
+    createProductList();
+}
+
+function createProductList() {
     let productList = document.querySelector(".ProductList_Custom_DIV");
     productList.classList += " row";
 
@@ -122,4 +126,16 @@ if (document.querySelector(".webshop-checkout")) {
     $(document).ajaxStop(function () {
         styleShippingAndPaymentMethods(document.getElementById("column-shipping-payment"));
     });
+}
+
+if (document.querySelector(".webshop-frontpage")) {
+    var text = ["hjemmet", "virksomheden", "gæsterne"];
+    var counter = 0;
+    var elem = document.getElementById("text-spinner");
+    var inst = setInterval(change, 3000);
+    
+    function change() {
+      elem.innerHTML = text[counter % text.length];
+      counter++;
+    }
 }

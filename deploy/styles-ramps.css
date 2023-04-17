@@ -104,7 +104,9 @@ input[type=checkbox]:checked {
     height: 75px;
 }
 
-
+.frontpage {
+    background: linear-gradient(to bottom, var(--bs-primary), var(--bs-indigo));
+}
 
 
 
