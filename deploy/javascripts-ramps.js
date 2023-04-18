@@ -27,7 +27,7 @@ function createProductList() {
     productList.classList += " row";
 
     Array.from(productList.children).forEach(function (product) {
-        product.className += " col-sm-12 col-md-6 col-lg-4 col-xl-3";
+        product.className += " col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4";
         let buyButton = product.querySelector(".product-buy").firstChild;
         if (buyButton.nodeName == "A") {
             buyButton.className = "btn btn-success w-100";
