@@ -109,6 +109,15 @@ input[type=checkbox]:checked {
 }
 
 .frontpage {
+    padding: 0 !important;
+}
+
+.frontpage>.container {
+    max-width: 100%;
+    padding: 0;
+}
+
+.bg-indigo-gradient {
     background: linear-gradient(to bottom, var(--bs-primary), var(--bs-indigo));
 }
 
