@@ -96,9 +96,11 @@ if (document.querySelector(".webshop-productinfo")) {
 }
 
 if (document.querySelector(".webshop-checkout")) {
-    let checkoutLogin = document.getElementById("customer_lookup_submit");
+    if(document.getElementById("customer_lookup_submit")){
+        let checkoutLogin = document.getElementById("customer_lookup_submit");
+        checkoutLogin.className += " btn btn-success w-100";
+    }
     let checkoutComplete = document.getElementById("confirm-complete-button");
-    checkoutLogin.className += " btn btn-success w-100";
     checkoutComplete.className = "btn btn-success w-100";
 
     Array.from(document.getElementsByClassName("showfield-all")).forEach(function (field) {
