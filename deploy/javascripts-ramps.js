@@ -95,7 +95,7 @@ if (document.querySelector(".webshop-productinfo")) {
     placeImage();
 }
 // webshop-orderstep4 webshop-checkout webshop-terms
-if (document.querySelector(".webshop-checkout")) {
+if (document.querySelector(".webshop-orderstep4, .webshop-checkout, .webshop-terms")) {
     document.querySelector("main").className += " container py-5";
 }
 
