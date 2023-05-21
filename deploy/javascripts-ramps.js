@@ -94,6 +94,11 @@ if (document.querySelector(".webshop-productinfo")) {
     // Fire once to correctly place image
     placeImage();
 }
+// webshop-orderstep4 webshop-checkout webshop-terms
+if (document.querySelector(".webshop-checkout")) {
+    document.querySelector("main").className += " container py-5";
+}
+
 
 if (document.querySelector(".webshop-checkout")) {
     if(document.getElementById("customer_lookup_submit")){
@@ -125,9 +130,9 @@ if (document.querySelector(".webshop-checkout")) {
     document.getElementById("column-shipping-payment").addEventListener("change", (event) => styleShippingAndPaymentMethods(event.currentTarget));
 
     // Style when ZIP changed
-    $(document).ajaxStop(function () {
-        styleShippingAndPaymentMethods(document.getElementById("column-shipping-payment"));
-    });
+    //$(document).ajaxStop(function () {
+    //    styleShippingAndPaymentMethods(document.getElementById("column-shipping-payment"));
+    //});
 }
 
 if (document.querySelector(".webshop-frontpage")) {
