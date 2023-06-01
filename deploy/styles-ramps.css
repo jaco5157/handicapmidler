@@ -277,7 +277,6 @@ input[type=radio]:checked {
 
 
 
-
 /* ========= CHECKOUT ========= */
 
 /* row */
@@ -432,7 +431,7 @@ input[type=radio]:checked {
 /* ========= MEDIA ========= */
 
 @media (min-width: 768px) {
-    .product-images .zoom-gallery {
+    .product-images .zoom-gallery-slide {
         height: 525px
     }
 
