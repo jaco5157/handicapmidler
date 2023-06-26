@@ -243,8 +243,18 @@ input[type=radio]:checked {
 }
 
 .buy-button {
-    cursor: pointer;
+    margin: 4px 0 9px;
 }
+
+.VariantGroup {
+    width: 100%;
+  }
+  .VariantGroup tr:last-child td {
+    padding: 0;
+  }
+  .VariantGroup tr:first-child {
+    display: none;
+  }
 
 .product-images .selectors {
     display: flex;
