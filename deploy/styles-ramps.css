@@ -141,14 +141,22 @@ input[type=radio]:checked {
     height: 100%;
 }
 
+.product-image {
+    width: 304px;
+    height: 304px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
 .productlist-product .product-image img {
     width: 100%;
-    max-height: 304px;
-    object-fit: cover;
+    transition: all .1s ease-in-out;
 }
 
 .productlist-product:hover .product-image img {
-    scale: 1.05;
+    transform: scale(1.05);
 }
 
 .productlist-product .card-title a {
@@ -248,13 +256,15 @@ input[type=radio]:checked {
 
 .VariantGroup {
     width: 100%;
-  }
-  .VariantGroup tr:last-child td {
+}
+
+.VariantGroup tr:last-child td {
     padding: 0;
-  }
-  .VariantGroup tr:first-child {
+}
+
+.VariantGroup tr:first-child {
     display: none;
-  }
+}
 
 .product-images .selectors {
     display: flex;
