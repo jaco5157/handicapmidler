@@ -141,11 +141,15 @@ input[type=radio]:checked {
     height: 100%;
 }
 
-.product-image {
+.product-image,
+.product-images .zoom-gallery-slide.active {
     display: flex;
-    padding: 15px;
     justify-content: center;
     align-items: center;
+  }
+
+.product-image {
+    padding: 15px;
     overflow: hidden;
 }
 
