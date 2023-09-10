@@ -142,7 +142,7 @@ input[type=radio]:checked {
 }
 
 .product-image,
-.product-images .zoom-gallery-slide.active {
+#product-image-container {
     display: flex;
     justify-content: center;
     align-items: center;
