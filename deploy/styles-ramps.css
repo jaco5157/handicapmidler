@@ -409,12 +409,6 @@ input[type=radio]:checked {
     border-color: var(--bs-primary);
 }
 
-#column-shipping-payment label.selected-method {
-    border-color: var(--bs-primary);
-    background-color: var(--bs-primary-bg-subtle);
-}
-
-
 
 /* Basket lines */
 

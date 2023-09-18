@@ -116,28 +116,7 @@ if (document.querySelector(".webshop-checkout")) {
         field.querySelector("input").setAttribute("placeholder", field.querySelector("span").textContent);
     });
 
-    function styleShippingAndPaymentMethods(methods) {
-        methods.querySelectorAll("label").forEach(function (inputLabel) {
-            if (!inputLabel.querySelector("input").checked) {
-                inputLabel.className = "";
-                return;
-            }
-            inputLabel.className = "selected-method"
-        })
-    }
-
-    // Initial styling
-    styleShippingAndPaymentMethods(document.getElementById("column-shipping-payment"));
-
-    // Style when changing shipping method
-    document.getElementById("column-shipping-payment").addEventListener("change", (event) => styleShippingAndPaymentMethods(event.currentTarget));
-
-    // Style when ZIP changed
-    //$(document).ajaxStop(function () {
-    //    styleShippingAndPaymentMethods(document.getElementById("column-shipping-payment"));
-    //});
-
-
+    // Creates template element that can be queried
     function htmlToElement(html) {
         var template = document.createElement('template');
         html = html.trim(); // Never return a text node of whitespace as the result
@@ -145,20 +124,20 @@ if (document.querySelector(".webshop-checkout")) {
         return template.content.firstChild;
     }
 
+    // Hide password textbox initially
     var passwordInput = document.getElementById("checkout_password").parentElement;
     passwordInput.style.display = "none";
 
+    // Add textbox for creating password
     let passwordCheckboxString = '<div class="checkout-row"><div class="div-checkout-checkbox"><input autocomplete="false" type="checkbox" class="checkout-checkbox" value="1" id="checkout_create_account" name="checkout_create_account"></div><div class="div-checkout-checkbox-label"><label for="checkout_create_account" class="right-label">Jeg vil gerne oprette en konto</label></div></div>';
     let passwordCheckbox = htmlToElement(passwordCheckboxString);
+
+    // Display password textbox if checkbox is checked
     passwordCheckbox.querySelector("#checkout_create_account").addEventListener('click', function handleClick(event) {
-        console.log(event.target.checked)
-        console.log(event.target)
         if (event.target.checked) {
             passwordInput.style.display = 'block';
-            console.log("Show");
         } else {
             passwordInput.style.display = 'none';
-            console.log("Hide");
         }
     });
 
