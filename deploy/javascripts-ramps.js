@@ -101,13 +101,16 @@ if (document.querySelector(".webshop-orderstep4, .webshop-checkout, .webshop-ter
 
 
 if (document.querySelector(".webshop-checkout")) {
-    if(document.getElementById("customer_lookup_submit")){
+
+    // Set width of buttons
+    if (document.getElementById("customer_lookup_submit")) {
         let checkoutLogin = document.getElementById("customer_lookup_submit");
         checkoutLogin.className += " btn btn-success w-100";
     }
     let checkoutComplete = document.getElementById("confirm-complete-button");
     checkoutComplete.className = "btn btn-success w-100";
 
+    // Set placeholder text for all textboxes
     Array.from(document.getElementsByClassName("showfield-all")).forEach(function (field) {
         if (field.querySelector("select")) return;
         field.querySelector("input").setAttribute("placeholder", field.querySelector("span").textContent);
@@ -133,6 +136,33 @@ if (document.querySelector(".webshop-checkout")) {
     //$(document).ajaxStop(function () {
     //    styleShippingAndPaymentMethods(document.getElementById("column-shipping-payment"));
     //});
+
+
+    function htmlToElement(html) {
+        var template = document.createElement('template');
+        html = html.trim(); // Never return a text node of whitespace as the result
+        template.innerHTML = html;
+        return template.content.firstChild;
+    }
+
+    var passwordInput = document.getElementById("checkout_password").parentElement;
+    passwordInput.style.display = "none";
+
+    let passwordCheckboxString = '<div class="checkout-row"><div class="div-checkout-checkbox"><input autocomplete="false" type="checkbox" class="checkout-checkbox" value="1" id="checkout_create_account" name="checkout_create_account"></div><div class="div-checkout-checkbox-label"><label for="checkout_create_account" class="right-label">Jeg vil gerne oprette en konto</label></div></div>';
+    let passwordCheckbox = htmlToElement(passwordCheckboxString);
+    passwordCheckbox.querySelector("#checkout_create_account").addEventListener('click', function handleClick(event) {
+        console.log(event.target.checked)
+        console.log(event.target)
+        if (event.target.checked) {
+            passwordInput.style.display = 'block';
+            console.log("Show");
+        } else {
+            passwordInput.style.display = 'none';
+            console.log("Hide");
+        }
+    });
+
+    passwordInput.insertAdjacentElement("beforebegin", passwordCheckbox);
 }
 
 if (document.querySelector(".webshop-frontpage")) {
@@ -140,9 +170,9 @@ if (document.querySelector(".webshop-frontpage")) {
     var counter = 0;
     var elem = document.getElementById("text-spinner");
     var inst = setInterval(change, 3000);
-    
+
     function change() {
-      elem.innerHTML = text[counter % text.length];
-      counter++;
+        elem.innerHTML = text[counter % text.length];
+        counter++;
     }
 }
