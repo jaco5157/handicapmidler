@@ -42,6 +42,11 @@ function createProductList() {
 }
 
 if (document.querySelector(".webshop-productinfo")) {
+    if (document.querySelector(".inventory-container")) {
+        var inventoryAmount = document.getElementById("inventory-amount");
+        if (inventoryAmount.textContent > 100) inventoryAmount.textContent = "100+";
+    }
+
     // Change look of amount selector
     let amount = document.getElementById("amount");
 
@@ -71,10 +76,9 @@ if (document.querySelector(".webshop-productinfo")) {
     buyButton.value = "Læg i kurv";
     buyButton.className = "btn btn-success mt-1 buy-button col-12 col-lg-8 col-xl-7";
 
+    // Move image when page size changes
     var imageInside = true;
-
     window.addEventListener("resize", placeImage);
-
     function placeImage() {
         let mediaQuery = window.matchMedia('(min-width: 768px)')
         // If width is less than "medium" and image is not inside
