@@ -253,10 +253,6 @@ input[type=radio]:checked {
     transform: translate(-50%, -50%) rotate(90deg);
 }
 
-.buy-button {
-    margin: 4px 0 9px;
-}
-
 .VariantGroup {
     width: 100%;
 }
