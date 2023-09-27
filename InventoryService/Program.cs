@@ -5,8 +5,13 @@ using InventoryService.DataProviders;
 using InventoryService.DTOs;
 using InventoryService.Interfaces;
 
+// Instantiate empty list of InventoryItemDTO
 IEnumerable<InventoryItemDTO> inventoryItems;
+
+// Instantiante CSVDataProvider
 IDataProvider dataProvider = new CSVDataProvider();
+
+// Populate list with InventoryItemDTOs
 inventoryItems = dataProvider.GetInventoryItems();
 
 IDataProvider xmlWriter = new XMLDataProvider();

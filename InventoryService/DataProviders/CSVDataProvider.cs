@@ -19,6 +19,7 @@ public class CSVDataProvider: IDataProvider
         parser.TextFieldType = FieldType.Delimited;
         parser.SetDelimiters(";");
 
+        // Instantiate products and add to temporary dictionary
         while (!parser.EndOfData)
         {
             string[] row = parser.ReadFields();
@@ -30,7 +31,8 @@ public class CSVDataProvider: IDataProvider
         parser = new TextFieldParser(inventoryFile);
         parser.TextFieldType = FieldType.Delimited;
         parser.SetDelimiters(";");
-        
+
+        // Add current stock to each item
         while (!parser.EndOfData)
         {
             string[] row = parser.ReadFields();
@@ -50,7 +52,8 @@ public class CSVDataProvider: IDataProvider
         parser = new TextFieldParser(movementFile);
         parser.TextFieldType = FieldType.Delimited;
         parser.SetDelimiters(";");
-        
+
+        // Add all stock movements
         while (!parser.EndOfData)
         {
             string[] row = parser.ReadFields();
@@ -67,7 +70,8 @@ public class CSVDataProvider: IDataProvider
                 }
             }
         }
-        
+
+        // Convert to permanent DTO readable by other data providers
         return ConvertToDTO(items);
     }
 
