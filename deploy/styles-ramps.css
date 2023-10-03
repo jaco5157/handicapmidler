@@ -168,7 +168,8 @@ input[type=radio]:checked {
 }
 
 .productlist-product .TextInputField_ProductList,
-.productlist-product .ProductListVariantSelector {
+.productlist-product .ProductListVariantSelector,
+.productlist-product .TextInputField_ProductInfo {
     width: 100px;
     margin: 0 auto;
 }
@@ -296,6 +297,8 @@ input[type=radio]:checked {
 
 
 
+
+
 .CustomersAlsoBought_Custom_DIV {
     flex-wrap: nowrap;
     overflow-y: scroll;
@@ -303,12 +306,10 @@ input[type=radio]:checked {
 
 .related-scroll {
     position: absolute;
-    top: calc(50% - 25px);
-    border: 1px solid var(--bs-dark-border-subtle);
     border-radius: 50%;
+    top: calc(50% - 25px);
     width: 50px;
     height: 50px;
-    background: var(--bs-dark-bg-subtle);
     z-index: 1;
     display: flex;
     align-items: center;
@@ -316,23 +317,27 @@ input[type=radio]:checked {
 }
 
 .related-scroll-left {
-    left: 25px;
+    left: -50px;
     transform: rotate(-135deg);
 }
 
 .related-scroll-right {
-    right: 25px;
+    right: -50px;
     transform: rotate(45deg);
 }
 
 .related-scroll-arrow {
-    border: 3px solid var(--bs-dark);
+    border: 3px solid var(--bs-btn-color);
     border-left: 0;
     border-bottom: 0;
     height: 19px;
     width: 19px;
     margin: 5px 5px 0 0;
     border-top-right-radius: 3px;
+}
+
+.related-scroll:hover .related-scroll-arrow {
+    border-color: var(--bs-btn-hover-color);
 }
 
 
