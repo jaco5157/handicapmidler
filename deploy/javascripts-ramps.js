@@ -80,7 +80,7 @@ if (document.querySelector(".webshop-productinfo")) {
     document.getElementById("documentation").querySelectorAll("a").forEach(function (item) {
         item.textContent = item.nextSibling.textContent.trim();
         item.nextSibling.remove();
-        item.className = "btn btn-outline-light me-2";
+        item.className = "btn btn-outline-light mb-2 mb-md-0 me-2";
     });
 
     // Move image when page size changes
