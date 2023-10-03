@@ -76,6 +76,13 @@ if (document.querySelector(".webshop-productinfo")) {
     buyButton.value = "Læg i kurv";
     buyButton.className = "btn btn-success mt-1 buy-button col-12 col-lg-8 col-xl-7";
 
+    // Style product documentation
+    document.getElementById("documentation").querySelectorAll("a").forEach(function (item) {
+        item.textContent = item.nextSibling.textContent.trim();
+        item.nextSibling.remove();
+        item.className = "btn btn-outline-light me-2";
+    });
+
     // Move image when page size changes
     var imageInside = true;
     window.addEventListener("resize", placeImage);
