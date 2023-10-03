@@ -18,28 +18,37 @@ function createSearchBar() {
 
 createSearchBar();
 
-if (document.querySelector(".ProductList_Custom_DIV")) {
-    createProductList();
+function createProductList(productListName) {
+    if (document.querySelector(productListName)) {
+        let productList = document.querySelector(productListName);
+        productList.classList += " row";
+    
+        Array.from(productList.children).forEach(function (product) {
+            product.className += " col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4";
+            let buyButton = product.querySelector(".product-buy").firstChild;
+            if (buyButton.nodeName == "A") {
+                buyButton.className = "btn btn-success w-100";
+                buyButton.innerHTML = "Vælg variant";
+            }
+            if (buyButton.nodeName == "INPUT") {
+                buyButton.className = "btn btn-success w-100";
+                buyButton.value = "Læg i kurv";
+                buyButton.type = "submit";
+            }
+            if (buyButton.nodeName == "IMG") {
+                let newButton = document.createElement("span");
+                newButton.textContent = "Læg i kurv";
+                newButton.className = "btn btn-success w-100";
+                newButton.onclick = buyButton.onclick;
+                buyButton.insertAdjacentElement("beforebegin", newButton);
+                buyButton.remove();
+            }
+        });
+    }
 }
+createProductList(".ProductList_Custom_DIV");
+createProductList(".CustomersAlsoBought_Custom_DIV");
 
-function createProductList() {
-    let productList = document.querySelector(".ProductList_Custom_DIV");
-    productList.classList += " row";
-
-    Array.from(productList.children).forEach(function (product) {
-        product.className += " col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4";
-        let buyButton = product.querySelector(".product-buy").firstChild;
-        if (buyButton.nodeName == "A") {
-            buyButton.className = "btn btn-success w-100";
-            buyButton.innerHTML = "Vælg variant";
-        }
-        if (buyButton.nodeName == "INPUT") {
-            buyButton.className = "btn btn-success w-100";
-            buyButton.value = "Læg i kurv";
-            buyButton.type = "submit";
-        }
-    });
-}
 
 if (document.querySelector(".webshop-productinfo")) {
     if (document.querySelector(".inventory-container")) {
@@ -127,14 +136,6 @@ if (document.querySelector(".webshop-checkout")) {
         field.querySelector("input").setAttribute("placeholder", field.querySelector("span").textContent);
     });
 
-    // Creates template element that can be queried
-    function htmlToElement(html) {
-        var template = document.createElement('template');
-        html = html.trim(); // Never return a text node of whitespace as the result
-        template.innerHTML = html;
-        return template.content.firstChild;
-    }
-
     // Hide password textbox initially
     var passwordInput = document.getElementById("checkout_password").parentElement;
     passwordInput.style.display = "none";
@@ -165,4 +166,12 @@ if (document.querySelector(".webshop-frontpage")) {
         elem.innerHTML = text[counter % text.length];
         counter++;
     }
+}
+
+// Creates template element that can be queried
+function htmlToElement(html) {
+    var template = document.createElement('template');
+    html = html.trim(); // Never return a text node of whitespace as the result
+    template.innerHTML = html;
+    return template.content.firstChild;
 }
