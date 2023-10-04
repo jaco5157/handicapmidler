@@ -113,6 +113,16 @@ if (document.querySelector(".webshop-productinfo")) {
 
     // Fire once to correctly place image
     placeImage();
+
+
+    // Scroll buttons for related products
+    let relatedProducts = document.querySelector(".CustomersAlsoBought_Custom_DIV");
+    document.querySelector(".related-scroll-right").addEventListener("click", function () {
+    relatedProducts.scrollBy(relatedProducts.clientWidth - (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth) - relatedProducts.firstChild.clientWidth, 0); 
+    });
+    document.querySelector(".related-scroll-left").addEventListener("click", function () {
+        relatedProducts.scrollBy(-relatedProducts.clientWidth - (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth) + relatedProducts.firstChild.clientWidth, 0); 
+    });
 }
 // webshop-orderstep4 webshop-checkout webshop-terms
 if (document.querySelector(".webshop-orderstep4, .webshop-checkout, .webshop-terms")) {

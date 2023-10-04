@@ -296,12 +296,10 @@ input[type=radio]:checked {
 
 
 
-
-
-
 .CustomersAlsoBought_Custom_DIV {
     flex-wrap: nowrap;
     overflow-y: scroll;
+    scroll-behavior: smooth;
 }
 
 .related-scroll {
@@ -317,16 +315,18 @@ input[type=radio]:checked {
 }
 
 .related-scroll-left {
-    left: -50px;
+    left: 40px;
     transform: rotate(-135deg);
 }
 
 .related-scroll-right {
-    right: -50px;
+    right: 40px;
     transform: rotate(45deg);
 }
 
-.related-scroll-arrow {
+.related-scroll::after {
+    display: block;
+    content: "";
     border: 3px solid var(--bs-btn-color);
     border-left: 0;
     border-bottom: 0;
@@ -336,7 +336,7 @@ input[type=radio]:checked {
     border-top-right-radius: 3px;
 }
 
-.related-scroll:hover .related-scroll-arrow {
+.related-scroll:hover::after {
     border-color: var(--bs-btn-hover-color);
 }
 
