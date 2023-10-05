@@ -18,37 +18,38 @@ function createSearchBar() {
 
 createSearchBar();
 
-function createProductList(productListName) {
-    if (document.querySelector(productListName)) {
-        let productList = document.querySelector(productListName);
-        productList.classList += " row";
-    
-        Array.from(productList.children).forEach(function (product) {
-            product.className += " col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4";
-            let buyButton = product.querySelector(".product-buy").firstChild;
-            if (buyButton.nodeName == "A") {
-                buyButton.className = "btn btn-success w-100";
-                buyButton.innerHTML = "Vælg variant";
-            }
-            if (buyButton.nodeName == "INPUT") {
-                buyButton.className = "btn btn-success w-100";
-                buyButton.value = "Læg i kurv";
-                buyButton.type = "submit";
-            }
-            if (buyButton.nodeName == "IMG") {
-                let newButton = document.createElement("span");
-                newButton.textContent = "Læg i kurv";
-                newButton.className = "btn btn-success w-100";
-                newButton.onclick = buyButton.onclick;
-                buyButton.insertAdjacentElement("beforebegin", newButton);
-                buyButton.remove();
-            }
-        });
-    }
-}
-createProductList(".ProductList_Custom_DIV");
-createProductList(".CustomersAlsoBought_Custom_DIV");
+function createProductList(productList) {
+    productList.classList += " row";
 
+    Array.from(productList.children).forEach(function (product) {
+        product.className += " col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4";
+        let buyButton = product.querySelector(".product-buy").firstChild;
+        if (buyButton.nodeName == "A") {
+            buyButton.className = "btn btn-success w-100";
+            buyButton.innerHTML = "Vælg variant";
+        }
+        if (buyButton.nodeName == "INPUT") {
+            buyButton.className = "btn btn-success w-100";
+            buyButton.value = "Læg i kurv";
+            buyButton.type = "submit";
+        }
+        if (buyButton.nodeName == "IMG") {
+            let newButton = document.createElement("span");
+            newButton.textContent = "Læg i kurv";
+            newButton.className = "btn btn-success w-100";
+            newButton.onclick = buyButton.onclick;
+            buyButton.insertAdjacentElement("beforebegin", newButton);
+            buyButton.remove();
+        }
+    });
+}
+
+if (document.querySelector(".ProductList_Custom_DIV")) {
+    createProductList(document.querySelector(".ProductList_Custom_DIV"));
+}
+if (document.querySelector(".CustomersAlsoBought_Custom_DIV")) {
+    createProductList(document.querySelector(".CustomersAlsoBought_Custom_DIV"));
+}
 
 if (document.querySelector(".webshop-productinfo")) {
     if (document.querySelector(".inventory-container")) {
@@ -118,10 +119,10 @@ if (document.querySelector(".webshop-productinfo")) {
     // Scroll buttons for related products
     let relatedProducts = document.querySelector(".CustomersAlsoBought_Custom_DIV");
     document.querySelector(".related-scroll-right").addEventListener("click", function () {
-    relatedProducts.scrollBy(relatedProducts.clientWidth - (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth) - relatedProducts.firstChild.clientWidth, 0); 
+        relatedProducts.scrollBy((relatedProducts.clientWidth - relatedProducts.firstChild.clientWidth) - (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth), 0); 
     });
     document.querySelector(".related-scroll-left").addEventListener("click", function () {
-        relatedProducts.scrollBy(-relatedProducts.clientWidth - (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth) + relatedProducts.firstChild.clientWidth, 0); 
+        relatedProducts.scrollBy(-(relatedProducts.clientWidth - relatedProducts.firstChild.clientWidth) - (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth) , 0); 
     });
 }
 // webshop-orderstep4 webshop-checkout webshop-terms
