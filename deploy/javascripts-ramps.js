@@ -1,56 +1,10 @@
-function createSearchBar() {
-    let searchForm = document.getElementById("Search_Form");
-    let searchField = searchForm.querySelector(".SearchField_SearchPage");
-    let searchButton = searchForm.querySelector(".SubmitButton_SearchPage");
-
-    searchForm.setAttribute("class", "d-flex me-auto ms-auto");
-    searchForm.setAttribute("role", "search");
-
-    searchField.className += " form-control me-2";
-    searchField.setAttribute("type", "search");
-    searchField.setAttribute("placeholder", "Søg efter produkter...");
-    searchField.setAttribute("aria-label", "Søg efter produkter");
-    searchField.setAttribute("size", "");
-
-    searchButton.className += " btn btn-outline-light";
-    searchButton.value = "Søg";
-}
-
 createSearchBar();
-
-function createProductList(productList) {
-    productList.classList += " row";
-
-    Array.from(productList.children).forEach(function (product) {
-        product.className += " col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4";
-        let buyButton = product.querySelector(".product-buy").firstChild;
-        if (buyButton.nodeName == "A") {
-            buyButton.className = "btn btn-success w-100";
-            buyButton.innerHTML = "Vælg variant";
-        }
-        if (buyButton.nodeName == "INPUT") {
-            buyButton.className = "btn btn-success w-100";
-            buyButton.value = "Læg i kurv";
-            buyButton.type = "submit";
-        }
-        if (buyButton.nodeName == "IMG") {
-            let newButton = document.createElement("span");
-            newButton.textContent = "Læg i kurv";
-            newButton.className = "btn btn-success w-100";
-            newButton.onclick = buyButton.onclick;
-            buyButton.insertAdjacentElement("beforebegin", newButton);
-            buyButton.remove();
-        }
-    });
-}
 
 if (document.querySelector(".ProductList_Custom_DIV")) {
     createProductList(document.querySelector(".ProductList_Custom_DIV"));
 }
-if (document.querySelector(".CustomersAlsoBought_Custom_DIV")) {
-    createProductList(document.querySelector(".CustomersAlsoBought_Custom_DIV"));
-}
 
+//======= PRODUCT INFO =======//
 if (document.querySelector(".webshop-productinfo")) {
     if (document.querySelector(".inventory-container")) {
         var inventoryAmount = document.getElementById("inventory-amount");
@@ -115,27 +69,29 @@ if (document.querySelector(".webshop-productinfo")) {
     // Fire once to correctly place image
     placeImage();
 
-
     // Scroll buttons for related products
     let relatedProducts = document.querySelector(".related-products");
-    if(!relatedProducts.textContent.trim()){
+    if (!relatedProducts.textContent.trim()) {
         relatedProducts.className += " d-none";
     } else {
         relatedProducts = document.querySelector(".CustomersAlsoBought_Custom_DIV");
+        createProductList(relatedProducts);
         document.querySelector(".related-scroll-right").addEventListener("click", function () {
-            relatedProducts.scrollBy((relatedProducts.clientWidth - relatedProducts.firstChild.clientWidth) - (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth), 0); 
+            relatedProducts.scrollBy((relatedProducts.clientWidth - relatedProducts.firstChild.clientWidth) - (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth), 0);
         });
         document.querySelector(".related-scroll-left").addEventListener("click", function () {
-            relatedProducts.scrollBy(-(relatedProducts.clientWidth - relatedProducts.firstChild.clientWidth) - (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth) , 0); 
+            relatedProducts.scrollBy(-(relatedProducts.clientWidth - relatedProducts.firstChild.clientWidth) - (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth), 0);
         });
     }
 }
+
+//======= CHECKOUT =======//
 // webshop-orderstep4 webshop-checkout webshop-terms
 if (document.querySelector(".webshop-orderstep4, .webshop-checkout, .webshop-terms")) {
     document.querySelector("main").className += " container py-5";
 }
 
-
+// Checkout
 if (document.querySelector(".webshop-checkout")) {
 
     // Set width of buttons
@@ -172,6 +128,7 @@ if (document.querySelector(".webshop-checkout")) {
     passwordInput.insertAdjacentElement("beforebegin", passwordCheckbox);
 }
 
+//======= FRONTPAGE =======//
 if (document.querySelector(".webshop-frontpage")) {
     var text = ["hjemmet", "virksomheden", "gæsterne"];
     var counter = 0;
@@ -182,6 +139,74 @@ if (document.querySelector(".webshop-frontpage")) {
         elem.innerHTML = text[counter % text.length];
         counter++;
     }
+
+    let fpdata = document.createElement("div");
+    let productList = document.querySelector(".ProductList_Custom_DIV");
+    (async () => {
+        var response = await fetch('https://doertrinsramper.dk/shop/forside-94c1.html');
+        switch (response.status) {
+            // status "OK"
+            case 200:
+                fpdata.innerHTML = await response.text();
+                let products = fpdata.querySelector(".ProductList_Custom_DIV").childNodes;
+                products.forEach(function (item) {
+                    productList.appendChild(item.cloneNode(true));
+                });
+                createProductList(productList);
+                break;
+            // status "Not Found"
+            case 404:
+                console.log('Products not found');
+                break;
+        }
+    })();
+}
+
+//======= GENERAL FUNCTIONS =======//
+// Create search bar
+function createSearchBar() {
+    let searchForm = document.getElementById("Search_Form");
+    let searchField = searchForm.querySelector(".SearchField_SearchPage");
+    let searchButton = searchForm.querySelector(".SubmitButton_SearchPage");
+
+    searchForm.setAttribute("class", "d-flex me-auto ms-auto");
+    searchForm.setAttribute("role", "search");
+
+    searchField.className += " form-control me-2";
+    searchField.setAttribute("type", "search");
+    searchField.setAttribute("placeholder", "Søg efter produkter...");
+    searchField.setAttribute("aria-label", "Søg efter produkter");
+    searchField.setAttribute("size", "");
+
+    searchButton.className += " btn btn-outline-light";
+    searchButton.value = "Søg";
+}
+
+// Create product list
+function createProductList(productList) {
+    productList.classList += " row";
+
+    Array.from(productList.children).forEach(function (product) {
+        product.className += " col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4";
+        let buyButton = product.querySelector(".product-buy").firstChild;
+        if (buyButton.nodeName == "A") {
+            buyButton.className = "btn btn-success w-100";
+            buyButton.innerHTML = "Vælg variant";
+        }
+        if (buyButton.nodeName == "INPUT") {
+            buyButton.className = "btn btn-success w-100";
+            buyButton.value = "Læg i kurv";
+            buyButton.type = "submit";
+        }
+        if (buyButton.nodeName == "IMG") {
+            let newButton = document.createElement("span");
+            newButton.textContent = "Læg i kurv";
+            newButton.className = "btn btn-success w-100";
+            newButton.onclick = buyButton.onclick;
+            buyButton.insertAdjacentElement("beforebegin", newButton);
+            buyButton.remove();
+        }
+    });
 }
 
 // Creates template element that can be queried
