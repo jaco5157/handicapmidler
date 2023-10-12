@@ -7,7 +7,7 @@ if (document.querySelector(".ProductList_Custom_DIV")) {
 //======= PRODUCT INFO =======//
 if (document.querySelector(".webshop-productinfo")) {
     if (document.querySelector(".inventory-container")) {
-        var inventoryAmount = document.getElementById("inventory-amount");
+        let inventoryAmount = document.getElementById("inventory-amount");
         if (inventoryAmount.textContent > 100) inventoryAmount.textContent = "100+";
     }
 
@@ -26,6 +26,7 @@ if (document.querySelector(".webshop-productinfo")) {
 
     amount.parentNode.append(minus, amount, plus);
 
+
     minus.addEventListener("click", function (evt) {
         if (!amount.disabled) amount.stepDown();
         else warningBox.style.display = "block";
@@ -35,10 +36,12 @@ if (document.querySelector(".webshop-productinfo")) {
         else warningBox.style.display = "block";
     })
 
+
     let buyButton = document.querySelector(".buyWrapper input");
     buyButton.type = "submit";
     buyButton.value = "Læg i kurv";
     buyButton.className = "btn btn-success mt-1 buy-button col-12 col-lg-8 col-xl-7";
+
 
     // Style product documentation
     document.getElementById("documentation").querySelectorAll("a").forEach(function (item) {
@@ -47,9 +50,9 @@ if (document.querySelector(".webshop-productinfo")) {
         item.className = "btn btn-outline-light mb-2 mb-md-0 me-2";
     });
 
+
     // Move image when page size changes
     var imageInside = true;
-    window.addEventListener("resize", placeImage);
     function placeImage() {
         let mediaQuery = window.matchMedia('(min-width: 768px)')
         // If width is less than "medium" and image is not inside
@@ -65,9 +68,11 @@ if (document.querySelector(".webshop-productinfo")) {
             imageInside = false;
         }
     }
-
     // Fire once to correctly place image
     placeImage();
+    // Fire when windows is resized
+    window.addEventListener("resize", placeImage);
+
 
     // Scroll buttons for related products
     let relatedProducts = document.querySelector(".related-products");
@@ -77,10 +82,15 @@ if (document.querySelector(".webshop-productinfo")) {
         relatedProducts = document.querySelector(".CustomersAlsoBought_Custom_DIV");
         createProductList(relatedProducts);
         document.querySelector(".related-scroll-right").addEventListener("click", function () {
-            relatedProducts.scrollBy((relatedProducts.clientWidth - relatedProducts.firstChild.clientWidth) - (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth), 0);
+            let n = relatedProducts.clientWidth / relatedProducts.firstChild.clientWidth;
+            let scrollAmount = relatedProducts.firstChild.clientWidth * (n > 1 ? (n - 1) : 1);
+            relatedProducts.scrollBy(scrollAmount - (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth), 0);
         });
         document.querySelector(".related-scroll-left").addEventListener("click", function () {
-            relatedProducts.scrollBy(-(relatedProducts.clientWidth - relatedProducts.firstChild.clientWidth) - (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth), 0);
+            let n = relatedProducts.clientWidth / relatedProducts.firstChild.clientWidth;
+            let scrollAmount = relatedProducts.firstChild.clientWidth * (n > 1 ? (n - 1) : 1);
+            relatedProducts.scrollBy(- scrollAmount - ((relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth) > 0 ? (relatedProducts.scrollLeft % relatedProducts.firstChild.clientWidth) - relatedProducts.firstChild.clientWidth : 0), 0);
+
         });
     }
 }
@@ -94,11 +104,6 @@ if (document.querySelector(".webshop-orderstep4, .webshop-checkout, .webshop-ter
 // Checkout
 if (document.querySelector(".webshop-checkout")) {
 
-    // Set width of buttons
-    if (document.getElementById("customer_lookup_submit")) {
-        let checkoutLogin = document.getElementById("customer_lookup_submit");
-        checkoutLogin.className += " btn btn-success w-100";
-    }
     let checkoutComplete = document.getElementById("confirm-complete-button");
     checkoutComplete.className = "btn btn-success w-100";
 
@@ -108,29 +113,34 @@ if (document.querySelector(".webshop-checkout")) {
         field.querySelector("input").setAttribute("placeholder", field.querySelector("span").textContent);
     });
 
+    document.getElementById("confirm-accepterms-link").className = document.getElementById("confirm-accept-customerdata-link").className = "btn btn-outline-primary flex-grow-1";
+
+    // Set width of buttons
+    //if (document.getElementById("customer_lookup_submit")) {
+    //    let checkoutLogin = document.getElementById("customer_lookup_submit");
+    //    checkoutLogin.className += " btn btn-success w-100";
+    //}
+
     // Hide password textbox initially
-    var passwordInput = document.getElementById("checkout_password").parentElement;
-    passwordInput.style.display = "none";
+    //var passwordInput = document.getElementById("checkout_password").parentElement;
+    //passwordInput.style.display = "none";
 
     // Add textbox for creating password
-    let passwordCheckboxString = '<div class="checkout-row"><div class="div-checkout-checkbox"><input autocomplete="false" type="checkbox" class="checkout-checkbox" value="1" id="checkout_create_account" name="checkout_create_account"></div><div class="div-checkout-checkbox-label"><label for="checkout_create_account" class="right-label">Jeg vil gerne oprette en konto</label></div></div>';
-    let passwordCheckbox = htmlToElement(passwordCheckboxString);
+    //let passwordCheckboxString = '<div class="checkout-row"><div class="div-checkout-checkbox"><input autocomplete="false" type="checkbox" class="checkout-checkbox" value="1" id="checkout_create_account" name="checkout_create_account"></div><div class="div-checkout-checkbox-label"><label for="checkout_create_account" class="right-label">Jeg vil gerne oprette en konto</label></div></div>';
+    //let passwordCheckbox = htmlToElement(passwordCheckboxString);
 
     // Display password textbox if checkbox is checked
-    passwordCheckbox.querySelector("#checkout_create_account").addEventListener('click', function handleClick(event) {
-        if (event.target.checked) {
-            passwordInput.style.display = 'block';
-        } else {
-            passwordInput.style.display = 'none';
-        }
-    });
-
-    passwordInput.insertAdjacentElement("beforebegin", passwordCheckbox);
+    //passwordCheckbox.querySelector("#checkout_create_account").addEventListener('click', function handleClick(event) {
+    //    if (event.target.checked) passwordInput.style.display = 'block';
+    //    else passwordInput.style.display = 'none';
+    //});
+    //passwordInput.insertAdjacentElement("beforebegin", passwordCheckbox);
 }
+
 
 //======= FRONTPAGE =======//
 if (document.querySelector(".webshop-frontpage")) {
-    var text = ["hjemmet", "virksomheden", "gæsterne"];
+    var text = ["virksomheden", "hjemmet", "gæsterne", "ældre", "rollatorer", "kunderne", "varelageret", "handicappede", "kørestole", "el-kørestole"];
     var counter = 0;
     var elem = document.getElementById("text-spinner");
     var inst = setInterval(change, 3000);
@@ -162,6 +172,7 @@ if (document.querySelector(".webshop-frontpage")) {
     })();
 }
 
+
 //======= GENERAL FUNCTIONS =======//
 // Create search bar
 function createSearchBar() {
@@ -181,6 +192,7 @@ function createSearchBar() {
     searchButton.className += " btn btn-outline-light";
     searchButton.value = "Søg";
 }
+
 
 // Create product list
 function createProductList(productList) {
@@ -210,9 +222,9 @@ function createProductList(productList) {
 }
 
 // Creates template element that can be queried
-function htmlToElement(html) {
-    var template = document.createElement('template');
-    html = html.trim(); // Never return a text node of whitespace as the result
-    template.innerHTML = html;
-    return template.content.firstChild;
-}
+// function htmlToElement(html) {
+//     var template = document.createElement('template');
+//     html = html.trim(); // Never return a text node of whitespace as the result
+//     template.innerHTML = html;
+//     return template.content.firstChild;
+// }
