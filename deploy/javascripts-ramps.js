@@ -43,12 +43,6 @@ if (document.querySelector(".webshop-productinfo")) {
     buyButton.className = "btn btn-success mt-1 buy-button col-12 col-lg-8 col-xl-7";
 
 
-    // Style product documentation
-    document.getElementById("documentation").querySelectorAll("a").forEach(function (item) {
-        item.textContent = item.nextSibling.textContent.trim();
-        item.nextSibling.remove();
-        item.className = "btn btn-outline-light mb-2 mb-md-0 me-2";
-    });
 
 
     // Move image when page size changes
@@ -73,6 +67,18 @@ if (document.querySelector(".webshop-productinfo")) {
     // Fire when windows is resized
     window.addEventListener("resize", placeImage);
 
+    
+    // Style product documentation
+    document.getElementById("documentation").querySelectorAll("a").forEach(function (item) {
+        item.textContent = item.nextSibling.textContent.trim();
+        item.nextSibling.remove();
+        item.className = "btn btn-outline-light mb-2 mb-md-0 me-2";
+    });
+    
+    document.getElementById("technical-description").querySelectorAll(".row").forEach(function (item) {
+        if (item.querySelector(".contents").textContent.trim()) return;
+        item.remove();
+    });
 
     // Scroll buttons for related products
     let relatedProducts = document.querySelector(".related-products");
