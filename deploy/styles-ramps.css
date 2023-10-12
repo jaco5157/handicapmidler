@@ -395,6 +395,20 @@ input[type=radio]:checked {
     margin-top: 10px;
 }
 
+#confirm-accepterms,
+#confirm-accept-customerdata {
+    display: flex;
+    position: relative;
+}
+
+#acceptTermsBit,
+#acceptCustomerDataBit {
+    position: absolute;
+    top: calc(50% - 10px);
+    margin: 0;
+    left: 8px;
+}
+
 
 /* Custom address fields styling */
 
