@@ -83,7 +83,7 @@ if (document.querySelector(".webshop-productinfo")) {
     var selectColor;
     avGroups.forEach(group => {
       groupIndex = avGroups.indexOf(group);
-      if (group.Name == 'Farve') {
+      if (group.Name.toLowerCase().includes('farve')) {
         selectColor = document.querySelector('.VariantGroupPosition-' + (groupIndex + 1) + ' .RadioButton_Container_ProductInfo');
         createColorPicker(selectColor);
       } else {
@@ -219,7 +219,7 @@ function createColorPicker(select) {
   select.classList.add('flex-container', 'flex-gap', 'centertext')
   select.querySelectorAll('.advanced-variant-item-container').forEach((option, i) => {
     var input = option.querySelector('input');
-    value = input.value.toLowerCase().replace(" ", "-").split("/");
+    value = input.value.toLowerCase().split(" (")[0].replace(" ", "-").split("/");
     div = option.querySelector('div');
     div.classList.add('variant-color');
     div.setAttribute('style', 'background-color: var(--' + value[0] + ')');
