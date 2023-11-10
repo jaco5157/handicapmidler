@@ -648,16 +648,16 @@ select:focus,
     margin-bottom: 10px;
 }
 
-.advanced-variant-item-container {
+.color-picker .advanced-variant-item-container {
     width: 61px;
 }
 
-.advanced-variant-image-active {
+.color-picker .advanced-variant-image-active {
     color: #4583ed;
     text-decoration: underline;
 }
 
-.variant-color {
+.color-picker .variant-color {
     height: 42px;
     width: 42px;
     background-color: #fff;
@@ -670,7 +670,7 @@ select:focus,
     margin: 0 auto 3px;
 }
 
-.variant-color {
+.color-picker .variant-color {
     --hvid: #fff;
     --sort: #000;
     --antrasit-grå: #383e42;
@@ -690,24 +690,25 @@ select:focus,
     --supreme: #E6BF83;
 }
 
-.advanced-variant-image-active .variant-color {
+.color-picker .advanced-variant-image-active .variant-color {
     box-shadow: 0 0 0 3px #4583ed;
 }
 
-.variant-color span {
+.color-picker .variant-color span {
     display: block;
     width: 50%;
     height: 100%;
 }
 
-.advanced-variant-item-container label {
+.color-picker .advanced-variant-item-container label {
     display: block;
     cursor: pointer;
 }
 
-.advanced-variant-item-container input {
+.color-picker .advanced-variant-item-container input {
     appearance: none;
     float: left;
+    word-break: break-word;
 }
 
 .warning {
