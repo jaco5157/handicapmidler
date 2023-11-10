@@ -216,7 +216,7 @@ if (document.querySelector(".webshop-productinfo")) {
 
 //Create color picker
 function createColorPicker(select) {
-  select.classList.add('flex-container', 'flex-gap', 'centertext')
+  select.classList.add('color-variant', 'flex-container', 'flex-gap', 'centertext')
   select.querySelectorAll('.advanced-variant-item-container').forEach((option, i) => {
     var input = option.querySelector('input');
     value = input.value.toLowerCase().split(" (")[0].replace(" ", "-").split("/");
