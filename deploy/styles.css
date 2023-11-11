@@ -1956,11 +1956,11 @@ footer #copyright #rights {
     #categoryes {
         border: 1px solid #d0d0d0;
         border-radius: 15px 15px 0 0;
+        overflow: hidden;
     }
 
     #categoryes .Heading_Productmenu {
         width: 100%;
-        border-radius: 15px 15px 0 0;
     }
 
     #rightcol {
