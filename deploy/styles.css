@@ -640,12 +640,16 @@ select:focus,
 .product-info .VariantGroupLabel {
     font-size: 20px;
     font-weight: normal;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     display: block;
 }
 
 .VariantGroup {
     margin-bottom: 10px;
+}
+
+.VariantGroup:not(:first-child) {
+    padding-top: 10px;
 }
 
 .color-picker .advanced-variant-item-container {
@@ -658,8 +662,8 @@ select:focus,
 }
 
 .color-picker .variant-color {
-    height: 42px;
-    width: 42px;
+    height: 48px;
+    width: 48px;
     background-color: #fff;
     border-radius: 100%;
     border: 3px solid #d0d0d0;
@@ -680,6 +684,7 @@ select:focus,
     --metallisk-brun: #ac4313;
     --rød: #b30000;
     --blå: #000099;
+    --lyseblå: #32ceee;
     --grøn: #00b300;
     --gul: #ffcc33;
     --lilla: #4d004d;
@@ -687,7 +692,8 @@ select:focus,
     --creme-royal: #d8b374;
     --orange: #f36500;
     --champagne: #c1b7a8;
-    --supreme: #E6BF83;
+    --supreme: #e6bf83;
+    --platin: #e5e4e2;
 }
 
 .color-picker .advanced-variant-image-active .variant-color {
@@ -703,12 +709,12 @@ select:focus,
 .color-picker .advanced-variant-item-container label {
     display: block;
     cursor: pointer;
+    word-break: break-word;
 }
 
 .color-picker .advanced-variant-item-container input {
     appearance: none;
     float: left;
-    word-break: break-word;
 }
 
 .warning {
