@@ -113,7 +113,71 @@ input[type=radio]:checked {
 }
 
 
+/* =================== COOKIES =================== */
+.fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    top: auto;
+}
 
+div#CookiePolicy {
+    height: 100%;
+    display: block;
+    overflow: auto;
+    background-color: #0000006e;
+}
+
+div.CookiePolicyCenterText {
+    background-color: #fff;
+    padding: 20px 0;
+    box-shadow: 0 0 10px #ccc;
+}
+
+div.CookiePolicyText {
+    display: flex;
+    padding: 0 10px;
+    flex-direction: column;
+    text-align: center
+}
+
+.cookie-policy-details-link-container {
+    order: 3;
+    padding: 0 0 15px
+}
+
+.cookie-policy-details-container {
+    order: 4;
+    display: none;
+    overflow: auto;
+    max-height: 400px;
+    margin-bottom: 20px;
+}
+
+.cookie-policy-accept-buttons-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cookie-policy-button {
+    border: none;
+    border-radius: 40px;
+    font-size: 17px;
+    cursor: pointer;
+    flex: 0 1 300px;
+    padding: 10px;
+    margin: 5px;
+}
+
+.cookie-policy-accept {
+    background-color: #fff;
+    border: solid 1px #d0d0d0;
+}
+
+.cookie-policy-accept-all {
+    background-color: #78BD3F;
+    color: #fff;
+}
 
 /* ========= TOPBAR ========= */
 .topbar {
@@ -503,6 +567,19 @@ input[type=radio]:checked {
 /* ========= MEDIA ========= */
 
 @media (min-width: 768px) {
+    div#CookiePolicy {
+        background-color: #fff;
+        max-height: 90%;
+        height: auto;
+        box-shadow: 0 0 10px #ccc;
+    }
+
+    div.CookiePolicyCenterText {
+        margin: 10px auto 0;
+        padding: 0;
+        box-shadow: none;
+    }
+
     .product-image {
         height: 334px;
     }
