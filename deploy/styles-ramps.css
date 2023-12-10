@@ -124,6 +124,7 @@ div#CookiePolicy {
     height: 100%;
     display: block;
     overflow: auto;
+    z-index: 9999;
     background-color: #0000006e;
 }
 
@@ -138,6 +139,10 @@ div.CookiePolicyText {
     padding: 0 10px;
     flex-direction: column;
     text-align: center
+}
+
+.cookie-policy-consents-container {
+    display: none;
 }
 
 .cookie-policy-details-link-container {
