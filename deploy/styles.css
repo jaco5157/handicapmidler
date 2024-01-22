@@ -652,7 +652,7 @@ select:focus,
 }
 
 .color-picker .advanced-variant-item-container {
-    width: 61px;
+    width: 75px;
 }
 
 .color-picker .advanced-variant-image-active {
@@ -661,11 +661,11 @@ select:focus,
 }
 
 .color-picker .variant-color {
-    height: 48px;
-    width: 48px;
+    height: 50px;
+    width: 50px;
     background-color: #fff;
     border-radius: 100%;
-    border: 3px solid #d0d0d0;
+    border: 2px solid #d0d0d0;
     cursor: pointer;
     overflow: hidden;
     transform: rotate(225deg);
