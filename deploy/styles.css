@@ -652,17 +652,13 @@ select:focus,
 }
 
 .color-picker .advanced-variant-item-container {
-    width: 75px;
-}
-
-.color-picker .advanced-variant-image-active {
-    color: #4583ed;
-    text-decoration: underline;
+    position: relative;
+    width: 56px;
 }
 
 .color-picker .variant-color {
-    height: 50px;
-    width: 50px;
+    height: 48px;
+    width: 48px;
     background-color: #fff;
     border-radius: 100%;
     border: 2px solid #d0d0d0;
@@ -707,9 +703,37 @@ select:focus,
 }
 
 .color-picker .advanced-variant-item-container label {
-    display: block;
+    visibility: hidden;
+    position: absolute;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity .6s;
+    top: 110%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.color-picker .advanced-variant-item-container label::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #555 transparent;
+  }
+
+.color-picker .advanced-variant-item-container:hover label {
+    visibility: visible;
+    opacity: 1;
     cursor: pointer;
-    word-break: break-word;
 }
 
 .color-picker .advanced-variant-item-container input {
