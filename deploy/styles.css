@@ -969,6 +969,13 @@ select:focus,
     align-items: center;
 }
 
+.product .image div.Element_Overlay_ProdList_SpecialOfferDIV {
+    position: relative;
+    display: flex;
+    height: 100%;
+    box-sizing: border-box;
+}
+
 .product .image img {
     max-height: 100%;
     transition: all 200ms ease-in-out;
