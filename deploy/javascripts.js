@@ -159,7 +159,7 @@ if (document.querySelector(".webshop-productinfo")) {
   tabLinks = document.getElementsByClassName("tab-links");
   if (tabs.textContent.trim()) {
     tabLinks[0].click();
-    if (!amount.disabled) document.querySelector(".more-info-button").style.display = "block";
+    //if (!amount.disabled) document.querySelector(".more-info-button").style.display = "block";
   }
   else tabs.remove();
 
@@ -278,7 +278,7 @@ function interactableProducts() {
 
 if (document.querySelector(".webshop-productlist, .CustomersAlsoBought_Custom_DIV, .webshop-frontpage")) {
   interactableProducts();
-  
+
   document.querySelectorAll(".ProductListVariantSelector").forEach(item => {
     if(!item.firstChild.selected) item.firstChild.remove()
   });
