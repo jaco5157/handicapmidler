@@ -978,6 +978,7 @@ select:focus,
 
 .product .image img {
     max-height: 100%;
+    max-width: 100%;
     transition: all 200ms ease-in-out;
 }
 
