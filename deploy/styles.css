@@ -537,6 +537,10 @@ p {
     padding: 10px 0
 }
 
+#rightcol ul {
+    padding: 0 0 10px 40px;
+}
+
 a,
 .Choose_Variant {
     text-decoration: underline;
@@ -609,6 +613,7 @@ select:focus,
 .pictures .selectors {
     display: flex;
 }
+
 .pictures .selectors a {
     display: flex;
     height: 70px;
@@ -728,7 +733,7 @@ select:focus,
     border-width: 5px;
     border-style: solid;
     border-color: transparent transparent #555 transparent;
-  }
+}
 
 .color-picker .advanced-variant-item-container:hover label {
     visibility: visible;
@@ -1015,7 +1020,7 @@ select:focus,
     font-weight: bold;
 }
 
-.product .listprodinfo .price .PriceStriked_Productlist{
+.product .listprodinfo .price .PriceStriked_Productlist {
     color: #555;
     font-weight: normal;
 }
