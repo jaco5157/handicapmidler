@@ -345,10 +345,6 @@ span.logo span {
     border-bottom: 3px solid #ff9100
 }
 
-#quicknav {
-    width: 360px;
-}
-
 #search {
     position: absolute;
     top: 75px;
@@ -1039,12 +1035,32 @@ select:focus,
     width: 120px;
 }
 
+.listprodbuy {
+    height: 44px;
+}
+
 .product input[type=image].BuyButton_ProductList,
 img.BuyButton_ProductList,
-img.Related_BuyButton_IMG {
+img.Related_BuyButton_IMG,
+.product .basket-button {
     max-height: 40px;
     width: 100%;
     height: 100%;
+}
+
+.product .basket-button {
+    max-width: 316px;
+    background-color: transparent;
+    border: 1px solid #78bd3f;
+    border-radius: 20px;
+    font-size: 20px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.product .basket-button:hover {
+    background-color: #78bd3f !important;
+    color: #fff;
 }
 
 .productlistTable .BackgroundColor2_Productlist {
@@ -1907,6 +1923,10 @@ footer #copyright #rights {
         max-width: 465px;
         padding: 29px 25px 29px 0;
         width: auto;
+    }
+
+    #quicknav {
+        width: 360px;
     }
 
     #search {

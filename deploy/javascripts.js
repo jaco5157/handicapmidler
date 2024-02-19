@@ -254,15 +254,44 @@ function openTab(evt, tabName) {
 /*
  PRODUCTLIST SCRIPTS
 */
+
+async function addToBasket(product, event){
+  event.preventDefault();
+
+  productParam = product.querySelector(".listed-product-number").textContent;
+  amountParam = product.querySelector(".prodvar input").value;
+  fetchurl = "/shop/showbasket.html?AddMultiple=1&ProductID=" + productParam + "&Amount=" + amountParam;
+
+  button = document.createElement("button");
+  button.setAttribute("type", "button")
+  button.setAttribute("class", "basket-button")
+  button.setAttribute("onclick", "location.href='https://www.handicapmidler.dk/shop/showbasket.html'")
+  button.textContent = "Gå til kurven"
+
+  await fetch(fetchurl).then(function (response) {
+    if (!response.ok) throw new Error('Der opstod en fejl, prøv venligst igen.');
+    console.log(event.target)
+    event.target.insertAdjacentElement("afterend", button)
+    event.target.className += " hidden";
+  })
+}
+
 function interactableProducts() {
   // Go to product page when clicking a product
   document.querySelectorAll(".productlist .product, .CustomersAlsoBought_Custom_DIV .product").forEach(function (product) {
-    product.addEventListener("click", function (event) {
-      // Dont do anything if user clicks the add to basket button
-      if (event.target.nodeName == "INPUT" || event.target.nodeName == "IMG" || event.target.nodeName == "SELECT") return false;
+    product.addEventListener("click", event => {
+      // Default behaviour when user clicks a button
+      if (event.target.nodeName == "IMG" || event.target.nodeName == "SELECT" || event.target.nodeName == "BUTTON" || event.target.nodeName == "INPUT") return false;
       product.querySelector("a").click();
     })
+    // Add to basket when user clicks the buy button, but dont go to the basket
+    let buybutton = product.querySelector(".listprodbuy").firstChild
+    if ((document.querySelector(".ProductList_Custom_DIV") && buybutton.nodeName == "INPUT") || (document.querySelector(".CustomersAlsoBought_Custom_DIV") && buybutton.nodeName == "IMG")) {
+      buybutton.removeAttribute("onclick");
+      buybutton.addEventListener("click", event => addToBasket(product, event))
+    }
   })
+
   // Add attributes to input fields
   document.getElementsByClassName("BuyButton_ProductList").forEach(function (item) {
     if (item.type == "text") item.setAttribute("aria-label", "Indtast antal produkter til køb");
