@@ -270,7 +270,6 @@ async function addToBasket(product, event){
 
   await fetch(fetchurl).then(function (response) {
     if (!response.ok) throw new Error('Der opstod en fejl, prøv venligst igen.');
-    console.log(event.target)
     event.target.insertAdjacentElement("afterend", button)
     event.target.className += " hidden";
   })
