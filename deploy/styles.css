@@ -849,8 +849,8 @@ select:focus,
     width: 380px;
 }
 
-.list {
-    margin-left: 18px;
+.Description_Productinfo a {
+    color: #4583ed;
 }
 
 .tab {
@@ -1219,7 +1219,7 @@ figure img {
     background-size: 100px;
     background-repeat: no-repeat;
     background-position: 90% 30%;
-    min-height: 140px;
+    min-height: 100px;
     width: 100%;
 }
 
