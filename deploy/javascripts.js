@@ -130,7 +130,8 @@ if (document.querySelector(".webshop-productinfo")) {
     variantClick(document.querySelector(".Choose_Variant"))
   }
   document.querySelectorAll(".prodinfotable td").forEach(item => {
-    if(item.textContent.includes("Vælg størrelse")) variantClick(item);
+    let conditions = ["vælg størrelse", "vælg variant", "vælg sædebredde"];
+    if(conditions.some(el => item.textContent.toLowerCase().includes(el))) variantClick(item);
   })
 
   function variantClick(item){
