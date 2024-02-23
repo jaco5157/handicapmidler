@@ -620,7 +620,7 @@ select:focus,
     justify-content: center;
 }
 
-.pictures .selectors a.active {
+.pictures .selectors .mz-thumb-selected {
     border-color: #2e2e2e;
 }
 
