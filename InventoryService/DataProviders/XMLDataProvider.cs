@@ -16,7 +16,7 @@ public class XMLDataProvider: IDataProvider
     public void GenerateInventoryFile(IEnumerable<InventoryItemDTO>? items)
     {
         var inventoryItemDtos = items as InventoryItemDTO[] ?? items.ToArray();
-        var excludedProductNumbers = File.ReadAllLines("./Data/exclude.txt");
+        var excludedProductNumbers = File.ReadAllLines("../InventoryService/Data/exclude.txt");
 
 
         var elements = new XElement("ELEMENTS");
