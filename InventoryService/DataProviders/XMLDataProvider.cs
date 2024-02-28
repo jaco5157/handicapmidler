@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Xml.Linq;
 using InventoryService.DTOs;
 using InventoryService.Interfaces;
@@ -15,10 +16,13 @@ public class XMLDataProvider: IDataProvider
     public void GenerateInventoryFile(IEnumerable<InventoryItemDTO>? items)
     {
         var inventoryItemDtos = items as InventoryItemDTO[] ?? items.ToArray();
+        var excludedProductNumbers = File.ReadAllLines("../Data/exclude.txt");
+
 
         var elements = new XElement("ELEMENTS");
         elements.Add(
             from item in inventoryItemDtos
+            where !excludedProductNumbers.Contains(item.ProductNumber)
             select item.ToXML()
             );
         
