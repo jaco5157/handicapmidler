@@ -1196,11 +1196,16 @@ figure img {
 .basket-total {
     padding: 20px 0;
     border-bottom: 1px solid #D9D9D9;
-    font-size: 17px;
+    font-size: 16px;
 }
 
 .basket-price {
     font-weight: bold;
+    font-size: 20px;
+}
+
+.vat-price {
+    color: #646464
 }
 
 .Order_back_basket img {
