@@ -997,6 +997,7 @@ select:focus,
     border-bottom: 1px dashed #d0d0d0;
     margin: 0;
     overflow: hidden;
+    padding: 0 5px;
 }
 
 .product .listprodinfo .prodheader a {
