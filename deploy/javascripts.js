@@ -80,17 +80,18 @@ if (document.querySelector(".webshop-productinfo")) {
   // Create color pickers if any color variants
   if (avGroups) {
     selectOther = [];
-    var selectColor;
+    var selectColor = [];
     avGroups.forEach(group => {
       groupIndex = avGroups.indexOf(group);
       if (group.Name.toLowerCase().includes('farve')) {
-        selectColor = document.querySelector('.VariantGroupPosition-' + (groupIndex + 1) + ' .RadioButton_Container_ProductInfo');
-        createColorPicker(selectColor);
+        selectColor.push('.VariantGroupPosition-' + (groupIndex + 1) + ' .RadioButton_Container_ProductInfo');
+        selectOther.push(document.querySelector('.VariantGroupPosition-' + (groupIndex + 1) + ' .RadioButton_Container_ProductInfo'));
       } else {
         selectOther.push(document.querySelector('.VariantGroupPosition-' + (groupIndex + 1) + ' select.OptionSelect_ProductInfo'));
       }
+      createColorPicker(selectColor);
     });
-    if (selectColor) {
+    if (selectColor.length) {
       selectOther.forEach(select => {
         select.addEventListener('change', () => createColorPicker(selectColor))
       })
@@ -223,21 +224,28 @@ if (document.querySelector(".webshop-productinfo")) {
 }
 
 //Create color picker
-function createColorPicker(select) {
-  select.classList.add('color-picker', 'flex-container', 'flex-gap', 'centertext')
-  select.querySelectorAll('.advanced-variant-item-container').forEach((option, i) => {
-    var input = option.querySelector('input');
-    value = input.value.toLowerCase().split(" (")[0].replace(" ", "-").split("/");
-    div = option.querySelector('div');
-    div.classList.add('variant-color');
-    div.setAttribute('style', 'background-color: var(--' + value[0] + ')');
-    option.insertAdjacentElement('afterbegin', div);
-    div.addEventListener('click', () => input.click());
-    if (value[1]) {
-      span = document.createElement('span');
-      span.setAttribute('style', 'background-color: var(--' + value[1] + ')');
-      div.appendChild(span);
-    }
+function createColorPicker(selectors) {
+  selectors.forEach((selectName, i) => {
+    console.log(selectName);
+    select = document.querySelector(selectName);
+    console.log("creating color picker for" + select.id)
+    select.classList.add('color-picker', 'flex-container', 'flex-gap', 'centertext')
+    select.querySelectorAll('.advanced-variant-item-container').forEach((option, i) => {
+      var input = option.querySelector('input');
+      value = input.value.toLowerCase().split(" (")[0].replace(" ", "-").split("/");
+      console.log(value);
+      div = option.querySelector('div');
+      div.classList.add('variant-color');
+      div.setAttribute('style', 'background-color: var(--' + value[0] + ')');
+      console.log(div);
+      option.insertAdjacentElement('afterbegin', div);
+      div.addEventListener('click', () => input.click());
+      if (value[1]) {
+        span = document.createElement('span');
+        span.setAttribute('style', 'background-color: var(--' + value[1] + ')');
+        div.appendChild(span);
+      }
+    })
   })
 }
 
