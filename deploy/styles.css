@@ -651,6 +651,10 @@ select:focus,
     padding-top: 10px;
 }
 
+.color-picker {
+    height: 58px;
+}
+
 .color-picker .advanced-variant-item-container {
     position: relative;
     width: 56px;
