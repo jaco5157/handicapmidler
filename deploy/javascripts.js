@@ -93,8 +93,12 @@ if (document.querySelector(".webshop-productinfo")) {
     });
     if (selectColor.length) {
       selectOther.forEach(select => {
-        select.addEventListener('change', () => createColorPicker(selectColor))
-      })
+        select.addEventListener('change', () => {
+          setTimeout(() => {
+            createColorPicker(selectColor);
+          }, 50);
+        });
+      });
     }
   }
 
