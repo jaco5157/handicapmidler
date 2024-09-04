@@ -79,23 +79,28 @@ if (document.querySelector(".webshop-productinfo")) {
 
   // Create color pickers if any color variants
   if (avGroups) {
-    selectOther = [];
-    var selectColor = [];
+    var colorGroups = [];
+    otherGroups = [];
     avGroups.forEach(group => {
       groupIndex = avGroups.indexOf(group);
       if (group.Name.toLowerCase().includes('farve')) {
-        selectColor.push('.VariantGroupPosition-' + (groupIndex + 1) + ' .RadioButton_Container_ProductInfo');
-        selectOther.push(document.querySelector('.VariantGroupPosition-' + (groupIndex + 1) + ' .RadioButton_Container_ProductInfo'));
+        colorGroupQuery = '.VariantGroupPosition-' + (groupIndex + 1) + ' .RadioButton_Container_ProductInfo'
+        otherGroups.push(document.querySelector(colorGroupQuery));
+        if(!groupIndex){ // If first variant group, dont add to list of color selectors, but rather instantiate once
+          createColorPicker([colorGroupQuery])
+        } else {
+          colorGroups.push(colorGroupQuery);
+        }
       } else {
-        selectOther.push(document.querySelector('.VariantGroupPosition-' + (groupIndex + 1) + ' select.OptionSelect_ProductInfo'));
+        otherGroups.push(document.querySelector('.VariantGroupPosition-' + (groupIndex + 1) + ' select.OptionSelect_ProductInfo'));
       }
-      createColorPicker(selectColor);
+      createColorPicker(colorGroups);
     });
-    if (selectColor.length) {
-      selectOther.forEach(select => {
+    if (colorGroups.length) {
+      otherGroups.forEach(select => {
         select.addEventListener('change', () => {
           setTimeout(() => {
-            createColorPicker(selectColor);
+            createColorPicker(colorGroups);
           }, 50);
         });
       });
@@ -230,14 +235,11 @@ if (document.querySelector(".webshop-productinfo")) {
 //Create color picker
 function createColorPicker(selectors) {
   selectors.forEach((selectName, i) => {
-    console.log(selectName);
     select = document.querySelector(selectName);
-    console.log("creating color picker for" + select.id)
     select.classList.add('color-picker', 'flex-container', 'flex-gap', 'centertext')
     select.querySelectorAll('.advanced-variant-item-container').forEach((option, i) => {
       var input = option.querySelector('input');
       value = input.value.toLowerCase().split(" (")[0].replace(" ", "-").split("/");
-      console.log(value);
       div = option.querySelector('div');
       div.classList.add('variant-color');
       div.setAttribute('style', 'background-color: var(--' + value[0] + ')');
