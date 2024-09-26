@@ -652,7 +652,8 @@ select:focus,
 }
 
 .color-picker {
-    height: 58px;
+    min-height: 58px;
+    --gap: 4px;
 }
 
 .color-picker .advanced-variant-item-container {
