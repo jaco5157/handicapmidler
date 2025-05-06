@@ -768,6 +768,10 @@ select:focus,
     background-color: #fff;
 }
 
+.inventory-item-stock {
+    display: none;
+}
+
 .inventory-item-low-stock {
     border-color: #ff9100;
 }
