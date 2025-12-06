@@ -6,3 +6,7 @@ components
 .DS_Store
 **/.vs/**/*
 *test.sh
+/data/
+/productService/generated
+statistics/referrals.csv
+products.html
