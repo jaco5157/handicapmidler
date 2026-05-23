@@ -9,23 +9,34 @@ def main():
     print(f"{len(mobilex_df)} products found on Mobilex.dk")
     print(f"{len(exported_df)} products found in Handicapmidler.dk")
 
-
     """ List products that are in Mobilex but not in the export.xml file """
     missing_df = list_products_missing_in_export(mobilex_df, exported_df)
     missing_df.to_csv("productService/generated/products_missing_in_export.csv", index=False)
 
-
-
 def list_products_missing_in_export(mobilex_df, exported_df):
     merged_df = mobilex_df.merge(exported_df, left_on='product_number', right_on='GENERAL_PROD_NUM', how='left', indicator=True)
     not_in_exported = merged_df[merged_df['_merge'] == 'left_only']
-    return not_in_exported[['product_number', 'product_name', 'product_url', 'category_name']]
+    return not_in_exported[['product_number', 'product_name', 'category_name', 'product_url']]
+
+def filter_categories(df: pd.DataFrame) -> pd.DataFrame:
+    spare_parts = [
+        "Tilbehør rollatorer", "Reservedele rollatorer", "Reservedele/tilbehør til gangborde",
+        "Reservedele/tilbehør til badestole", "Tilbehør til kørestole", "Reservedele til kørestole",
+        "Rampetilbehør", "Eger og tilbehør", "Tilbehør til gummiramper"
+    ]
+    top_level_categories = [
+        "Rollator", "Toilet og bad", "Kørestole", "Kørestolsramper",
+        "Spinergy og specialhjul", "Dørtrinsramper"
+    ]
+    exclude_list = spare_parts + top_level_categories
+    return df[~df["category_name"].isin(exclude_list)]
 
 def get_mobilex_data(csv_file = "productService/generated/mobilex_products.csv") -> pd.DataFrame:
-    df = pd.read_csv(csv_file)
+    df = pd.read_csv(csv_file, sep=';')
+    df = filter_categories(df)
     df = df.drop_duplicates(subset=['product_number'])
     df = df.reset_index(drop=True)
-    
+
     return df
 
 def get_product_data(xml_file = 'productService/generated/export.xml') -> pd.DataFrame:
