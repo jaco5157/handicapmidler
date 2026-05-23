@@ -7,6 +7,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
+import queue
 
 starting_urls = ["https://mobilex.dk/hjaelpemidler/rollatorer/","https://mobilex.dk/reservedele-tilbehoer/forhjul-til-koerestole/1/"]
 
@@ -88,28 +91,50 @@ def get_driver():
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     return driver
 
+def scrape_category(category_row, driver_pool):
+    driver = driver_pool.get()
+    try:
+        name = category_row["category_name"]
+        url = category_row["category_url"]
+        print(f"Scraping category: {name}")
+        df = scrape_mobilex_products(url, driver)
+        df["category_name"] = name
+        return df
+    finally:
+        driver_pool.put(driver)
+
+NUM_WORKERS = 4
+
 if __name__ == "__main__":
     driver = get_driver()
-
     print("Getting product categories...")
     categories = get_categories(driver)
+    driver.quit()
     print(f"Found {len(categories)} categories")
 
-    products_df = pd.DataFrame()
-    
-    for _, category in categories.iterrows():
-        print(f"Scraping category: {category['category_name']}")
-        products = scrape_mobilex_products(category["category_url"], driver)
-        products["category_name"] = category["category_name"]
-        products_df = pd.concat([products_df, products], ignore_index=True)
+    category_rows = [row for _, row in categories.iterrows()]
+
+    driver_pool = queue.Queue()
+    drivers = [get_driver() for _ in range(NUM_WORKERS)]
+    for d in drivers:
+        driver_pool.put(d)
+
+    try:
+        with ThreadPoolExecutor(max_workers=NUM_WORKERS) as executor:
+            futures = [executor.submit(scrape_category, row, driver_pool) for row in category_rows]
+            results = [f.result() for f in as_completed(futures)]
+    finally:
+        for d in drivers:
+            d.quit()
+
+    products_df = pd.concat(results, ignore_index=True)
 
     print(f"\nFound {len(products_df)} products")
     print(products_df.head())
-    
+
     # Save to CSV
     products_df.to_csv("productService/generated/mobilex_products.csv", index=False, sep=';')
     print("\nData saved to mobilex_products.csv")
-    driver.quit()
 
 
     
