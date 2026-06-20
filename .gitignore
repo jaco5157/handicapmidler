@@ -5,8 +5,8 @@ obj
 components
 .DS_Store
 **/.vs/**/*
+**/.idea/**/*
 *test.sh
 /data/
-/productService/generated
+**/generated
 statistics/referrals.csv
-products.html
