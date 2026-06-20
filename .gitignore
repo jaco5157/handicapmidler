@@ -10,3 +10,4 @@ components
 /productService/generated
 statistics/referrals.csv
 products.html
+/tests/
