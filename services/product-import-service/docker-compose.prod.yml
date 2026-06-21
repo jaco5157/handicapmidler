@@ -1,0 +1,28 @@
+services:
+  product-import-service:
+    build:
+      context: .
+    image: product-import-service:pi
+    env_file:
+      - ${PRODUCT_IMPORT_ENV_FILE:-.env}
+    environment:
+      DATA_DIR: /app/data
+      CHROME_BIN: /usr/bin/chromium
+      SELENIUM_DRIVER_PATH: /usr/bin/chromedriver
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    init: true
+    restart: unless-stopped
+    shm_size: "256m"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s

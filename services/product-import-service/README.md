@@ -41,6 +41,8 @@ Open `http://127.0.0.1:8000`.
 
 Generated files are stored in `services/product-import-service/data` when using Docker Compose.
 
+For Raspberry Pi/DietPi deployment, see [DEPLOY_DIETPI.md](DEPLOY_DIETPI.md).
+
 ## Upload Configuration
 
 Set these in `.env` before enabling upload:

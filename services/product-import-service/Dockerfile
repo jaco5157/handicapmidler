@@ -14,6 +14,7 @@ WORKDIR /app
 RUN apk add --no-cache \
     build-base \
     chromium \
+    chromium-docker-selenium-compat \
     font-freefont \
     libjpeg-dev \
     libwebp-dev \
