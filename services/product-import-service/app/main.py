@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import ValidationError
@@ -11,16 +11,33 @@ from pydantic import ValidationError
 from app.config import get_settings
 from app.models import MediaReference, ProductDraft, ScrapeRequest
 from app.scraper.mobilex import MobilexScrapeError, scrape_mobilex_product_page
+from app.security import verify_basic_auth_header
 from app.services.images import build_image_plan, prepare_product_images
 from app.services.import_client import FileUpload, save_xml, upload_product_import
 from app.services.xml_builder import build_product_xml
 
 BASE_DIR = Path(__file__).resolve().parent
 settings = get_settings()
+settings.require_runtime_config()
 
 app = FastAPI(title=settings.app_name)
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
+AUTH_EXEMPT_PATHS = {"/health"}
+
+
+@app.middleware("http")
+async def require_authentication(request: Request, call_next):
+    if not settings.auth_enabled or request.url.path in AUTH_EXEMPT_PATHS:
+        return await call_next(request)
+
+    if verify_basic_auth_header(request.headers.get("authorization"), settings.auth_username, settings.auth_password_hash):
+        return await call_next(request)
+
+    return Response(
+        status_code=401,
+        headers={"WWW-Authenticate": 'Basic realm="Product Import Service", charset="UTF-8"'},
+    )
 
 
 @app.get("/", response_class=HTMLResponse)

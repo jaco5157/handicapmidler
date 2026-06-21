@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import ipaddress
 import shutil
+import socket
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 import requests
 from PIL import Image, ImageChops
@@ -12,6 +14,13 @@ from PIL import Image, ImageChops
 from app.config import Settings
 from app.models import ProductImageInput
 from app.utils import normalize_filename_base
+
+MAX_IMAGE_DOWNLOAD_REDIRECTS = 3
+ALLOWED_IMAGE_CONTENT_TYPES = {
+    "image/jpeg": ".jpg",
+    "image/png": ".png",
+    "image/webp": ".webp",
+}
 
 
 @dataclass
@@ -73,7 +82,13 @@ def prepare_product_images(images: list[ProductImageInput], settings: Settings) 
     compressed_dir = settings.data_dir / "compressed"
 
     for plan in plans:
-        original_path = download_image(plan.source_url, originals_dir, plan.filename_base, settings.request_timeout_seconds)
+        original_path = download_image(
+            plan.source_url,
+            originals_dir,
+            plan.filename_base,
+            settings.request_timeout_seconds,
+            settings.image_download_max_bytes,
+        )
         if settings.compression_backend == "external":
             generated_paths = compress_with_external_tools(original_path, compressed_dir, plan.filename_base, settings)
         else:
@@ -85,14 +100,24 @@ def prepare_product_images(images: list[ProductImageInput], settings: Settings) 
     return plans
 
 
-def download_image(url: str, target_dir: Path, filename_base: str, timeout_seconds: int) -> Path:
+def download_image(
+    url: str,
+    target_dir: Path,
+    filename_base: str,
+    timeout_seconds: int,
+    max_download_bytes: int = 10_000_000,
+) -> Path:
     target_dir.mkdir(parents=True, exist_ok=True)
-    response = requests.get(url, timeout=timeout_seconds)
-    response.raise_for_status()
+    response = _get_public_image_response(url, timeout_seconds)
+    try:
+        response.raise_for_status()
+        final_url = getattr(response, "url", None) or url
+        extension = _supported_image_extension(final_url, response.headers.get("content-type"))
+        target_path = target_dir / f"{normalize_filename_base(filename_base)}{extension}"
+        _write_limited_response(response, target_path, max_download_bytes)
+    finally:
+        response.close()
 
-    extension = _extension_from_url(url) or _extension_from_content_type(response.headers.get("content-type")) or ".jpg"
-    target_path = target_dir / f"{normalize_filename_base(filename_base)}{extension}"
-    target_path.write_bytes(response.content)
     return target_path
 
 
@@ -190,17 +215,114 @@ def _resize_long_edge(image: Image.Image, long_edge: int) -> Image.Image:
     return image.resize(new_size, Image.Resampling.LANCZOS)
 
 
+def _get_public_image_response(url: str, timeout_seconds: int) -> requests.Response:
+    current_url = url
+    for redirect_count in range(MAX_IMAGE_DOWNLOAD_REDIRECTS + 1):
+        _ensure_public_http_url(current_url)
+        response = requests.get(current_url, timeout=timeout_seconds, stream=True, allow_redirects=False)
+        if not response.is_redirect:
+            return response
+
+        if redirect_count == MAX_IMAGE_DOWNLOAD_REDIRECTS:
+            response.close()
+            break
+
+        redirect_location = response.headers.get("location")
+        response.close()
+        if not redirect_location:
+            raise ValueError("Image URL redirected without a Location header.")
+        current_url = urljoin(current_url, redirect_location)
+
+    raise ValueError("Image URL redirected too many times.")
+
+
+def _ensure_public_http_url(url: str) -> None:
+    parsed_url = urlparse(url)
+    if parsed_url.scheme not in {"http", "https"}:
+        raise ValueError("Image URL must use http or https.")
+    if not parsed_url.hostname:
+        raise ValueError("Image URL must include a hostname.")
+
+    try:
+        port = parsed_url.port or (443 if parsed_url.scheme == "https" else 80)
+    except ValueError as error:
+        raise ValueError("Image URL contains an invalid port.") from error
+
+    try:
+        address_infos = socket.getaddrinfo(parsed_url.hostname, port, type=socket.SOCK_STREAM)
+    except socket.gaierror as error:
+        raise ValueError("Image URL hostname could not be resolved.") from error
+
+    if not address_infos:
+        raise ValueError("Image URL hostname did not resolve to an address.")
+
+    for address_info in address_infos:
+        ip_address = ipaddress.ip_address(address_info[4][0])
+        if _is_blocked_download_ip(ip_address):
+            raise ValueError("Image URL must resolve to a public internet address.")
+
+
+def _is_blocked_download_ip(ip_address: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
+    return (
+        not ip_address.is_global
+        or ip_address.is_loopback
+        or ip_address.is_link_local
+        or ip_address.is_multicast
+        or ip_address.is_private
+        or ip_address.is_reserved
+        or ip_address.is_unspecified
+    )
+
+
+def _supported_image_extension(url: str, content_type: str | None) -> str:
+    normalized_content_type = _normalize_content_type(content_type)
+    if normalized_content_type:
+        extension = _extension_from_content_type(normalized_content_type)
+        if not extension:
+            raise ValueError("Downloaded file is not a supported image type.")
+        return extension
+
+    extension = _extension_from_url(url)
+    if extension:
+        return extension
+    raise ValueError("Image response must include a supported image content type or file extension.")
+
+
+def _write_limited_response(response: requests.Response, target_path: Path, max_download_bytes: int) -> None:
+    content_length = response.headers.get("content-length")
+    if content_length:
+        try:
+            declared_size = int(content_length)
+        except ValueError:
+            declared_size = 0
+        if declared_size > max_download_bytes:
+            raise ValueError(f"Image download exceeds the {max_download_bytes} byte limit.")
+
+    bytes_written = 0
+    try:
+        with target_path.open("wb") as file_handle:
+            for chunk in response.iter_content(chunk_size=64 * 1024):
+                if not chunk:
+                    continue
+                bytes_written += len(chunk)
+                if bytes_written > max_download_bytes:
+                    raise ValueError(f"Image download exceeds the {max_download_bytes} byte limit.")
+                file_handle.write(chunk)
+    except Exception:
+        target_path.unlink(missing_ok=True)
+        raise
+
+
+def _normalize_content_type(content_type: str | None) -> str | None:
+    if not content_type:
+        return None
+    return content_type.split(";", 1)[0].strip().lower()
+
+
 def _extension_from_url(url: str) -> str | None:
     suffix = Path(urlparse(url).path).suffix.lower()
     return suffix if suffix in {".jpg", ".jpeg", ".png", ".webp"} else None
 
 
 def _extension_from_content_type(content_type: str | None) -> str | None:
-    if not content_type:
-        return None
-    content_type = content_type.split(";", 1)[0].strip().lower()
-    return {
-        "image/jpeg": ".jpg",
-        "image/png": ".png",
-        "image/webp": ".webp",
-    }.get(content_type)
+    return ALLOWED_IMAGE_CONTENT_TYPES.get(_normalize_content_type(content_type) or "")

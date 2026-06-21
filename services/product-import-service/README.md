@@ -43,6 +43,34 @@ Generated files are stored in `services/product-import-service/data` when using 
 
 For Raspberry Pi/DietPi deployment, see [DEPLOY_DIETPI.md](DEPLOY_DIETPI.md).
 
+## Access and Authentication
+
+Do not expose this service directly to the public internet. It can download images, upload files by FTP, and trigger webshop imports.
+
+The recommended production setup is:
+
+1. Bind Docker to localhost only.
+2. Use Tailscale Serve for private tailnet HTTPS access.
+3. Enable app authentication with a strong password.
+
+The Compose files bind port 8000 to `127.0.0.1`, so remote access should go through Tailscale Serve or another private reverse proxy running on the same host.
+
+Generate an app password hash from this directory:
+
+```bash
+python3 -c 'from app.security import hash_password; import getpass; print(hash_password(getpass.getpass("App password: ")))'
+```
+
+Then set:
+
+```env
+AUTH_ENABLED=true
+AUTH_USERNAME=admin
+AUTH_PASSWORD_HASH=pbkdf2_sha256$...
+```
+
+When `UPLOAD_ENABLED=true`, the service refuses to start unless authentication is enabled and configured.
+
 ## Upload Configuration
 
 Set these in `.env` before enabling upload:
@@ -69,6 +97,10 @@ POST API_UPLOAD_ENDPOINT?file=Products/Updated/document.xml&response=1&updateonl
 
 with form fields `user` and `password`.
 
+## Image Download Safety
+
+Uploaded product drafts contain image URLs. The service only downloads `http` and `https` image URLs that resolve to public internet addresses, rejects unsupported content types, and limits image downloads with `IMAGE_DOWNLOAD_MAX_BYTES`.
+
 ## Image Compression
 
 The default `COMPRESSION_BACKEND=pillow` mirrors the output naming and long-edge sizing from `compress.sh` without requiring ImageMagick or Caesium in local development.
@@ -82,4 +114,4 @@ cd services/product-import-service
 pytest
 ```
 
-The test suite covers filename suggestions, price validation, specs table generation, XML mapping, optional specs omission, and image variant planning.
+The test suite covers filename suggestions, price validation, specs table generation, XML mapping, optional specs omission, image variant planning, authentication, and image download safety.

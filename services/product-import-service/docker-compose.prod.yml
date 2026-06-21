@@ -10,7 +10,7 @@ services:
       CHROME_BIN: /usr/bin/chromium
       SELENIUM_DRIVER_PATH: /usr/bin/chromedriver
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     volumes:
       - ./data:/app/data
     init: true

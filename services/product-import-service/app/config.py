@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     upload_enabled: bool = False
     data_dir: Path = Path("data")
 
+    auth_enabled: bool = False
+    auth_username: str | None = None
+    auth_password_hash: str | None = None
+
     ftp_host: str | None = None
     ftp_port: int = 21
     ftp_username: str | None = None
@@ -42,6 +46,7 @@ class Settings(BaseSettings):
     jpeg_quality: int = 88
 
     request_timeout_seconds: int = 30
+    image_download_max_bytes: int = 10_000_000
 
     def ensure_data_dirs(self) -> None:
         self.data_dir.mkdir(parents=True, exist_ok=True)
@@ -57,6 +62,27 @@ class Settings(BaseSettings):
 
         if missing:
             raise ValueError(f"Upload is enabled, but these settings are missing: {', '.join(missing)}")
+
+    def require_auth_config(self) -> None:
+        problems = []
+        if not self.auth_enabled:
+            problems.append("AUTH_ENABLED=true")
+        if not self.auth_username:
+            problems.append("AUTH_USERNAME")
+        if not self.auth_password_hash:
+            problems.append("AUTH_PASSWORD_HASH")
+        elif not self.auth_password_hash.startswith("pbkdf2_sha256$"):
+            problems.append("AUTH_PASSWORD_HASH generated with app.security.hash_password")
+
+        if problems:
+            raise ValueError(f"Authentication is required, but these settings are missing or invalid: {', '.join(problems)}")
+
+    def require_runtime_config(self) -> None:
+        if self.auth_enabled:
+            self.require_auth_config()
+        if self.upload_enabled:
+            self.require_upload_config()
+            self.require_auth_config()
 
 
 @lru_cache
