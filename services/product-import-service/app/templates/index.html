@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Product Import Service</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>Product Import</h1>
+          <p>{{ "Upload active" if upload_enabled else "Dry run" }}</p>
+        </div>
+        <span class="path-chip">{{ image_public_url_prefix }}</span>
+      </header>
+
+      <section class="workspace-grid">
+        <form id="product-form" class="editor-surface">
+          <section class="band supplier-band">
+            <label for="supplier-url">Supplier URL</label>
+            <div class="inline-control">
+              <input id="supplier-url" name="source_url" type="url" placeholder="https://mobilex.dk/..." required />
+              <button id="scrape-button" type="button">Scrape</button>
+            </div>
+          </section>
+
+          <section class="band two-column">
+            <div>
+              <label for="product-name">Title</label>
+              <input id="product-name" name="product_name" required />
+            </div>
+            <div>
+              <label for="product-number">Product number</label>
+              <input id="product-number" name="product_number" inputmode="numeric" required />
+            </div>
+            <div>
+              <label for="hmi-number">HMI number</label>
+              <input id="hmi-number" name="hmi_number" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="category-id">Product group ID</label>
+              <input id="category-id" name="category_id" inputmode="numeric" required />
+            </div>
+            <div>
+              <label for="price">Price</label>
+              <input id="price" name="price" inputmode="decimal" required />
+            </div>
+            <div>
+              <label for="title-tag">Title tag</label>
+              <input id="title-tag" name="title_tag" required />
+            </div>
+          </section>
+
+          <section class="band">
+            <div class="section-row">
+              <h2>Images</h2>
+              <button id="add-image" type="button" class="secondary">Add</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Use</th>
+                    <th>Preview</th>
+                    <th>Filename</th>
+                    <th>Alt text</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="image-rows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="band two-column descriptions">
+            <div>
+              <label for="meta-description">Meta description</label>
+              <textarea id="meta-description" name="meta_description" required></textarea>
+            </div>
+            <div>
+              <label for="meta-keywords">Meta keywords</label>
+              <textarea id="meta-keywords" name="meta_keywords" required></textarea>
+            </div>
+            <div>
+              <label for="short-description">Short description</label>
+              <textarea id="short-description" name="short_description" maxlength="512"></textarea>
+            </div>
+            <div>
+              <label for="long-description">Long description</label>
+              <textarea id="long-description" name="long_description" class="long-text"></textarea>
+            </div>
+          </section>
+
+          <section class="band">
+            <div class="section-row">
+              <h2>Specs</h2>
+              <button id="add-spec" type="button" class="secondary">Add</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="spec-rows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <footer class="action-bar">
+            <button id="preview-button" type="button">Preview XML</button>
+            <button id="download-button" type="button" class="secondary" disabled>Download XML</button>
+            <button id="upload-button" type="button" class="primary">Generate Upload</button>
+          </footer>
+        </form>
+
+        <aside class="preview-surface">
+          <div class="section-row">
+            <h2>Output</h2>
+            <span id="status-pill" class="status-pill">Idle</span>
+          </div>
+          <pre id="message-panel"></pre>
+          <textarea id="xml-preview" spellcheck="false"></textarea>
+        </aside>
+      </section>
+    </main>
+
+    <template id="image-row-template">
+      <tr class="image-row">
+        <td><input class="image-enabled" type="checkbox" checked /></td>
+        <td><img class="image-preview" alt="" /></td>
+        <td>
+          <input class="image-source" type="hidden" />
+          <input class="image-filename" required />
+        </td>
+        <td><input class="image-alt" /></td>
+        <td><button type="button" class="icon-button remove-row">Remove</button></td>
+      </tr>
+    </template>
+
+    <template id="spec-row-template">
+      <tr class="spec-row">
+        <td><input class="spec-name" /></td>
+        <td><input class="spec-value" /></td>
+        <td><button type="button" class="icon-button remove-row">Remove</button></td>
+      </tr>
+    </template>
+
+    <script src="/static/product_form.js"></script>
+  </body>
+</html>
