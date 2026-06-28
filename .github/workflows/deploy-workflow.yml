@@ -7,13 +7,19 @@ on:
     
   workflow_dispatch:
 
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
 jobs:    
   deploy-code:
     name: Deploy assets
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Get codebase
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
 
@@ -22,12 +28,14 @@ jobs:
         with:
           directory: 'deploy'
 
-      - name: Commit files
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "refactor: Minify source code"
-          branch: ${{ github.ref }}
-    
+      - name: Verify minified files
+        run: |
+          if [ ! -d "./deploy" ] || [ -z "$(find ./deploy -name '*.min.js' -o -name '*.min.css' 2>/dev/null)" ]; then
+            echo "Warning: No minified files found in deploy directory"
+          else
+            echo "Minified files verified successfully"
+          fi
+
       - name: Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.2.0
         with:
