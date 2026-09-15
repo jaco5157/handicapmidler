@@ -37,7 +37,7 @@ cp .env.example .env
 docker compose up --build
 ```
 
-Open `http://127.0.0.1:8000`.
+Open `http://127.0.0.1:8765`.
 
 Generated files are stored in `services/product-import-service/data` when using Docker Compose.
 
