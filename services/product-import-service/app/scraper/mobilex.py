@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 import time
 
 from selenium import webdriver
@@ -25,17 +26,25 @@ def get_driver(settings: Settings) -> webdriver.Chrome:
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1440,1200")
+    # Disable various features that may cause crashes in container
+    options.add_argument("--disable-setuid-sandbox")
+    options.add_argument("--disable-web-resources")
+    options.add_argument("--disable-extensions")
 
-    if settings.chromium_binary:
-        options.binary_location = settings.chromium_binary
+    chromium_binary = settings.chromium_binary or shutil.which("chromium") or shutil.which("chromium-browser")
+    if chromium_binary:
+        options.binary_location = chromium_binary
 
-    if settings.selenium_driver_path:
-        service = Service(settings.selenium_driver_path)
-    else:
-        service = Service(ChromeDriverManager().install())
+    driver_path = settings.selenium_driver_path or shutil.which("chromedriver")
+    if not driver_path:
+        driver_path = ChromeDriverManager().install()
 
-    return webdriver.Chrome(service=service, options=options)
+    try:
+        return webdriver.Chrome(service=Service(driver_path), options=options)
+    except WebDriverException as error:
+        raise MobilexScrapeError(f"Could not start Chromium: {error.msg}") from error
 
 
 def scrape_mobilex_product_page(url: str, settings: Settings) -> ScrapedProduct:

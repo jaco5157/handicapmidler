@@ -1,24 +1,22 @@
-FROM cgr.dev/chainguard/python:latest-dev
-
-USER root
+FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     DATA_DIR=/app/data \
     CHROME_BIN=/usr/bin/chromium \
-    SELENIUM_DRIVER_PATH=/usr/bin/chromedriver \
-    PIP_BREAK_SYSTEM_PACKAGES=1
+    SELENIUM_DRIVER_PATH=/usr/bin/chromedriver
 
 WORKDIR /app
 
-RUN apk add --no-cache \
-    build-base \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     chromium \
-    chromium-docker-selenium-compat \
-    font-freefont \
-    libjpeg-dev \
-    libwebp-dev \
-    zlib-dev
+    chromium-driver \
+    fonts-dejavu-core \
+    libjpeg-turbo-progs \
+    webp \
+    ca-certificates \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 RUN python -m pip install --no-cache-dir --upgrade pip \
@@ -26,7 +24,7 @@ RUN python -m pip install --no-cache-dir --upgrade pip \
 
 COPY app ./app
 
-RUN chown -R nonroot:nonroot /app
+RUN useradd -m -u 1000 nonroot && chown -R nonroot:nonroot /app
 
 USER nonroot
 
