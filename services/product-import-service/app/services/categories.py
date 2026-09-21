@@ -1,8 +1,33 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from html.parser import HTMLParser
 from pathlib import Path
+from tempfile import NamedTemporaryFile
+from urllib.parse import urljoin, urlparse
 from xml.etree import ElementTree as ET
+
+import requests
+
+
+MAX_CATEGORIES_XML_BYTES = 5_000_000
+
+
+class CategoryRefreshError(RuntimeError):
+    pass
+
+
+class _ExportDownloadLinkParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.hrefs: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag.lower() != "a":
+            return
+        href = dict(attrs).get("href")
+        if href:
+            self.hrefs.append(href)
 
 
 @dataclass(frozen=True)
@@ -28,6 +53,9 @@ class _Category:
 def load_category_options(xml_path: Path) -> list[CategoryOption]:
     """Load categories in parent-first order while preserving XML sibling order."""
     root = ET.parse(xml_path).getroot()
+    if root.tag != "PRODUCT_CATEGORY_EXPORT":
+        raise ValueError("The category export has an unexpected XML root element")
+
     categories: list[_Category] = []
     category_by_id: dict[str, _Category] = {}
 
@@ -45,6 +73,9 @@ def load_category_options(xml_path: Path) -> list[CategoryOption]:
         category = _Category(id=category_id, name=name, parent_id=parent_id)
         categories.append(category)
         category_by_id[category_id] = category
+
+    if not categories:
+        raise ValueError("The category export does not contain any categories")
 
     children_by_parent: dict[str, list[_Category]] = {}
     for category in categories:
@@ -70,3 +101,74 @@ def load_category_options(xml_path: Path) -> list[CategoryOption]:
         add_branch(category, 0)
 
     return options
+
+
+def fetch_category_options(
+    endpoint: str,
+    username: str | None,
+    password: str | None,
+    destination: Path,
+    timeout_seconds: int,
+) -> list[CategoryOption]:
+    """Fetch, validate, and atomically replace the persisted category export."""
+    if not username or not password:
+        raise CategoryRefreshError("API_USERNAME and API_PASSWORD are required to fetch categories")
+
+    try:
+        response = requests.post(
+            endpoint,
+            data={"user": username, "password": password},
+            timeout=timeout_seconds,
+        )
+        response.raise_for_status()
+        content = response.content
+
+        download_url = _find_export_download_url(content, endpoint)
+        if download_url:
+            response = requests.get(download_url, timeout=timeout_seconds)
+            response.raise_for_status()
+            content = response.content
+    except requests.RequestException as error:
+        raise CategoryRefreshError(f"Could not fetch categories: {error}") from error
+
+    if not content:
+        raise CategoryRefreshError("The category endpoint returned an empty response")
+    if len(content) > MAX_CATEGORIES_XML_BYTES:
+        raise CategoryRefreshError("The category export is larger than the allowed 5 MB")
+
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path: Path | None = None
+    try:
+        with NamedTemporaryFile(dir=destination.parent, prefix="categories-", suffix=".xml", delete=False) as file:
+            file.write(content)
+            temporary_path = Path(file.name)
+
+        options = load_category_options(temporary_path)
+        temporary_path.replace(destination)
+        return options
+    except (ET.ParseError, OSError, ValueError) as error:
+        raise CategoryRefreshError(f"The downloaded category export is invalid: {error}") from error
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
+
+
+def _find_export_download_url(content: bytes, endpoint: str) -> str | None:
+    parser = _ExportDownloadLinkParser()
+    try:
+        parser.feed(content.decode("utf-8-sig"))
+    except UnicodeDecodeError:
+        return None
+
+    endpoint_url = urlparse(endpoint)
+    for href in parser.hrefs:
+        download_url = urljoin(endpoint, href)
+        parsed_url = urlparse(download_url)
+        if (
+            parsed_url.scheme == endpoint_url.scheme
+            and parsed_url.netloc == endpoint_url.netloc
+            and parsed_url.path.startswith("/images/ImportExport/")
+            and parsed_url.path.lower().endswith(".xml")
+        ):
+            return download_url
+    return None

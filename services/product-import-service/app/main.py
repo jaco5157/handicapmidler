@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from xml.etree.ElementTree import ParseError
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, Response
@@ -12,15 +13,16 @@ from app.config import get_settings
 from app.models import MediaReference, ProductDraft, ScrapeRequest
 from app.scraper.mobilex import MobilexScrapeError, scrape_mobilex_product_page
 from app.security import verify_basic_auth_header
-from app.services.categories import load_category_options
+from app.services.categories import CategoryOption, CategoryRefreshError, fetch_category_options, load_category_options
 from app.services.images import build_image_plan, prepare_product_images
 from app.services.import_client import FileUpload, save_xml, upload_product_import
 from app.services.xml_builder import build_product_xml
 
 BASE_DIR = Path(__file__).resolve().parent
-CATEGORIES_XML_PATH = BASE_DIR.parent / "categories.xml"
 settings = get_settings()
 settings.require_runtime_config()
+CATEGORIES_XML_PATH = settings.data_dir / "categories.xml"
+LEGACY_CATEGORIES_XML_PATH = BASE_DIR.parent / "categories.xml"
 
 app = FastAPI(title=settings.app_name)
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
@@ -44,13 +46,14 @@ async def require_authentication(request: Request, call_next):
 
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request) -> HTMLResponse:
+    categories = _load_available_categories()
     return templates.TemplateResponse(
         "index.html",
         {
             "request": request,
             "upload_enabled": settings.upload_enabled,
             "image_public_url_prefix": settings.image_public_url_prefix,
-            "categories": load_category_options(CATEGORIES_XML_PATH),
+            "categories": categories,
         },
     )
 
@@ -58,6 +61,26 @@ def index(request: Request) -> HTMLResponse:
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.post("/api/categories/refresh")
+def refresh_categories() -> dict[str, object]:
+    try:
+        categories = fetch_category_options(
+            settings.category_export_endpoint,
+            settings.api_username,
+            settings.api_password,
+            CATEGORIES_XML_PATH,
+            settings.request_timeout_seconds,
+        )
+    except CategoryRefreshError as error:
+        raise HTTPException(status_code=502, detail=str(error)) from error
+
+    return {
+        "message": "The latest categories were fetched and saved.",
+        "category_count": len(categories),
+        "categories": [_category_payload(category) for category in categories],
+    }
 
 
 @app.post("/api/scrape")
@@ -105,3 +128,17 @@ def upload_product(draft: ProductDraft) -> dict[str, object]:
         "media": [image.to_dict() for image in image_plan],
         "upload": upload_result,
     }
+
+
+def _load_available_categories() -> list[CategoryOption]:
+    for path in (CATEGORIES_XML_PATH, LEGACY_CATEGORIES_XML_PATH):
+        if path.is_file():
+            try:
+                return load_category_options(path)
+            except (OSError, ParseError, ValueError):
+                continue
+    return []
+
+
+def _category_payload(category: CategoryOption) -> dict[str, str]:
+    return {"id": category.id, "label": category.label}

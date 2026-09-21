@@ -45,7 +45,7 @@ def upload_product_import(xml_path: Path, image_uploads: list[FileUpload], setti
             _upload_file(ftp, upload)
 
     response = requests.post(
-        settings.api_upload_endpoint,
+        settings.upload_endpoint,
         params={"file": settings.xml_import_file_param, "response": "1", "updateonly": "0"},
         data={"user": settings.api_username, "password": settings.api_password},
         timeout=settings.request_timeout_seconds,
@@ -98,7 +98,7 @@ def _normalize_ftp_host(host: str) -> str:
 
 
 def _build_import_url(settings: Settings) -> str | None:
-    if not settings.api_upload_endpoint:
+    if not settings.upload_endpoint:
         return None
-    separator = "&" if "?" in settings.api_upload_endpoint else "?"
-    return f"{settings.api_upload_endpoint}{separator}file={settings.xml_import_file_param}&response=1&updateonly=0"
+    separator = "&" if "?" in settings.upload_endpoint else "?"
+    return f"{settings.upload_endpoint}{separator}file={settings.xml_import_file_param}&response=1&updateonly=0"

@@ -13,6 +13,7 @@ FastAPI service for creating webshop product import XML from a supplier product 
    - `name-r.jpg`
    - `name-t.jpg`
 5. Uploads image variants to `/images/products/`, uploads XML to the import folder, and calls the import endpoint with `updateonly=0` when uploads are enabled.
+6. Fetches the current product categories from the webshop and stores them in the persistent data directory.
 
 By default the service runs in dry-run mode, so it generates files locally without FTP or import API calls.
 
@@ -84,18 +85,25 @@ IMAGE_FTP_DIR=/images/products/
 IMAGE_PUBLIC_URL_PREFIX=/images/products/
 XML_FTP_DIR=/images/ImportExport/Products/Updated/
 XML_IMPORT_FILE_PARAM=Products/Updated/document.xml
-API_UPLOAD_ENDPOINT=https://example.com/import
+UPLOAD_ENDPOINT=https://example.com/import
 API_USERNAME=...
 API_PASSWORD=...
+CATEGORY_EXPORT_ENDPOINT=https://www.handicapmidler.dk/admin/modules/export/RunExport?langid=26&exportid=5
 ```
 
 The import call is made as:
 
 ```text
-POST API_UPLOAD_ENDPOINT?file=Products/Updated/document.xml&response=1&updateonly=0
+POST UPLOAD_ENDPOINT?file=Products/Updated/document.xml&response=1&updateonly=0
 ```
 
 with form fields `user` and `password`.
+
+## Product Categories
+
+Use **Fetch latest** beside the product category field after deployment and whenever the webshop categories change. The server sends `API_USERNAME` and `API_PASSWORD` to `CATEGORY_EXPORT_ENDPOINT` as the POST form fields `user` and `password`.
+
+The downloaded file is validated before it replaces the current file and is stored as `data/categories.xml`. The `data` directory is mounted at `/app/data` by Docker Compose, so categories survive image rebuilds and container replacement until **Fetch latest** is used again. Both the legacy root `categories.xml` and the persistent `data` directory are excluded from Git.
 
 ## Image Download Safety
 

@@ -31,7 +31,7 @@ def test_upload_enabled_requires_auth_config():
         ftp_host="ftp.example.com",
         ftp_username="ftp-user",
         ftp_password="ftp-pass",
-        api_upload_endpoint="https://example.com/import",
+        upload_endpoint="https://example.com/import",
         api_username="api-user",
         api_password="api-pass",
     )
@@ -51,6 +51,7 @@ def test_auth_middleware_protects_ui_docs_static_and_api(monkeypatch, tmp_path):
         assert response.headers["www-authenticate"].startswith("Basic")
 
     assert client.post("/api/preview", json={}).status_code == 401
+    assert client.post("/api/categories/refresh", json={}).status_code == 401
     assert client.get("/", auth=("admin", "secret")).status_code == 200
     assert client.get("/static/product_form.js", auth=("admin", "secret")).status_code == 200
 
@@ -65,7 +66,7 @@ def _load_main_with_auth(monkeypatch, tmp_path):
         "FTP_HOST",
         "FTP_USERNAME",
         "FTP_PASSWORD",
-        "API_UPLOAD_ENDPOINT",
+        "UPLOAD_ENDPOINT",
         "API_USERNAME",
         "API_PASSWORD",
     ]:

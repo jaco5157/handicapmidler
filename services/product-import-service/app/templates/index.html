@@ -41,12 +41,17 @@
             </div>
             <div>
               <label for="category-id">Product category</label>
-              <select id="category-id" name="category_id" required>
-                <option value="" selected disabled>Choose a category</option>
-                {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.label }}</option>
-                {% endfor %}
-              </select>
+              <div class="inline-control category-control">
+                <select id="category-id" name="category_id" required>
+                  <option value="" selected disabled>
+                    {{ "Choose a category" if categories else "Fetch categories first" }}
+                  </option>
+                  {% for category in categories %}
+                  <option value="{{ category.id }}">{{ category.label }}</option>
+                  {% endfor %}
+                </select>
+                <button id="refresh-categories-button" type="button" class="secondary">Fetch latest</button>
+              </div>
             </div>
             <div>
               <label for="price">Price</label>

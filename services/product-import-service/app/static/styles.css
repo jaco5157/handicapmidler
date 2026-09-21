@@ -178,6 +178,10 @@ textarea.long-text {
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
+.category-control button {
+  white-space: nowrap;
+}
+
 .section-row {
   align-items: center;
   display: flex;

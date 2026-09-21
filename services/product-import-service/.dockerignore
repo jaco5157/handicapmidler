@@ -1,5 +1,6 @@
 .venv
 .env
+categories.xml
 data
 .pytest_cache
 __pycache__

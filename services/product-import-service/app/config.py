@@ -28,9 +28,12 @@ class Settings(BaseSettings):
     xml_file_name: str = "document.xml"
     xml_import_file_param: str = "Products/Updated/document.xml"
 
-    api_upload_endpoint: str | None = None
+    upload_endpoint: str | None = None
     api_username: str | None = None
     api_password: str | None = None
+    category_export_endpoint: str = (
+        "https://www.handicapmidler.dk/admin/modules/export/RunExport?langid=26&exportid=5"
+    )
 
     language_id: int = 26
     currency_code: str = "DKK"
@@ -56,7 +59,7 @@ class Settings(BaseSettings):
 
     def require_upload_config(self) -> None:
         missing = []
-        for name in ["ftp_host", "ftp_username", "ftp_password", "api_upload_endpoint", "api_username", "api_password"]:
+        for name in ["ftp_host", "ftp_username", "ftp_password", "upload_endpoint", "api_username", "api_password"]:
             if not getattr(self, name):
                 missing.append(name.upper())
 

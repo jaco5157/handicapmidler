@@ -23,7 +23,6 @@ RUN python -m pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
 COPY app ./app
-COPY categories.xml ./categories.xml
 
 RUN useradd -m -u 1000 nonroot && chown -R nonroot:nonroot /app
 

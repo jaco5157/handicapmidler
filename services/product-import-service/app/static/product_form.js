@@ -11,6 +11,7 @@ const downloadButton = document.querySelector("#download-button");
 let latestXml = "";
 
 document.querySelector("#scrape-button").addEventListener("click", scrapeProduct);
+document.querySelector("#refresh-categories-button").addEventListener("click", refreshCategories);
 document.querySelector("#preview-button").addEventListener("click", previewProduct);
 document.querySelector("#upload-button").addEventListener("click", uploadProduct);
 document.querySelector("#download-button").addEventListener("click", downloadXml);
@@ -18,6 +19,35 @@ document.querySelector("#add-image").addEventListener("click", () => addImageRow
 document.querySelector("#add-spec").addEventListener("click", () => addSpecRow({}));
 
 addSpecRow({});
+
+async function refreshCategories() {
+  setBusy("Fetching categories");
+  try {
+    const data = await postJson("/api/categories/refresh", {});
+    replaceCategoryOptions(data.categories || []);
+    setMessage(`${data.message}\n${data.category_count} categories are available.`);
+  } catch (error) {
+    setMessage(error.message, true);
+  } finally {
+    setIdle();
+  }
+}
+
+function replaceCategoryOptions(categories) {
+  const select = document.querySelector("#category-id");
+  const previousValue = select.value;
+  const placeholder = new Option("Choose a category", "", true, false);
+  placeholder.disabled = true;
+  select.replaceChildren(placeholder);
+
+  for (const category of categories) {
+    select.add(new Option(category.label, category.id));
+  }
+
+  if (categories.some((category) => category.id === previousValue)) {
+    select.value = previousValue;
+  }
+}
 
 async function scrapeProduct() {
   const url = document.querySelector("#supplier-url").value.trim();
