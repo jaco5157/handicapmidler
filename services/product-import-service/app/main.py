@@ -12,11 +12,13 @@ from app.config import get_settings
 from app.models import MediaReference, ProductDraft, ScrapeRequest
 from app.scraper.mobilex import MobilexScrapeError, scrape_mobilex_product_page
 from app.security import verify_basic_auth_header
+from app.services.categories import load_category_options
 from app.services.images import build_image_plan, prepare_product_images
 from app.services.import_client import FileUpload, save_xml, upload_product_import
 from app.services.xml_builder import build_product_xml
 
 BASE_DIR = Path(__file__).resolve().parent
+CATEGORIES_XML_PATH = BASE_DIR.parent / "categories.xml"
 settings = get_settings()
 settings.require_runtime_config()
 
@@ -48,6 +50,7 @@ def index(request: Request) -> HTMLResponse:
             "request": request,
             "upload_enabled": settings.upload_enabled,
             "image_public_url_prefix": settings.image_public_url_prefix,
+            "categories": load_category_options(CATEGORIES_XML_PATH),
         },
     )
 

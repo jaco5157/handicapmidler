@@ -143,7 +143,9 @@ label {
 }
 
 input,
+select,
 textarea {
+  background: #fff;
   border: 1px solid var(--line);
   border-radius: 6px;
   color: var(--text);

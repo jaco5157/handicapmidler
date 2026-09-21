@@ -40,8 +40,13 @@
               <input id="hmi-number" name="hmi_number" inputmode="numeric" />
             </div>
             <div>
-              <label for="category-id">Product group ID</label>
-              <input id="category-id" name="category_id" inputmode="numeric" required />
+              <label for="category-id">Product category</label>
+              <select id="category-id" name="category_id" required>
+                <option value="" selected disabled>Choose a category</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.label }}</option>
+                {% endfor %}
+              </select>
             </div>
             <div>
               <label for="price">Price</label>
