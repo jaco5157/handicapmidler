@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Product Import Service</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>Product Import</h1>
+          <p>{{ "Upload active" if upload_enabled else "Dry run" }}</p>
+        </div>
+        <span class="path-chip">{{ image_public_url_prefix }}</span>
+      </header>
+
+      <section class="workspace-grid">
+        <form id="product-form" class="editor-surface">
+          <section class="band supplier-band">
+            <label for="supplier-url">Supplier URL</label>
+            <div class="inline-control">
+              <input id="supplier-url" name="source_url" type="url" placeholder="https://mobilex.dk/..." required />
+              <button id="scrape-button" type="button">Scrape</button>
+            </div>
+          </section>
+
+          <section class="band two-column">
+            <div>
+              <label for="product-name">Title</label>
+              <input id="product-name" name="product_name" required />
+            </div>
+            <div>
+              <label for="product-number">Product number</label>
+              <input id="product-number" name="product_number" inputmode="text" required />
+            </div>
+            <div>
+              <label for="category-id">Product category</label>
+              <div class="inline-control category-control">
+                <select id="category-id" name="category_id" required>
+                  <option value="" selected disabled>
+                    {{ "Choose a category" if categories else "Fetch categories first" }}
+                  </option>
+                  {% for category in categories %}
+                  <option value="{{ category.id }}">{{ category.label }}</option>
+                  {% endfor %}
+                </select>
+                <button id="refresh-categories-button" type="button" class="secondary">Fetch latest</button>
+              </div>
+            </div>
+            <div>
+              <label for="price">Price</label>
+              <input id="price" name="price" inputmode="decimal" required />
+            </div>
+          </section>
+
+          <section class="band">
+            <div class="section-row">
+              <div>
+                <h2>Images</h2>
+                <p class="section-help">Choose the primary image and arrange the remaining gallery images with the arrow buttons.</p>
+              </div>
+              <button id="add-image" type="button" class="secondary">Add</button>
+            </div>
+            <div class="table-wrap">
+              <table class="image-table">
+                <thead>
+                  <tr>
+                    <th>Use</th>
+                    <th>Primary</th>
+                    <th>Order</th>
+                    <th>Preview</th>
+                    <th>Filename</th>
+                    <th>Alt text</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="image-rows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="band field-group">
+            <div class="field-group-header">
+              <h2>Search engine optimization</h2>
+              <p class="section-help">The preview is an approximation; Google may rewrite the displayed title and description.</p>
+            </div>
+            <div class="two-column seo-fields">
+              <div>
+                <label for="title-tag">Title tag</label>
+                <input id="title-tag" name="title_tag" data-preview-maxlength="60" aria-describedby="title-tag-help" required />
+                <span id="title-tag-help" class="field-help"><span id="title-tag-count">0</span>/60 characters shown in preview</span>
+              </div>
+              <div>
+                <label for="custom-product-url">Custom product URL</label>
+                <input
+                  id="custom-product-url"
+                  name="custom_product_url"
+                  maxlength="255"
+                  aria-describedby="custom-product-url-help"
+                />
+                <span id="custom-product-url-help" class="field-help">The custom URL name imported into DanDomain.</span>
+              </div>
+              <div>
+                <label for="meta-description">Meta description</label>
+                <textarea
+                  id="meta-description"
+                  name="meta_description"
+                  data-preview-maxlength="160"
+                  aria-describedby="meta-description-help"
+                  required
+                ></textarea>
+                <span id="meta-description-help" class="field-help"><span id="meta-description-count">0</span>/160 characters shown in preview</span>
+              </div>
+              <div>
+                <label for="meta-keywords">Meta keywords</label>
+                <textarea id="meta-keywords" name="meta_keywords" maxlength="1000" required></textarea>
+              </div>
+            </div>
+            <div
+              id="google-preview"
+              class="google-preview"
+              data-storefront-url="{{ storefront_url }}"
+              aria-label="Google search result preview"
+              aria-live="polite"
+            >
+              <p class="google-preview-label">Google preview</p>
+              <p id="google-preview-url" class="google-preview-url"></p>
+              <p id="google-preview-title" class="google-preview-title"></p>
+              <p id="google-preview-description" class="google-preview-description"></p>
+            </div>
+          </section>
+
+          <section class="band field-group descriptions">
+            <div class="field-group-header">
+              <h2>Descriptions</h2>
+            </div>
+            <div class="stacked-fields">
+              <div>
+                <label for="short-description">Short description</label>
+                <textarea id="short-description" name="short_description" maxlength="512"></textarea>
+              </div>
+              <div>
+                <label for="long-description">Long description</label>
+                <textarea id="long-description" name="long_description" class="long-text"></textarea>
+              </div>
+            </div>
+          </section>
+
+          <section class="band">
+            <div class="section-row">
+              <h2>Specs</h2>
+              <button id="add-spec" type="button" class="secondary">Add</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="spec-rows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <footer class="action-bar">
+            <button id="preview-button" type="button">Preview XML</button>
+            <button id="download-button" type="button" class="secondary" disabled>Download XML</button>
+            <button id="upload-button" type="button" class="primary">Generate Upload</button>
+          </footer>
+        </form>
+
+        <aside class="preview-surface">
+          <div class="section-row">
+            <h2>Output</h2>
+            <span id="status-pill" class="status-pill">Idle</span>
+          </div>
+          <pre id="message-panel"></pre>
+          <textarea id="xml-preview" spellcheck="false"></textarea>
+        </aside>
+      </section>
+    </main>
+
+    <template id="image-row-template">
+      <tr class="image-row">
+        <td><input class="image-enabled" type="checkbox" checked /></td>
+        <td><input class="image-primary" type="radio" name="primary-image" aria-label="Use as primary image" /></td>
+        <td>
+          <div class="image-order-controls">
+            <button type="button" class="secondary order-image-up" title="Move image up" aria-label="Move image up">↑</button>
+            <button type="button" class="secondary order-image-down" title="Move image down" aria-label="Move image down">↓</button>
+          </div>
+        </td>
+        <td><img class="image-preview" alt="" /></td>
+        <td>
+          <input class="image-source" type="hidden" />
+          <input class="image-filename" required />
+        </td>
+        <td><input class="image-alt" /></td>
+        <td><button type="button" class="icon-button remove-row">Remove</button></td>
+      </tr>
+    </template>
+
+    <template id="spec-row-template">
+      <tr class="spec-row">
+        <td><input class="spec-name" /></td>
+        <td><input class="spec-value" /></td>
+        <td><button type="button" class="icon-button remove-row">Remove</button></td>
+      </tr>
+    </template>
+
+    <script src="/static/product_form.js"></script>
+  </body>
+</html>

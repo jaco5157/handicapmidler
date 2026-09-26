@@ -1,0 +1,6 @@
+.env
+/categories.xml
+data/
+__pycache__/
+.pytest_cache/
+.venv/

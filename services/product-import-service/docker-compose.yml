@@ -1,0 +1,10 @@
+services:
+  product-import-service:
+    build: .
+    init: true
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:8765:8000"
+    volumes:
+      - ./data:/app/data
