@@ -15,7 +15,13 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 from app.config import Settings
 from app.models import ScrapedImage, ScrapedProduct
-from app.utils import dedupe_preserving_order, ensure_unique_filename_bases, extract_first_number, suggest_image_name
+from app.utils import (
+    dedupe_preserving_order,
+    ensure_unique_filename_bases,
+    extract_first_number,
+    extract_product_number,
+    suggest_image_name,
+)
 
 
 class MobilexScrapeError(RuntimeError):
@@ -88,7 +94,7 @@ def scrape_mobilex_product_page_with_driver(url: str, driver: webdriver.Chrome, 
         source_url=url,
         product_name=title,
         hmi_number=extract_first_number(hmi_text),
-        product_number=extract_first_number(product_code_text),
+        product_number=extract_product_number(product_code_text),
         images=images,
     )
 

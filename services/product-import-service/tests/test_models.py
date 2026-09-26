@@ -26,6 +26,12 @@ def test_product_draft_normalizes_price():
     assert draft.price == "1499,95"
 
 
+def test_product_draft_accepts_alphanumeric_product_number():
+    draft = make_draft(product_number="DF-240")
+
+    assert draft.product_number == "DF-240"
+
+
 @pytest.mark.parametrize(
     ("field_name", "label"),
     [

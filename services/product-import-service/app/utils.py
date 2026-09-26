@@ -14,6 +14,14 @@ def extract_first_number(value: str | None) -> str | None:
     return match.group(0) if match else None
 
 
+def extract_product_number(value: str | None) -> str | None:
+    if not value:
+        return None
+
+    match = re.search(r"\b(?=[A-Za-z0-9-]*\d)[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\b", value)
+    return match.group(0) if match else None
+
+
 def normalize_price(value: str) -> str:
     raw_value = value.strip().replace(" ", "")
     if not raw_value:

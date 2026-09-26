@@ -25,3 +25,20 @@ def test_scrape_sets_page_timeout_and_wraps_navigation_timeouts(timeout_error):
         call.set_page_load_timeout(7),
         call.get("https://mobilex.dk/product"),
     ]
+
+
+def test_scrape_preserves_product_number_prefix(monkeypatch):
+    driver = MagicMock()
+    elements = {
+        ".description h1": MagicMock(text="Badestol"),
+        ".description .hmino": MagicMock(text="HMI Nr. 43651"),
+        ".description .productcode": MagicMock(text="Varenr.: DF-240"),
+    }
+    driver.find_element.side_effect = lambda _by, selector: elements[selector]
+    driver.execute_script.side_effect = [None, []]
+    monkeypatch.setattr("app.scraper.mobilex.time.sleep", lambda _seconds: None)
+
+    product = scrape_mobilex_product_page_with_driver("https://mobilex.dk/product", driver)
+
+    assert product.product_number == "DF-240"
+    assert product.hmi_number == "43651"

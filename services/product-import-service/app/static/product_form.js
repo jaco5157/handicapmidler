@@ -119,8 +119,8 @@ function validateProductForm(focusFirst = true) {
   }
 
   const productNumber = document.querySelector("#product-number");
-  if (productNumber.value.trim() && !/^\d+$/.test(productNumber.value.trim())) {
-    addFieldValidationError(errors, productNumber, "Product number must contain only digits.");
+  if (productNumber.value.trim() && !/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/.test(productNumber.value.trim())) {
+    addFieldValidationError(errors, productNumber, "Product number must contain only letters, digits, and hyphens.");
   }
 
   const hmiNumber = document.querySelector("#hmi-number");

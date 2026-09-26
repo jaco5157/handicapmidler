@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 from pydantic import BaseModel, Field, ValidationInfo, field_validator, model_validator
 
 from app.utils import normalize_filename_base, normalize_price
@@ -121,8 +123,8 @@ class ProductDraft(BaseModel):
         if self.hmi_number and not self.hmi_number.isdigit():
             raise ValueError("HMI number must contain only digits")
 
-        if not self.product_number.isdigit():
-            raise ValueError("Product number must contain only digits")
+        if not re.fullmatch(r"[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*", self.product_number):
+            raise ValueError("Product number must contain only letters, digits, and hyphens")
 
         if not self.category_id.isdigit():
             raise ValueError("Category ID must contain only digits")
