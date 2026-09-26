@@ -37,6 +37,14 @@ def test_product_draft_strips_optional_custom_product_url():
     assert draft.custom_product_url == "badestol-med-ryg"
 
 
+@pytest.mark.parametrize("empty_value", ["", "   ", None])
+def test_product_draft_accepts_empty_descriptions(empty_value):
+    draft = make_draft(short_description=empty_value, long_description=empty_value)
+
+    assert draft.short_description == ""
+    assert draft.long_description == ""
+
+
 def test_product_draft_rejects_custom_product_url_over_255_characters():
     with pytest.raises(ValidationError):
         make_draft(custom_product_url="a" * 256)

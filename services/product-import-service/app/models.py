@@ -107,8 +107,6 @@ class ProductDraft(BaseModel):
     @field_validator(
         "source_url",
         "custom_product_url",
-        "short_description",
-        "long_description",
         mode="before",
     )
     @classmethod
@@ -117,6 +115,11 @@ class ProductDraft(BaseModel):
             return None
         stripped = str(value).strip()
         return stripped or None
+
+    @field_validator("short_description", "long_description", mode="before")
+    @classmethod
+    def strip_descriptions(cls, value: object) -> str:
+        return str(value or "").strip()
 
     @model_validator(mode="after")
     def validate_product(self) -> "ProductDraft":
