@@ -10,6 +10,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from urllib3.exceptions import ReadTimeoutError
 from webdriver_manager.chrome import ChromeDriverManager
 
 from app.config import Settings
@@ -23,6 +24,7 @@ class MobilexScrapeError(RuntimeError):
 
 def get_driver(settings: Settings) -> webdriver.Chrome:
     options = Options()
+    options.page_load_strategy = "eager"
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
@@ -52,16 +54,22 @@ def scrape_mobilex_product_page(url: str, settings: Settings) -> ScrapedProduct:
     try:
         return scrape_mobilex_product_page_with_driver(url, driver, settings.selenium_timeout_seconds)
     finally:
-        driver.quit()
+        try:
+            driver.quit()
+        except (ReadTimeoutError, WebDriverException):
+            pass
 
 
 def scrape_mobilex_product_page_with_driver(url: str, driver: webdriver.Chrome, timeout_seconds: int = 15) -> ScrapedProduct:
     try:
+        driver.set_page_load_timeout(timeout_seconds)
         driver.get(url)
         wait = WebDriverWait(driver, timeout_seconds)
         wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".description h1")))
-    except TimeoutException as error:
-        raise MobilexScrapeError("Timed out waiting for the Mobilex product page to load") from error
+    except (ReadTimeoutError, TimeoutException) as error:
+        raise MobilexScrapeError(
+            f"Timed out after {timeout_seconds} seconds while loading the Mobilex product page"
+        ) from error
     except WebDriverException as error:
         raise MobilexScrapeError(f"Could not open Mobilex product page: {error.msg}") from error
 
