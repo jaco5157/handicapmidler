@@ -8,11 +8,8 @@ from app.config import Settings
 from app.models import MediaReference, ProductDraft, SpecRow
 
 
-def build_specs_table(hmi_number: str | None, specs: list[SpecRow]) -> str | None:
+def build_specs_table(specs: list[SpecRow]) -> str | None:
     rows: list[tuple[str, str]] = []
-    if hmi_number:
-        rows.append(("HMI-nr.", hmi_number))
-
     for spec in specs:
         if spec.has_content:
             rows.append((spec.name, spec.value))
@@ -45,7 +42,7 @@ def build_product_xml(draft: ProductDraft, media: list[MediaReference], settings
     description = ET.SubElement(product, "DESCRIPTION")
     _sub_element(description, "DESC_SHORT", draft.short_description or "")
     _sub_element(description, "DESC_LONG", draft.long_description or "")
-    specs_table = build_specs_table(draft.hmi_number, draft.non_empty_specs)
+    specs_table = build_specs_table(draft.non_empty_specs)
     if specs_table:
         _sub_element(description, "DESC_LONG_2", specs_table)
     _sub_element(description, "PROD_SEARCHWORD", draft.meta_keywords)

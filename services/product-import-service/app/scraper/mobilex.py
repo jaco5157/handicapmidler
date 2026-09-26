@@ -55,7 +55,7 @@ _session = _create_session()
 
 
 def scrape_mobilex_product_page(url: str, settings: Settings) -> ScrapedProduct:
-    timeout = (5, settings.selenium_timeout_seconds)
+    timeout = (settings.request_timeout_seconds, settings.request_timeout_seconds)
     try:
         # Mobilex associates its full-screen response with the product-page session.
         # Serializing both requests lets subsequent scrapes reuse the TLS connection.

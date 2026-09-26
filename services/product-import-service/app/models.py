@@ -76,7 +76,6 @@ class ProductDraft(BaseModel):
     source_url: str | None = None
     product_name: str
     product_number: str
-    hmi_number: str | None = None
     price: str
     category_id: str
     title_tag: str
@@ -107,7 +106,6 @@ class ProductDraft(BaseModel):
 
     @field_validator(
         "source_url",
-        "hmi_number",
         "custom_product_url",
         "short_description",
         "long_description",
@@ -122,9 +120,6 @@ class ProductDraft(BaseModel):
 
     @model_validator(mode="after")
     def validate_product(self) -> "ProductDraft":
-        if self.hmi_number and not self.hmi_number.isdigit():
-            raise ValueError("HMI number must contain only digits")
-
         if not re.fullmatch(r"[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*", self.product_number):
             raise ValueError("Product number must contain only letters, digits, and hyphens")
 

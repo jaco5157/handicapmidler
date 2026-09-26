@@ -9,7 +9,6 @@ def make_draft(**overrides):
     data = {
         "product_name": "Badestol",
         "product_number": "302040",
-        "hmi_number": "43651",
         "price": "149,00",
         "category_id": "50",
         "title_tag": "Badestol titel",
@@ -18,15 +17,15 @@ def make_draft(**overrides):
         "meta_keywords": "badestol, hmi",
         "short_description": "<p>Kort tekst</p>",
         "long_description": "<p>Lang tekst</p>",
-        "specs": [SpecRow(name="Farve", value="Hvid")],
+        "specs": [SpecRow(name="HMI-nr.", value="43651"), SpecRow(name="Farve", value="Hvid")],
         "images": [ProductImageInput(source_url="https://example.com/image.jpg", filename_base="badestol")],
     }
     data.update(overrides)
     return ProductDraft(**data)
 
 
-def test_build_specs_table_puts_hmi_first():
-    table = build_specs_table("43651", [SpecRow(name="Farve", value="Hvid")])
+def test_build_specs_table_preserves_spec_order():
+    table = build_specs_table([SpecRow(name="HMI-nr.", value="43651"), SpecRow(name="Farve", value="Hvid")])
 
     assert table == '<table class="prodinfotable"><tbody><tr><td>HMI-nr.</td><td>43651</td></tr><tr><td>Farve</td><td>Hvid</td></tr></tbody></table>'
 
@@ -56,9 +55,9 @@ def test_build_product_xml_maps_required_fields():
     assert product.findtext("PRODUCT_MEDIA/MEDIA/MEDIA_URL") == "/images/products/badestol.jpg"
 
 
-def test_build_product_xml_omits_desc_long_2_when_specs_and_hmi_are_empty():
+def test_build_product_xml_omits_desc_long_2_when_specs_are_empty():
     settings = Settings(data_dir="data")
-    draft = make_draft(hmi_number=None, specs=[])
+    draft = make_draft(specs=[])
     xml_text = build_product_xml(draft, [MediaReference(public_url="/images/products/badestol.jpg")], settings)
     root = ET.fromstring(xml_text)
 

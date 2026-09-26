@@ -13,6 +13,7 @@ const googlePreviewTitle = document.querySelector("#google-preview-title");
 const googlePreviewDescription = document.querySelector("#google-preview-description");
 const titleTagCount = document.querySelector("#title-tag-count");
 const metaDescriptionCount = document.querySelector("#meta-description-count");
+const HMI_SPEC_NAME = "HMI-nr.";
 
 let latestXml = "";
 let validationAttempted = false;
@@ -69,7 +70,7 @@ async function scrapeProduct() {
     const data = await postJson("/api/scrape", { url });
     document.querySelector("#product-name").value = data.product_name || "";
     document.querySelector("#product-number").value = data.product_number || "";
-    document.querySelector("#hmi-number").value = data.hmi_number || "";
+    setHmiSpec(data.hmi_number);
     document.querySelector("#title-tag").value = data.product_name || "";
     updateGooglePreview();
 
@@ -130,11 +131,6 @@ function validateProductForm(focusFirst = true) {
   const productNumber = document.querySelector("#product-number");
   if (productNumber.value.trim() && !/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/.test(productNumber.value.trim())) {
     addFieldValidationError(errors, productNumber, "Product number must contain only letters, digits, and hyphens.");
-  }
-
-  const hmiNumber = document.querySelector("#hmi-number");
-  if (hmiNumber.value.trim() && !/^\d+$/.test(hmiNumber.value.trim())) {
-    addFieldValidationError(errors, hmiNumber, "HMI number must contain only digits.");
   }
 
   const price = document.querySelector("#price");
@@ -286,7 +282,6 @@ function collectDraft() {
     source_url: document.querySelector("#supplier-url").value,
     product_name: document.querySelector("#product-name").value,
     product_number: document.querySelector("#product-number").value,
-    hmi_number: document.querySelector("#hmi-number").value,
     price: document.querySelector("#price").value,
     category_id: document.querySelector("#category-id").value,
     title_tag: document.querySelector("#title-tag").value,
@@ -448,6 +443,33 @@ function addSpecRow(spec) {
   row.querySelector(".spec-value").value = spec.value || "";
   row.querySelector(".remove-row").addEventListener("click", () => row.remove());
   specRows.appendChild(row);
+  return row;
+}
+
+function setHmiSpec(hmiNumber) {
+  const value = String(hmiNumber || "").trim();
+  const matchingRows = [...specRows.querySelectorAll(".spec-row")].filter(
+    (row) => row.querySelector(".spec-name").value.trim().toLowerCase() === HMI_SPEC_NAME.toLowerCase(),
+  );
+
+  if (!value) {
+    for (const row of matchingRows) row.remove();
+    return;
+  }
+
+  let row = matchingRows.shift();
+  if (!row) {
+    row = [...specRows.querySelectorAll(".spec-row")].find(
+      (candidate) =>
+        !candidate.querySelector(".spec-name").value.trim() && !candidate.querySelector(".spec-value").value.trim(),
+    );
+  }
+  if (!row) row = addSpecRow({});
+
+  row.querySelector(".spec-name").value = HMI_SPEC_NAME;
+  row.querySelector(".spec-value").value = value;
+  for (const duplicate of matchingRows) duplicate.remove();
+  specRows.prepend(row);
 }
 
 async function postJson(url, payload) {

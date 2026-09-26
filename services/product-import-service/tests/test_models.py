@@ -8,7 +8,6 @@ def make_draft(**overrides):
     data = {
         "product_name": "Badestol",
         "product_number": "302040",
-        "hmi_number": "43651",
         "price": "149.5",
         "category_id": "50",
         "title_tag": "Badestol titel",

@@ -43,7 +43,10 @@ def test_scrape_fetches_product_and_fullscreen_images(monkeypatch):
     session.get.side_effect = [_response(PAGE_HTML), _response(FULLSCREEN_HTML)]
     monkeypatch.setattr(mobilex, "_session", session)
 
-    product = scrape_mobilex_product_page(PRODUCT_URL, Settings(selenium_timeout_seconds=7))
+    product = scrape_mobilex_product_page(
+      PRODUCT_URL,
+      Settings(request_timeout_seconds=7, selenium_timeout_seconds=1),
+    )
 
     assert product.product_name == "Badestol"
     assert product.product_number == "DF-240"
@@ -53,8 +56,8 @@ def test_scrape_fetches_product_and_fullscreen_images(monkeypatch):
         "https://cdn.mobilex.dk/medias/badestol-side_800x1000px.jpg",
     ]
     assert session.get.call_args_list == [
-        call(PRODUCT_URL, timeout=(5, 7)),
-        call("https://mobilex.dk/async.asp?guid=abc&type=1&method=FullScreen", timeout=(5, 7)),
+      call(PRODUCT_URL, timeout=(7, 7)),
+      call("https://mobilex.dk/async.asp?guid=abc&type=1&method=FullScreen", timeout=(7, 7)),
     ]
 
 
