@@ -32,6 +32,17 @@ def test_product_draft_accepts_alphanumeric_product_number():
     assert draft.product_number == "DF-240"
 
 
+def test_product_draft_strips_optional_custom_product_url():
+    draft = make_draft(custom_product_url="  badestol-med-ryg  ")
+
+    assert draft.custom_product_url == "badestol-med-ryg"
+
+
+def test_product_draft_rejects_custom_product_url_over_255_characters():
+    with pytest.raises(ValidationError):
+        make_draft(custom_product_url="a" * 256)
+
+
 @pytest.mark.parametrize(
     ("field_name", "label"),
     [

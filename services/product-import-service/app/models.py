@@ -80,6 +80,7 @@ class ProductDraft(BaseModel):
     price: str
     category_id: str
     title_tag: str
+    custom_product_url: str | None = Field(default=None, max_length=255)
     meta_description: str
     meta_keywords: str
     short_description: str = ""
@@ -107,6 +108,7 @@ class ProductDraft(BaseModel):
     @field_validator(
         "source_url",
         "hmi_number",
+        "custom_product_url",
         "short_description",
         "long_description",
         mode="before",

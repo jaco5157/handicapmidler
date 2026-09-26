@@ -38,6 +38,10 @@ def build_product_xml(draft: ProductDraft, media: list[MediaReference], settings
     _sub_element(general, "PROD_NAME", draft.product_name)
     _sub_element(general, "PROD_PHOTO_URL", primary_image_url)
 
+    if draft.custom_product_url:
+        advanced = ET.SubElement(product, "ADVANCED")
+        _sub_element(advanced, "PROD_UNIQUE_URL_NAME", draft.custom_product_url)
+
     description = ET.SubElement(product, "DESCRIPTION")
     _sub_element(description, "DESC_SHORT", draft.short_description or "")
     _sub_element(description, "DESC_LONG", draft.long_description or "")

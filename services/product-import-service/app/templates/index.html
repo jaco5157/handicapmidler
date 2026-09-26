@@ -57,10 +57,6 @@
               <label for="price">Price</label>
               <input id="price" name="price" inputmode="decimal" required />
             </div>
-            <div>
-              <label for="title-tag">Title tag</label>
-              <input id="title-tag" name="title_tag" required />
-            </div>
           </section>
 
           <section class="band">
@@ -89,22 +85,70 @@
             </div>
           </section>
 
-          <section class="band two-column descriptions">
-            <div>
-              <label for="meta-description">Meta description</label>
-              <textarea id="meta-description" name="meta_description" required></textarea>
+          <section class="band field-group">
+            <div class="field-group-header">
+              <h2>Search engine optimization</h2>
+              <p class="section-help">The preview is an approximation; Google may rewrite the displayed title and description.</p>
             </div>
-            <div>
-              <label for="meta-keywords">Meta keywords</label>
-              <textarea id="meta-keywords" name="meta_keywords" required></textarea>
+            <div class="two-column seo-fields">
+              <div>
+                <label for="title-tag">Title tag</label>
+                <input id="title-tag" name="title_tag" data-preview-maxlength="60" aria-describedby="title-tag-help" required />
+                <span id="title-tag-help" class="field-help"><span id="title-tag-count">0</span>/60 characters shown in preview</span>
+              </div>
+              <div>
+                <label for="custom-product-url">Custom product URL</label>
+                <input
+                  id="custom-product-url"
+                  name="custom_product_url"
+                  maxlength="255"
+                  aria-describedby="custom-product-url-help"
+                />
+                <span id="custom-product-url-help" class="field-help">The custom URL name imported into DanDomain.</span>
+              </div>
+              <div>
+                <label for="meta-description">Meta description</label>
+                <textarea
+                  id="meta-description"
+                  name="meta_description"
+                  data-preview-maxlength="160"
+                  aria-describedby="meta-description-help"
+                  required
+                ></textarea>
+                <span id="meta-description-help" class="field-help"><span id="meta-description-count">0</span>/160 characters shown in preview</span>
+              </div>
+              <div>
+                <label for="meta-keywords">Meta keywords</label>
+                <textarea id="meta-keywords" name="meta_keywords" maxlength="1000" required></textarea>
+              </div>
             </div>
-            <div>
-              <label for="short-description">Short description</label>
-              <textarea id="short-description" name="short_description" maxlength="512"></textarea>
+            <div
+              id="google-preview"
+              class="google-preview"
+              data-storefront-url="{{ storefront_url }}"
+              aria-label="Google search result preview"
+              aria-live="polite"
+            >
+              <p class="google-preview-label">Google preview</p>
+              <p id="google-preview-url" class="google-preview-url"></p>
+              <p id="google-preview-title" class="google-preview-title"></p>
+              <p id="google-preview-description" class="google-preview-description"></p>
             </div>
-            <div>
-              <label for="long-description">Long description</label>
-              <textarea id="long-description" name="long_description" class="long-text"></textarea>
+          </section>
+
+          <section class="band field-group descriptions">
+            <div class="field-group-header">
+              <h2>Descriptions</h2>
+            </div>
+            <div class="stacked-fields">
+              <div>
+                <label for="short-description">Short description</label>
+                <textarea id="short-description" name="short_description" maxlength="512"></textarea>
+              </div>
+              <div>
+                <label for="long-description">Long description</label>
+                <textarea id="long-description" name="long_description" class="long-text"></textarea>
+              </div>
             </div>
           </section>
 

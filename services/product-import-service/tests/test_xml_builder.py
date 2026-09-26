@@ -13,6 +13,7 @@ def make_draft(**overrides):
         "price": "149,00",
         "category_id": "50",
         "title_tag": "Badestol titel",
+        "custom_product_url": "badestol-med-ryg",
         "meta_description": "Meta description",
         "meta_keywords": "badestol, hmi",
         "short_description": "<p>Kort tekst</p>",
@@ -46,6 +47,7 @@ def test_build_product_xml_maps_required_fields():
     assert product.findtext("GENERAL/PROD_NUM") == "302040"
     assert product.findtext("GENERAL/LANGUAGE_ID") == "26"
     assert product.findtext("GENERAL/PROD_PHOTO_URL") == "/images/products/badestol.jpg"
+    assert product.findtext("ADVANCED/PROD_UNIQUE_URL_NAME") == "badestol-med-ryg"
     assert product.findtext("DESCRIPTION/PROD_SEARCHWORD") == "badestol, hmi"
     assert product.findtext("DESCRIPTION/META_DESCRIPTION") == "Meta description"
     assert product.findtext("DESCRIPTION/TITLE") == "Badestol titel"

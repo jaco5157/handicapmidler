@@ -53,6 +53,7 @@ def index(request: Request) -> HTMLResponse:
             "request": request,
             "upload_enabled": settings.upload_enabled,
             "image_public_url_prefix": settings.image_public_url_prefix,
+            "storefront_url": settings.storefront_url,
             "categories": categories,
         },
     )

@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     app_name: str = "Product Import Service"
     upload_enabled: bool = False
     data_dir: Path = Path("data")
+    storefront_url: str = "https://www.handicapmidler.dk"
 
     auth_enabled: bool = False
     auth_username: str | None = None

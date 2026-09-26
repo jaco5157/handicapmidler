@@ -7,6 +7,12 @@ const statusPill = document.querySelector("#status-pill");
 const messagePanel = document.querySelector("#message-panel");
 const xmlPreview = document.querySelector("#xml-preview");
 const downloadButton = document.querySelector("#download-button");
+const googlePreview = document.querySelector("#google-preview");
+const googlePreviewUrl = document.querySelector("#google-preview-url");
+const googlePreviewTitle = document.querySelector("#google-preview-title");
+const googlePreviewDescription = document.querySelector("#google-preview-description");
+const titleTagCount = document.querySelector("#title-tag-count");
+const metaDescriptionCount = document.querySelector("#meta-description-count");
 
 let latestXml = "";
 let validationAttempted = false;
@@ -20,8 +26,10 @@ document.querySelector("#add-image").addEventListener("click", () => addImageRow
 document.querySelector("#add-spec").addEventListener("click", () => addSpecRow({}));
 form.addEventListener("input", refreshValidation);
 form.addEventListener("change", refreshValidation);
+form.addEventListener("input", updateGooglePreview);
 
 addSpecRow({});
+updateGooglePreview();
 
 async function refreshCategories() {
   setBusy("Fetching categories");
@@ -63,6 +71,7 @@ async function scrapeProduct() {
     document.querySelector("#product-number").value = data.product_number || "";
     document.querySelector("#hmi-number").value = data.hmi_number || "";
     document.querySelector("#title-tag").value = data.product_name || "";
+    updateGooglePreview();
 
     imageRows.innerHTML = "";
     for (const image of data.images || []) addImageRow(image);
@@ -281,6 +290,7 @@ function collectDraft() {
     price: document.querySelector("#price").value,
     category_id: document.querySelector("#category-id").value,
     title_tag: document.querySelector("#title-tag").value,
+    custom_product_url: document.querySelector("#custom-product-url").value,
     meta_description: document.querySelector("#meta-description").value,
     meta_keywords: document.querySelector("#meta-keywords").value,
     short_description: document.querySelector("#short-description").value,
@@ -297,6 +307,30 @@ function collectDraft() {
       value: row.querySelector(".spec-value").value,
     })),
   };
+}
+
+function updateGooglePreview() {
+  const titleInput = document.querySelector("#title-tag");
+  const descriptionInput = document.querySelector("#meta-description");
+  const titleLimit = Number(titleInput.dataset.previewMaxlength);
+  const descriptionLimit = Number(descriptionInput.dataset.previewMaxlength);
+  const title = titleInput.value.trim().slice(0, titleLimit);
+  const description = descriptionInput.value.trim().slice(0, descriptionLimit);
+  const customUrl = document.querySelector("#custom-product-url").value.trim();
+  const storefrontUrl = googlePreview.dataset.storefrontUrl.replace(/\/+$/, "");
+  const storefront = new URL(storefrontUrl);
+  const urlParts = [storefront.hostname, "shop"];
+  if (customUrl) urlParts.push(customUrl.replace(/^\/+|\/+$/g, ""));
+
+  googlePreviewUrl.textContent = urlParts.join(" › ");
+  googlePreviewTitle.textContent = title || "Product title";
+  googlePreviewDescription.textContent = description || "The meta description will appear here.";
+  titleTagCount.textContent = titleInput.value.length;
+  metaDescriptionCount.textContent = descriptionInput.value.length;
+  titleTagCount.closest(".field-help").classList.toggle("is-over-limit", titleInput.value.length > titleLimit);
+  metaDescriptionCount
+    .closest(".field-help")
+    .classList.toggle("is-over-limit", descriptionInput.value.length > descriptionLimit);
 }
 
 function addImageRow(image) {
