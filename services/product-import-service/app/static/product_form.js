@@ -328,8 +328,11 @@ function addImageRow(image) {
 function selectPrimaryImage(row) {
   if (!row.querySelector(".image-enabled").checked) return;
   row.querySelector(".image-primary").checked = true;
-  imageRows.prepend(row);
-  updateImageControls();
+  if (row === imageRows.firstElementChild) {
+    updateImageControls();
+    return;
+  }
+  animateImageReorder(row, -1, () => imageRows.prepend(row));
 }
 
 function ensurePrimaryImage() {
@@ -350,12 +353,44 @@ function moveImageRow(row, direction) {
   const sibling = direction < 0 ? row.previousElementSibling : row.nextElementSibling;
   if (!sibling) return;
 
-  if (direction < 0) {
-    imageRows.insertBefore(row, sibling);
-  } else {
-    imageRows.insertBefore(sibling, row);
-  }
+  animateImageReorder(row, direction, () => {
+    if (direction < 0) {
+      imageRows.insertBefore(row, sibling);
+    } else {
+      imageRows.insertBefore(sibling, row);
+    }
+  });
+}
+
+function animateImageReorder(movedRow, direction, reorder) {
+  const rows = [...imageRows.querySelectorAll(".image-row")];
+  const previousPositions = new Map(rows.map((row) => [row, row.getBoundingClientRect().top]));
+
+  reorder();
   updateImageControls();
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  for (const row of rows) {
+    const distance = previousPositions.get(row) - row.getBoundingClientRect().top;
+    if (!distance) continue;
+    row.animate(
+      [
+        { transform: `translateY(${distance}px)` },
+        { transform: "translateY(0)" },
+      ],
+      {
+        duration: row === movedRow ? 460 : 380,
+        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+      },
+    );
+  }
+
+  const animationClass = direction < 0 ? "moved-up" : "moved-down";
+  movedRow.classList.remove("moved-up", "moved-down");
+  void movedRow.offsetWidth;
+  movedRow.classList.add(animationClass);
+  window.setTimeout(() => movedRow.classList.remove(animationClass), 650);
 }
 
 function updateImageControls() {
