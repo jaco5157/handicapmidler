@@ -85,7 +85,7 @@ IMAGE_FTP_DIR=/images/products/
 IMAGE_PUBLIC_URL_PREFIX=/images/products/
 XML_FTP_DIR=/images/ImportExport/Products/Updated/
 XML_IMPORT_FILE_PARAM=Products/Updated/document.xml
-UPLOAD_ENDPOINT=https://example.com/import
+UPLOAD_ENDPOINT=https://www.handicapmidler.dk/admin/modules/importexport/import_v6.aspx
 API_USERNAME=...
 API_PASSWORD=...
 CATEGORY_EXPORT_ENDPOINT=https://www.handicapmidler.dk/admin/modules/export/RunExport?langid=26&exportid=5
@@ -98,6 +98,11 @@ POST UPLOAD_ENDPOINT?file=Products/Updated/document.xml&response=1&updateonly=0
 ```
 
 with form fields `user` and `password`.
+
+With `response=1`, DanDomain returns an `IMPORT_RESULT` XML document. The service validates
+`STATUS`, rejects application-level failures even when the HTTP status is 200, and returns the
+import counts and any errors as structured data. DanDomain deletes the remote source XML from
+`images/ImportExport` after processing; the local copy remains in `data/xml` for troubleshooting.
 
 ## Product Categories
 

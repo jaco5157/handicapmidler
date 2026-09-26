@@ -3,7 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from ftplib import FTP, FTP_TLS
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
+from xml.etree import ElementTree as ET
 
 import requests
 
@@ -18,6 +19,10 @@ class FileUpload:
 
     def remote_path(self) -> str:
         return f"{self.remote_dir.rstrip('/')}/{self.remote_name}"
+
+
+class DanDomainImportError(RuntimeError):
+    pass
 
 
 def save_xml(xml_text: str, settings: Settings) -> Path:
@@ -46,19 +51,27 @@ def upload_product_import(xml_path: Path, image_uploads: list[FileUpload], setti
 
     response = requests.post(
         settings.upload_endpoint,
-        params={"file": settings.xml_import_file_param, "response": "1", "updateonly": "0"},
+        params=_import_params(settings),
         data={"user": settings.api_username, "password": settings.api_password},
         timeout=settings.request_timeout_seconds,
     )
-    response.raise_for_status()
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as error:
+        raise DanDomainImportError(
+            f"DanDomain import endpoint returned HTTP {response.status_code}."
+        ) from error
+
+    import_result = _parse_import_response(response.content)
 
     return {
         "dry_run": False,
-        "message": "Images and XML were uploaded, and the import endpoint was called.",
+        "message": "Images and XML were uploaded, and the DanDomain import completed successfully.",
         "image_uploads": [upload.remote_path() for upload in image_uploads],
         "xml_upload": xml_upload.remote_path(),
         "import_response_status": response.status_code,
         "import_response_text": response.text,
+        "import_result": import_result,
     }
 
 
@@ -97,8 +110,72 @@ def _normalize_ftp_host(host: str) -> str:
     return parsed.hostname or host
 
 
+def _import_params(settings: Settings) -> dict[str, str]:
+    return {
+        "file": settings.xml_import_file_param,
+        "response": "1",
+        # This service creates products. Per DanDomain, updateonly is enabled only by the value 1.
+        "updateonly": "0",
+    }
+
+
+def _parse_import_response(content: bytes) -> dict[str, object]:
+    try:
+        root = ET.fromstring(content)
+    except ET.ParseError as error:
+        raise DanDomainImportError("DanDomain returned an invalid XML import response.") from error
+
+    if root.tag != "IMPORT_RESULT":
+        raise DanDomainImportError(
+            f"DanDomain returned an unexpected import response root element: {root.tag}."
+        )
+
+    status = (root.findtext("STATUS") or "").strip()
+    errors = [
+        {
+            "title": (error.findtext("TITLE") or "").strip(),
+            "message": (error.findtext("MESSAGE") or "").strip(),
+        }
+        for error in root.findall("./ERRORS/ERROR")
+    ]
+    result: dict[str, object] = {
+        "type": (root.findtext("TYPE") or "").strip(),
+        "status": status,
+        "time": (root.findtext("TIME") or "").strip(),
+        "count": _parse_result_count(root, "COUNT"),
+        "completed": _parse_result_count(root, "COMPLETED"),
+        "failed": _parse_result_count(root, "FAILED"),
+        "created": _parse_result_count(root, "CREATED"),
+        "modified": _parse_result_count(root, "MODIFIED"),
+        "errors": errors,
+    }
+
+    if status != "1":
+        details = "; ".join(
+            ": ".join(part for part in (error["title"], error["message"]) if part)
+            for error in errors
+        )
+        message = "DanDomain reported that the product import failed"
+        if details:
+            message = f"{message}: {details}"
+        raise DanDomainImportError(message)
+
+    return result
+
+
+def _parse_result_count(root: ET.Element, element_name: str) -> int:
+    value = (root.findtext(element_name) or "0").strip()
+    try:
+        return int(value)
+    except ValueError as error:
+        raise DanDomainImportError(
+            f"DanDomain returned a non-numeric {element_name} value: {value}."
+        ) from error
+
+
 def _build_import_url(settings: Settings) -> str | None:
     if not settings.upload_endpoint:
         return None
-    separator = "&" if "?" in settings.upload_endpoint else "?"
-    return f"{settings.upload_endpoint}{separator}file={settings.xml_import_file_param}&response=1&updateonly=0"
+    parsed = urlparse(settings.upload_endpoint)
+    query = [*parse_qsl(parsed.query, keep_blank_values=True), *_import_params(settings).items()]
+    return urlunparse(parsed._replace(query=urlencode(query)))
