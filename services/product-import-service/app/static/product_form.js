@@ -95,6 +95,7 @@ async function generateProduct(endpoint, successText) {
 }
 
 function collectDraft() {
+  ensurePrimaryImage();
   return {
     source_url: document.querySelector("#supplier-url").value,
     product_name: document.querySelector("#product-name").value,
@@ -109,6 +110,7 @@ function collectDraft() {
     long_description: document.querySelector("#long-description").value,
     images: [...document.querySelectorAll(".image-row")].map((row) => ({
       enabled: row.querySelector(".image-enabled").checked,
+      is_primary: row.querySelector(".image-primary").checked,
       source_url: row.querySelector(".image-source").value,
       filename_base: row.querySelector(".image-filename").value,
       alt_text: row.querySelector(".image-alt").value,
@@ -122,13 +124,75 @@ function collectDraft() {
 
 function addImageRow(image) {
   const row = imageTemplate.content.firstElementChild.cloneNode(true);
-  row.querySelector(".image-enabled").checked = image.enabled ?? true;
+  const enabledInput = row.querySelector(".image-enabled");
+  const primaryInput = row.querySelector(".image-primary");
+  enabledInput.checked = image.enabled ?? true;
+  primaryInput.checked = image.is_primary ?? false;
   row.querySelector(".image-source").value = image.source_url || "";
   row.querySelector(".image-filename").value = image.filename_base || "";
   row.querySelector(".image-alt").value = image.alt_text || "";
   row.querySelector(".image-preview").src = image.source_url || "";
-  row.querySelector(".remove-row").addEventListener("click", () => row.remove());
+  enabledInput.addEventListener("change", ensurePrimaryImage);
+  primaryInput.addEventListener("change", () => selectPrimaryImage(row));
+  row.querySelector(".order-image-up").addEventListener("click", () => moveImageRow(row, -1));
+  row.querySelector(".order-image-down").addEventListener("click", () => moveImageRow(row, 1));
+  row.querySelector(".remove-row").addEventListener("click", () => {
+    row.remove();
+    ensurePrimaryImage();
+  });
   imageRows.appendChild(row);
+  if (primaryInput.checked && enabledInput.checked) {
+    selectPrimaryImage(row);
+  } else {
+    ensurePrimaryImage();
+  }
+}
+
+function selectPrimaryImage(row) {
+  if (!row.querySelector(".image-enabled").checked) return;
+  row.querySelector(".image-primary").checked = true;
+  imageRows.prepend(row);
+  updateImageControls();
+}
+
+function ensurePrimaryImage() {
+  const rows = [...imageRows.querySelectorAll(".image-row")];
+  const enabledRows = rows.filter((row) => row.querySelector(".image-enabled").checked);
+  let primaryRow = enabledRows.find((row) => row.querySelector(".image-primary").checked);
+
+  if (!primaryRow && enabledRows.length) {
+    primaryRow = enabledRows[0];
+    primaryRow.querySelector(".image-primary").checked = true;
+    imageRows.prepend(primaryRow);
+  }
+
+  updateImageControls();
+}
+
+function moveImageRow(row, direction) {
+  const sibling = direction < 0 ? row.previousElementSibling : row.nextElementSibling;
+  if (!sibling) return;
+
+  if (direction < 0) {
+    imageRows.insertBefore(row, sibling);
+  } else {
+    imageRows.insertBefore(sibling, row);
+  }
+  updateImageControls();
+}
+
+function updateImageControls() {
+  const rows = [...imageRows.querySelectorAll(".image-row")];
+  const primaryRow = rows.find((row) => row.querySelector(".image-primary").checked);
+  for (const [index, row] of rows.entries()) {
+    const enabled = row.querySelector(".image-enabled").checked;
+    const primaryInput = row.querySelector(".image-primary");
+    primaryInput.disabled = !enabled;
+    if (!enabled) primaryInput.checked = false;
+    row.classList.toggle("is-primary", primaryInput.checked);
+    row.querySelector(".order-image-up").disabled = index === 0 || rows[index - 1] === primaryRow;
+    row.querySelector(".order-image-down").disabled = index === rows.length - 1 || row === primaryRow;
+  }
 }
 
 function addSpecRow(spec) {
@@ -173,6 +237,7 @@ function setIdle() {
   statusPill.textContent = "Idle";
   for (const button of form.querySelectorAll("button")) button.disabled = false;
   downloadButton.disabled = !latestXml;
+  updateImageControls();
 }
 
 function setMessage(message, isError = false) {

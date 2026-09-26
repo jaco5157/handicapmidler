@@ -39,3 +39,33 @@ def test_product_draft_rejects_duplicate_image_filenames():
                 ProductImageInput(source_url="https://example.com/2.jpg", filename_base="badestol"),
             ]
         )
+
+
+def test_product_draft_places_primary_image_first():
+    draft = make_draft(
+        images=[
+            ProductImageInput(source_url="https://example.com/1.jpg", filename_base="side"),
+            ProductImageInput(source_url="https://example.com/2.jpg", filename_base="front", is_primary=True),
+            ProductImageInput(source_url="https://example.com/3.jpg", filename_base="detail"),
+        ]
+    )
+
+    assert [image.filename_base for image in draft.enabled_images] == ["front", "side", "detail"]
+
+
+def test_product_draft_rejects_multiple_primary_images():
+    with pytest.raises(ValidationError, match="Only one enabled image can be the primary image"):
+        make_draft(
+            images=[
+                ProductImageInput(
+                    source_url="https://example.com/1.jpg",
+                    filename_base="front",
+                    is_primary=True,
+                ),
+                ProductImageInput(
+                    source_url="https://example.com/2.jpg",
+                    filename_base="side",
+                    is_primary=True,
+                ),
+            ]
+        )

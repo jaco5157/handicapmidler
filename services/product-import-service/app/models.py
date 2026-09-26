@@ -51,6 +51,7 @@ class ProductImageInput(BaseModel):
     filename_base: str
     alt_text: str = ""
     enabled: bool = True
+    is_primary: bool = False
 
     @field_validator("source_url", "filename_base", "alt_text", mode="before")
     @classmethod
@@ -124,6 +125,10 @@ class ProductDraft(BaseModel):
         if not enabled_images:
             raise ValueError("At least one image must be enabled")
 
+        primary_images = [image for image in enabled_images if image.is_primary]
+        if len(primary_images) > 1:
+            raise ValueError("Only one enabled image can be the primary image")
+
         filename_bases = [normalize_filename_base(image.filename_base) for image in enabled_images]
         if len(filename_bases) != len(set(filename_bases)):
             raise ValueError("Image filenames must be unique")
@@ -142,7 +147,8 @@ class ProductDraft(BaseModel):
 
     @property
     def enabled_images(self) -> list[ProductImageInput]:
-        return [image for image in self.images if image.enabled]
+        enabled_images = [image for image in self.images if image.enabled]
+        return sorted(enabled_images, key=lambda image: not image.is_primary)
 
 
 class MediaReference(BaseModel):

@@ -189,6 +189,12 @@ textarea.long-text {
   margin-bottom: 12px;
 }
 
+.section-help {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
 .table-wrap {
   overflow-x: auto;
 }
@@ -226,6 +232,47 @@ td:nth-child(2) {
 th:last-child,
 td:last-child {
   width: 90px;
+}
+
+.image-table th:nth-child(1),
+.image-table td:nth-child(1) {
+  width: 48px;
+}
+
+.image-table th:nth-child(2),
+.image-table td:nth-child(2) {
+  width: 66px;
+}
+
+.image-table th:nth-child(3),
+.image-table td:nth-child(3) {
+  width: 82px;
+}
+
+.image-table th:nth-child(4),
+.image-table td:nth-child(4) {
+  width: 76px;
+}
+
+.image-row.is-primary {
+  background: #f1f8f5;
+}
+
+.image-enabled,
+.image-primary {
+  min-height: auto;
+  width: auto;
+}
+
+.image-order-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.image-order-controls button {
+  min-height: 30px;
+  padding: 0;
+  width: 30px;
 }
 
 .image-preview {

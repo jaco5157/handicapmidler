@@ -65,14 +65,19 @@
 
           <section class="band">
             <div class="section-row">
-              <h2>Images</h2>
+              <div>
+                <h2>Images</h2>
+                <p class="section-help">Choose the primary image and arrange the remaining gallery images with the arrow buttons.</p>
+              </div>
               <button id="add-image" type="button" class="secondary">Add</button>
             </div>
             <div class="table-wrap">
-              <table>
+              <table class="image-table">
                 <thead>
                   <tr>
                     <th>Use</th>
+                    <th>Primary</th>
+                    <th>Order</th>
                     <th>Preview</th>
                     <th>Filename</th>
                     <th>Alt text</th>
@@ -143,6 +148,13 @@
     <template id="image-row-template">
       <tr class="image-row">
         <td><input class="image-enabled" type="checkbox" checked /></td>
+        <td><input class="image-primary" type="radio" name="primary-image" aria-label="Use as primary image" /></td>
+        <td>
+          <div class="image-order-controls">
+            <button type="button" class="secondary order-image-up" title="Move image up" aria-label="Move image up">↑</button>
+            <button type="button" class="secondary order-image-down" title="Move image down" aria-label="Move image down">↓</button>
+          </div>
+        </td>
         <td><img class="image-preview" alt="" /></td>
         <td>
           <input class="image-source" type="hidden" />
