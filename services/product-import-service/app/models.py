@@ -1,8 +1,19 @@
 from __future__ import annotations
 
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, ValidationInfo, field_validator, model_validator
 
 from app.utils import normalize_filename_base, normalize_price
+
+
+REQUIRED_FIELD_LABELS = {
+    "product_name": "Title",
+    "product_number": "Product number",
+    "price": "Price",
+    "category_id": "Product category",
+    "title_tag": "Title tag",
+    "meta_description": "Meta description",
+    "meta_keywords": "Meta keywords",
+}
 
 
 class ScrapeRequest(BaseModel):
@@ -75,21 +86,31 @@ class ProductDraft(BaseModel):
     images: list[ProductImageInput] = Field(default_factory=list)
 
     @field_validator(
-        "source_url",
         "product_name",
         "product_number",
-        "hmi_number",
         "price",
         "category_id",
         "title_tag",
         "meta_description",
         "meta_keywords",
+        mode="before",
+    )
+    @classmethod
+    def strip_required_strings(cls, value: object, info: ValidationInfo) -> str:
+        stripped = str(value or "").strip()
+        if not stripped:
+            raise ValueError(f"{REQUIRED_FIELD_LABELS[info.field_name]} is required")
+        return stripped
+
+    @field_validator(
+        "source_url",
+        "hmi_number",
         "short_description",
         "long_description",
         mode="before",
     )
     @classmethod
-    def strip_strings(cls, value: object) -> str | None:
+    def strip_optional_strings(cls, value: object) -> str | None:
         if value is None:
             return None
         stripped = str(value).strip()
@@ -97,19 +118,6 @@ class ProductDraft(BaseModel):
 
     @model_validator(mode="after")
     def validate_product(self) -> "ProductDraft":
-        required_fields = {
-            "product_name": self.product_name,
-            "product_number": self.product_number,
-            "price": self.price,
-            "category_id": self.category_id,
-            "title_tag": self.title_tag,
-            "meta_description": self.meta_description,
-            "meta_keywords": self.meta_keywords,
-        }
-        missing = [name for name, value in required_fields.items() if not value]
-        if missing:
-            raise ValueError(f"Required fields are missing: {', '.join(missing)}")
-
         if self.hmi_number and not self.hmi_number.isdigit():
             raise ValueError("HMI number must contain only digits")
 

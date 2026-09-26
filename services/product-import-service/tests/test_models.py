@@ -26,6 +26,27 @@ def test_product_draft_normalizes_price():
     assert draft.price == "1499,95"
 
 
+@pytest.mark.parametrize(
+    ("field_name", "label"),
+    [
+        ("product_name", "Title"),
+        ("product_number", "Product number"),
+        ("price", "Price"),
+        ("category_id", "Product category"),
+        ("title_tag", "Title tag"),
+        ("meta_description", "Meta description"),
+        ("meta_keywords", "Meta keywords"),
+    ],
+)
+def test_product_draft_reports_required_fields_by_label(field_name, label):
+    with pytest.raises(ValidationError) as error_info:
+        make_draft(**{field_name: "  "})
+
+    error = error_info.value.errors()[0]
+    assert error["loc"] == (field_name,)
+    assert error["msg"] == f"Value error, {label} is required"
+
+
 def test_product_draft_requires_numeric_category_id():
     with pytest.raises(ValidationError):
         make_draft(category_id="abc")

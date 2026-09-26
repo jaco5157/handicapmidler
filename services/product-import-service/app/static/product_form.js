@@ -9,6 +9,7 @@ const xmlPreview = document.querySelector("#xml-preview");
 const downloadButton = document.querySelector("#download-button");
 
 let latestXml = "";
+let validationAttempted = false;
 
 document.querySelector("#scrape-button").addEventListener("click", scrapeProduct);
 document.querySelector("#refresh-categories-button").addEventListener("click", refreshCategories);
@@ -17,6 +18,8 @@ document.querySelector("#upload-button").addEventListener("click", uploadProduct
 document.querySelector("#download-button").addEventListener("click", downloadXml);
 document.querySelector("#add-image").addEventListener("click", () => addImageRow({}));
 document.querySelector("#add-spec").addEventListener("click", () => addSpecRow({}));
+form.addEventListener("input", refreshValidation);
+form.addEventListener("change", refreshValidation);
 
 addSpecRow({});
 
@@ -80,6 +83,9 @@ async function uploadProduct() {
 }
 
 async function generateProduct(endpoint, successText) {
+  if (!validateProductForm()) return;
+
+  validationAttempted = false;
   setBusy("Generating");
   try {
     const data = await postJson(endpoint, collectDraft());
@@ -92,6 +98,177 @@ async function generateProduct(endpoint, successText) {
   } finally {
     setIdle();
   }
+}
+
+function validateProductForm(focusFirst = true) {
+  validationAttempted = true;
+  clearValidationErrors();
+  updateImageControls();
+
+  const errors = [];
+  const requiredControls = [...form.querySelectorAll("input[required], select[required], textarea[required]")];
+  for (const control of requiredControls) {
+    if (!control.disabled && !control.value.trim()) {
+      addFieldValidationError(errors, control, `${fieldLabel(control)} is required.`);
+    }
+  }
+
+  const supplierUrl = document.querySelector("#supplier-url");
+  if (supplierUrl.value.trim() && supplierUrl.validity.typeMismatch) {
+    addFieldValidationError(errors, supplierUrl, "Supplier URL must be a valid URL.");
+  }
+
+  const productNumber = document.querySelector("#product-number");
+  if (productNumber.value.trim() && !/^\d+$/.test(productNumber.value.trim())) {
+    addFieldValidationError(errors, productNumber, "Product number must contain only digits.");
+  }
+
+  const hmiNumber = document.querySelector("#hmi-number");
+  if (hmiNumber.value.trim() && !/^\d+$/.test(hmiNumber.value.trim())) {
+    addFieldValidationError(errors, hmiNumber, "HMI number must contain only digits.");
+  }
+
+  const price = document.querySelector("#price");
+  if (price.value.trim() && !isValidPrice(price.value)) {
+    addFieldValidationError(errors, price, "Price must be a number greater than zero.");
+  }
+
+  validateImages(errors);
+
+  if (!errors.length) {
+    statusPill.textContent = "Idle";
+    return true;
+  }
+
+  statusPill.textContent = "Needs input";
+  setMessage(`Please correct the highlighted fields:\n${errors.map(({ message }) => `• ${message}`).join("\n")}`, true);
+
+  if (focusFirst) {
+    errors[0].control.scrollIntoView({ behavior: "smooth", block: "center" });
+    errors[0].control.focus({ preventScroll: true });
+  }
+  return false;
+}
+
+function validateImages(errors) {
+  const rows = [...imageRows.querySelectorAll(".image-row")];
+  const enabledRows = rows.filter((row) => row.querySelector(".image-enabled").checked);
+  if (!enabledRows.length) {
+    addSectionValidationError(
+      errors,
+      imageRows.closest(".table-wrap"),
+      document.querySelector("#add-image"),
+      "At least one image must be enabled.",
+    );
+    return;
+  }
+
+  const filenames = new Map();
+  for (const row of enabledRows) {
+    const rowNumber = rows.indexOf(row) + 1;
+    const sourceUrl = row.querySelector(".image-source").value.trim();
+    const filename = row.querySelector(".image-filename");
+
+    if (!isHttpUrl(sourceUrl)) {
+      addFieldValidationError(errors, filename, `Image ${rowNumber} is missing a valid source URL.`, row);
+    }
+
+    if (filename.value.trim()) {
+      const normalizedName = normalizeFilename(filename.value);
+      if (filenames.has(normalizedName)) {
+        const firstFilename = filenames.get(normalizedName);
+        addFieldValidationError(errors, firstFilename, "Image filenames must be unique.", firstFilename.closest(".image-row"));
+        addFieldValidationError(errors, filename, `Image ${rowNumber} has a duplicate filename.`, row);
+      } else {
+        filenames.set(normalizedName, filename);
+      }
+    }
+  }
+}
+
+function addFieldValidationError(errors, control, message, row = null) {
+  control.setAttribute("aria-invalid", "true");
+  if (row) row.classList.add("has-validation-error");
+
+  const error = document.createElement("span");
+  error.className = "validation-error";
+  error.id = `validation-error-${document.querySelectorAll(".validation-error").length + 1}`;
+  error.textContent = message;
+
+  const currentDescriptions = control.getAttribute("aria-describedby");
+  control.setAttribute("aria-describedby", [currentDescriptions, error.id].filter(Boolean).join(" "));
+
+  const inlineControl = control.closest(".inline-control");
+  if (inlineControl) {
+    inlineControl.appendChild(error);
+  } else {
+    control.insertAdjacentElement("afterend", error);
+  }
+  errors.push({ control, message });
+}
+
+function addSectionValidationError(errors, container, control, message) {
+  container.classList.add("has-validation-error");
+  const error = document.createElement("p");
+  error.className = "validation-error section-validation-error";
+  error.textContent = message;
+  container.appendChild(error);
+  errors.push({ control, message });
+}
+
+function clearValidationErrors() {
+  for (const error of form.querySelectorAll(".validation-error")) error.remove();
+  for (const control of form.querySelectorAll('[aria-invalid="true"]')) {
+    control.removeAttribute("aria-invalid");
+    control.removeAttribute("aria-describedby");
+  }
+  for (const element of form.querySelectorAll(".has-validation-error")) element.classList.remove("has-validation-error");
+}
+
+function refreshValidation() {
+  if (validationAttempted) validateProductForm(false);
+}
+
+function fieldLabel(control) {
+  const label = control.id ? document.querySelector(`label[for="${control.id}"]`) : null;
+  if (label) return label.textContent.trim();
+  if (control.classList.contains("image-filename")) {
+    const rows = [...imageRows.querySelectorAll(".image-row")];
+    return `Image ${rows.indexOf(control.closest(".image-row")) + 1} filename`;
+  }
+  return "This field";
+}
+
+function isValidPrice(value) {
+  let normalized = value.trim().replaceAll(" ", "");
+  if (normalized.includes(",") && normalized.includes(".")) normalized = normalized.replaceAll(".", "");
+  normalized = normalized.replace(",", ".");
+  const number = Number(normalized);
+  return Number.isFinite(number) && number > 0;
+}
+
+function isHttpUrl(value) {
+  try {
+    return ["http:", "https:"].includes(new URL(value).protocol);
+  } catch {
+    return false;
+  }
+}
+
+function normalizeFilename(value) {
+  return value
+    .replaceAll("æ", "ae")
+    .replaceAll("ø", "oe")
+    .replaceAll("å", "aa")
+    .replaceAll("Æ", "Ae")
+    .replaceAll("Ø", "Oe")
+    .replaceAll("Å", "Aa")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Za-z0-9]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .toLowerCase();
 }
 
 function collectDraft() {
@@ -187,6 +364,7 @@ function updateImageControls() {
   for (const [index, row] of rows.entries()) {
     const enabled = row.querySelector(".image-enabled").checked;
     const primaryInput = row.querySelector(".image-primary");
+    row.querySelector(".image-filename").required = enabled;
     primaryInput.disabled = !enabled;
     if (!enabled) primaryInput.checked = false;
     row.classList.toggle("is-primary", primaryInput.checked);
