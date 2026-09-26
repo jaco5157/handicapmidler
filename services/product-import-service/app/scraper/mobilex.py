@@ -1,17 +1,13 @@
 from __future__ import annotations
 
-import shutil
-import time
+import re
+from threading import Lock
+from urllib.parse import urljoin
 
-from selenium import webdriver
-from selenium.common.exceptions import TimeoutException, WebDriverException
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-from urllib3.exceptions import ReadTimeoutError
-from webdriver_manager.chrome import ChromeDriverManager
+import requests
+from bs4 import BeautifulSoup
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from app.config import Settings
 from app.models import ScrapedImage, ScrapedProduct
@@ -28,62 +24,63 @@ class MobilexScrapeError(RuntimeError):
     pass
 
 
-def get_driver(settings: Settings) -> webdriver.Chrome:
-    options = Options()
-    options.page_load_strategy = "eager"
-    options.add_argument("--headless=new")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--window-size=1440,1200")
-    # Disable various features that may cause crashes in container
-    options.add_argument("--disable-setuid-sandbox")
-    options.add_argument("--disable-web-resources")
-    options.add_argument("--disable-extensions")
+FULLSCREEN_ENDPOINT_PATTERN = re.compile(
+    r"url:\s*['\"]([^'\"]*method=FullScreen[^'\"]*)['\"]",
+    re.IGNORECASE,
+)
+_session_lock = Lock()
 
-    chromium_binary = settings.chromium_binary or shutil.which("chromium") or shutil.which("chromium-browser")
-    if chromium_binary:
-        options.binary_location = chromium_binary
 
-    driver_path = settings.selenium_driver_path or shutil.which("chromedriver")
-    if not driver_path:
-        driver_path = ChromeDriverManager().install()
+def _create_session() -> requests.Session:
+    retries = Retry(
+        total=2,
+        connect=2,
+        read=2,
+        status=2,
+        backoff_factor=0.5,
+        status_forcelist=(429, 500, 502, 503, 504),
+        allowed_methods={"GET"},
+    )
+    adapter = HTTPAdapter(max_retries=retries, pool_connections=2, pool_maxsize=2)
+    session = requests.Session()
+    session.headers["User-Agent"] = (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36"
+    )
+    session.mount("https://", adapter)
+    return session
 
-    try:
-        return webdriver.Chrome(service=Service(driver_path), options=options)
-    except WebDriverException as error:
-        raise MobilexScrapeError(f"Could not start Chromium: {error.msg}") from error
+
+_session = _create_session()
 
 
 def scrape_mobilex_product_page(url: str, settings: Settings) -> ScrapedProduct:
-    driver = get_driver(settings)
+    timeout = (5, settings.selenium_timeout_seconds)
     try:
-        return scrape_mobilex_product_page_with_driver(url, driver, settings.selenium_timeout_seconds)
-    finally:
-        try:
-            driver.quit()
-        except (ReadTimeoutError, WebDriverException):
-            pass
+        # Mobilex associates its full-screen response with the product-page session.
+        # Serializing both requests lets subsequent scrapes reuse the TLS connection.
+        with _session_lock:
+            page_response = _session.get(url, timeout=timeout)
+            page_response.raise_for_status()
+            page_html = page_response.text
+            image_urls = _fetch_fullscreen_images(url, page_html, timeout)
+    except requests.RequestException as error:
+        raise MobilexScrapeError(f"Could not fetch Mobilex product page: {error}") from error
 
+    page = BeautifulSoup(page_html, "html.parser")
+    description = page.select_one(".description")
+    if description is None:
+        raise MobilexScrapeError("The Mobilex product page did not contain product details")
 
-def scrape_mobilex_product_page_with_driver(url: str, driver: webdriver.Chrome, timeout_seconds: int = 15) -> ScrapedProduct:
-    try:
-        driver.set_page_load_timeout(timeout_seconds)
-        driver.get(url)
-        wait = WebDriverWait(driver, timeout_seconds)
-        wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".description h1")))
-    except (ReadTimeoutError, TimeoutException) as error:
-        raise MobilexScrapeError(
-            f"Timed out after {timeout_seconds} seconds while loading the Mobilex product page"
-        ) from error
-    except WebDriverException as error:
-        raise MobilexScrapeError(f"Could not open Mobilex product page: {error.msg}") from error
+    title = _text_or_empty(description.select_one("h1"))
+    if not title:
+        raise MobilexScrapeError("The Mobilex product page did not contain a product title")
 
-    title = _text_or_empty(driver, ".description h1")
-    hmi_text = _text_or_empty(driver, ".description .hmino")
-    product_code_text = _text_or_empty(driver, ".description .productcode")
-    image_urls = _collect_fullscreen_images(driver)
+    if not image_urls:
+        image_urls = _collect_image_urls(page, url, "#preview img, .thumbs img")
 
+    hmi_text = _text_or_empty(description.select_one(".hmino"))
+    product_code_text = _text_or_empty(description.select_one(".productcode"))
     suggested_names = ensure_unique_filename_bases([suggest_image_name(image_url) for image_url in image_urls])
     images = [
         ScrapedImage(source_url=image_url, filename_base=filename_base, alt_text=title)
@@ -99,38 +96,26 @@ def scrape_mobilex_product_page_with_driver(url: str, driver: webdriver.Chrome, 
     )
 
 
-def _text_or_empty(driver: webdriver.Chrome, selector: str) -> str:
-    try:
-        return driver.find_element(By.CSS_SELECTOR, selector).text.strip()
-    except WebDriverException:
-        return ""
+def _fetch_fullscreen_images(url: str, page_html: str, timeout: tuple[int, int]) -> list[str]:
+    match = FULLSCREEN_ENDPOINT_PATTERN.search(page_html)
+    if match is None:
+        return []
+
+    endpoint = urljoin(url, match.group(1).replace("&amp;", "&"))
+    response = _session.get(endpoint, timeout=timeout)
+    response.raise_for_status()
+    return _collect_image_urls(BeautifulSoup(response.text, "html.parser"), url, ".slick img")
 
 
-def _collect_fullscreen_images(driver: webdriver.Chrome) -> list[str]:
-    try:
-        driver.execute_script(
-            """
-            const trigger = document.querySelector('.slick-slide img, .productimages img, img');
-            if (typeof showFullScreen === 'function' && trigger) {
-              showFullScreen(trigger);
-            }
-            """
-        )
-        time.sleep(0.7)
-    except WebDriverException:
-        pass
+def _collect_image_urls(page: BeautifulSoup, base_url: str, selector: str) -> list[str]:
+    image_urls = []
+    for image in page.select(selector):
+        source = image.get("src") or image.get("data-src") or image.get("data-lazy")
+        if isinstance(source, str) and source.strip():
+            image_urls.append(urljoin(base_url, source.strip()))
+    return dedupe_preserving_order(image_urls)
 
-    urls = driver.execute_script(
-        """
-        const selectors = ['.slick-slide img', '.productimages img', '.description img'];
-        const urls = [];
-        for (const selector of selectors) {
-          for (const img of document.querySelectorAll(selector)) {
-            const url = img.currentSrc || img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy');
-            if (url) urls.push(url);
-          }
-        }
-        return urls;
-        """
-    )
-    return dedupe_preserving_order([url for url in urls if isinstance(url, str) and url.startswith(("http://", "https://"))])
+
+def _text_or_empty(element: object) -> str:
+    get_text = getattr(element, "get_text", None)
+    return get_text(" ", strip=True) if callable(get_text) else ""

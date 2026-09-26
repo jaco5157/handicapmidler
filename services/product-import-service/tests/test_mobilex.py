@@ -1,44 +1,79 @@
 from unittest.mock import MagicMock, call
 
 import pytest
-from selenium.common.exceptions import TimeoutException
-from urllib3.exceptions import ReadTimeoutError
+import requests
 
-from app.scraper.mobilex import MobilexScrapeError, scrape_mobilex_product_page_with_driver
+from app.config import Settings
+from app.scraper import mobilex
+from app.scraper.mobilex import MobilexScrapeError, scrape_mobilex_product_page
 
 
-@pytest.mark.parametrize(
-    "timeout_error",
-    [
-        TimeoutException("page load timed out"),
-        ReadTimeoutError(None, "http://localhost/session", "read timed out"),
-    ],
-)
-def test_scrape_sets_page_timeout_and_wraps_navigation_timeouts(timeout_error):
-    driver = MagicMock()
-    driver.get.side_effect = timeout_error
+PRODUCT_URL = "https://mobilex.dk/products/badestol/"
+PAGE_HTML = """
+<html>
+  <script>
+    function showFullScreen() {
+      $.ajax({url: '/async.asp?guid=abc&type=1&method=FullScreen'});
+    }
+  </script>
+  <div id="preview"><img data-src="/medias/preview_480x600px.jpg"></div>
+  <div class="description">
+    <h1>Badestol</h1>
+    <div class="hmino">HMI Nr. 43651</div>
+    <div class="productcode">Varenr.: DF-240</div>
+  </div>
+</html>
+"""
+FULLSCREEN_HTML = """
+<div class="slick">
+  <img src="/medias/badestol_800x1000px.jpg">
+  <img src="https://cdn.mobilex.dk/medias/badestol-side_800x1000px.jpg">
+</div>
+"""
 
-    with pytest.raises(MobilexScrapeError, match="Timed out after 7 seconds"):
-        scrape_mobilex_product_page_with_driver("https://mobilex.dk/product", driver, 7)
 
-    assert driver.method_calls[:2] == [
-        call.set_page_load_timeout(7),
-        call.get("https://mobilex.dk/product"),
+def _response(text: str) -> MagicMock:
+    response = MagicMock(text=text)
+    response.raise_for_status.return_value = None
+    return response
+
+
+def test_scrape_fetches_product_and_fullscreen_images(monkeypatch):
+    session = MagicMock()
+    session.get.side_effect = [_response(PAGE_HTML), _response(FULLSCREEN_HTML)]
+    monkeypatch.setattr(mobilex, "_session", session)
+
+    product = scrape_mobilex_product_page(PRODUCT_URL, Settings(selenium_timeout_seconds=7))
+
+    assert product.product_name == "Badestol"
+    assert product.product_number == "DF-240"
+    assert product.hmi_number == "43651"
+    assert [image.source_url for image in product.images] == [
+        "https://mobilex.dk/medias/badestol_800x1000px.jpg",
+        "https://cdn.mobilex.dk/medias/badestol-side_800x1000px.jpg",
+    ]
+    assert session.get.call_args_list == [
+        call(PRODUCT_URL, timeout=(5, 7)),
+        call("https://mobilex.dk/async.asp?guid=abc&type=1&method=FullScreen", timeout=(5, 7)),
     ]
 
 
-def test_scrape_preserves_product_number_prefix(monkeypatch):
-    driver = MagicMock()
-    elements = {
-        ".description h1": MagicMock(text="Badestol"),
-        ".description .hmino": MagicMock(text="HMI Nr. 43651"),
-        ".description .productcode": MagicMock(text="Varenr.: DF-240"),
-    }
-    driver.find_element.side_effect = lambda _by, selector: elements[selector]
-    driver.execute_script.side_effect = [None, []]
-    monkeypatch.setattr("app.scraper.mobilex.time.sleep", lambda _seconds: None)
+def test_scrape_uses_preview_image_when_fullscreen_endpoint_is_absent(monkeypatch):
+    session = MagicMock()
+    session.get.return_value = _response(PAGE_HTML.replace("method=FullScreen", "method=Other"))
+    monkeypatch.setattr(mobilex, "_session", session)
 
-    product = scrape_mobilex_product_page_with_driver("https://mobilex.dk/product", driver)
+    product = scrape_mobilex_product_page(PRODUCT_URL, Settings())
 
-    assert product.product_number == "DF-240"
-    assert product.hmi_number == "43651"
+    assert [image.source_url for image in product.images] == [
+        "https://mobilex.dk/medias/preview_480x600px.jpg"
+    ]
+
+
+def test_scrape_wraps_network_errors(monkeypatch):
+    session = MagicMock()
+    session.get.side_effect = requests.Timeout("read timed out")
+    monkeypatch.setattr(mobilex, "_session", session)
+
+    with pytest.raises(MobilexScrapeError, match="Could not fetch Mobilex product page"):
+        scrape_mobilex_product_page(PRODUCT_URL, Settings())

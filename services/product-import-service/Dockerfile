@@ -2,15 +2,11 @@ FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    DATA_DIR=/app/data \
-    CHROME_BIN=/usr/bin/chromium \
-    SELENIUM_DRIVER_PATH=/usr/bin/chromedriver
+    DATA_DIR=/app/data
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    chromium \
-    chromium-driver \
     fonts-dejavu-core \
     libjpeg-turbo-progs \
     webp \
