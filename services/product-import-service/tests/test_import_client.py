@@ -1,11 +1,12 @@
 from pathlib import Path
+from ftplib import FTP_TLS, error_perm
 
 import pytest
 import requests
 
 from app.config import Settings
 from app.services import import_client
-from app.services.import_client import DanDomainImportError, FileUpload, upload_product_import
+from app.services.import_client import DanDomainImportError, FileUpload, save_xml, upload_product_import
 
 
 SUCCESS_RESPONSE = b"""\
@@ -54,6 +55,46 @@ class FakeFTP:
         self.uploads.append((command, file_handle.read()))
 
 
+class FakeDataSocket:
+    def __init__(self):
+        self.content = bytearray()
+        self.closed = False
+
+    def sendall(self, content: bytes):
+        self.content.extend(content)
+
+    def close(self):
+        self.closed = True
+
+
+class FakeFTPTLS(FTP_TLS):
+    def __init__(self):
+        self.commands: list[str] = []
+        self.data_socket = FakeDataSocket()
+        self.storbinary_called = False
+
+    def cwd(self, path: str):
+        return None
+
+    def mkd(self, path: str):
+        return None
+
+    def voidcmd(self, command: str):
+        self.commands.append(command)
+        return "200 Type set to I."
+
+    def transfercmd(self, command: str, rest=None):
+        self.commands.append(command)
+        return self.data_socket
+
+    def voidresp(self):
+        return "226 Transfer complete."
+
+    def storbinary(self, command: str, file_handle, blocksize=8192, callback=None, rest=None):
+        self.storbinary_called = True
+        raise AssertionError("FTP_TLS.storbinary must not be used with this IIS server")
+
+
 def make_settings(**overrides) -> Settings:
     values = {
         "upload_enabled": True,
@@ -72,7 +113,7 @@ def make_settings(**overrides) -> Settings:
 
 
 def test_upload_product_import_matches_dandomain_contract(monkeypatch, tmp_path: Path):
-    xml_path = tmp_path / "document.xml"
+    xml_path = tmp_path / "document-request-id.xml"
     xml_path.write_bytes(b"<PRODUCT_EXPORT type=\"PRODUCTS\"/>")
     image_path = tmp_path / "product.jpg"
     image_path.write_bytes(b"image")
@@ -95,12 +136,12 @@ def test_upload_product_import_matches_dandomain_contract(monkeypatch, tmp_path:
 
     assert fake_ftp.uploads == [
         ("STOR product.jpg", b"image"),
-        ("STOR document.xml", b'<PRODUCT_EXPORT type="PRODUCTS"/>'),
+        ("STOR document-request-id.xml", b'<PRODUCT_EXPORT type="PRODUCTS"/>'),
     ]
     assert captured_request == {
         "url": "https://shop.example.com/admin/modules/importexport/import_v6.aspx",
         "params": {
-            "file": "Products/Updated/document.xml",
+            "file": "Products/Updated/document-request-id.xml",
             "response": "1",
             "updateonly": "0",
         },
@@ -118,6 +159,79 @@ def test_upload_product_import_matches_dandomain_contract(monkeypatch, tmp_path:
         "modified": 0,
         "errors": [],
     }
+    assert result["xml_upload"] == "/images/ImportExport/Products/Updated/document-request-id.xml"
+
+
+def test_save_xml_uses_a_unique_file_for_each_request(tmp_path: Path):
+    settings = make_settings(data_dir=tmp_path, xml_file_name="document.xml")
+
+    first_path = save_xml("<FIRST/>", settings)
+    second_path = save_xml("<SECOND/>", settings)
+
+    assert first_path.parent == tmp_path / "xml"
+    assert first_path.name.startswith("document-")
+    assert first_path.suffix == ".xml"
+    assert second_path.name.startswith("document-")
+    assert first_path != second_path
+    assert first_path.read_text(encoding="utf-8") == "<FIRST/>"
+    assert second_path.read_text(encoding="utf-8") == "<SECOND/>"
+
+
+def test_upload_file_retries_windows_file_lock_errors(monkeypatch, tmp_path: Path):
+    upload_path = tmp_path / "document.xml"
+    upload_path.write_bytes(b"xml")
+    ftp = FakeFTP()
+    attempts = 0
+    delays = []
+
+    def locked_then_success(command, file_handle):
+        nonlocal attempts
+        attempts += 1
+        if attempts < 3:
+            raise error_perm("550 The process cannot access the file because it is being used by another process.")
+        ftp.uploads.append((command, file_handle.read()))
+
+    ftp.storbinary = locked_then_success
+    monkeypatch.setattr(import_client.time, "sleep", delays.append)
+
+    import_client._upload_file(ftp, FileUpload(upload_path, "/imports/", "document.xml"))
+
+    assert attempts == 3
+    assert delays == [1, 2]
+    assert ftp.uploads == [("STOR document.xml", b"xml")]
+
+
+def test_upload_file_closes_ftps_data_socket_without_unwrap(tmp_path: Path):
+    upload_path = tmp_path / "product.jpg"
+    upload_path.write_bytes(b"image-bytes")
+    ftp = FakeFTPTLS()
+
+    import_client._upload_file(ftp, FileUpload(upload_path, "/images/products/", "product.jpg"))
+
+    assert ftp.commands == ["TYPE I", "STOR product.jpg"]
+    assert bytes(ftp.data_socket.content) == b"image-bytes"
+    assert ftp.data_socket.closed
+    assert not ftp.storbinary_called
+
+
+def test_upload_file_does_not_retry_unrelated_ftp_errors(monkeypatch, tmp_path: Path):
+    upload_path = tmp_path / "document.xml"
+    upload_path.write_bytes(b"xml")
+    ftp = FakeFTP()
+    attempts = 0
+
+    def permission_denied(command, file_handle):
+        nonlocal attempts
+        attempts += 1
+        raise error_perm("550 Permission denied")
+
+    ftp.storbinary = permission_denied
+    monkeypatch.setattr(import_client.time, "sleep", lambda delay: pytest.fail("must not retry"))
+
+    with pytest.raises(DanDomainImportError, match=r"/imports/document\.xml: 550 Permission denied"):
+        import_client._upload_file(ftp, FileUpload(upload_path, "/imports/", "document.xml"))
+
+    assert attempts == 1
 
 
 def test_upload_product_import_rejects_dandomain_failure(monkeypatch, tmp_path: Path):
@@ -161,7 +275,7 @@ def test_upload_product_import_rejects_non_xml_response(monkeypatch, tmp_path: P
 
 
 def test_dry_run_builds_encoded_import_url(tmp_path: Path):
-    xml_path = tmp_path / "document.xml"
+    xml_path = tmp_path / "document-request-id.xml"
     settings = make_settings(
         upload_enabled=False,
         upload_endpoint="https://shop.example.com/import?existing=yes",
@@ -171,6 +285,6 @@ def test_dry_run_builds_encoded_import_url(tmp_path: Path):
     result = upload_product_import(xml_path, [], settings)
 
     assert result["planned_import_url"] == (
-        "https://shop.example.com/import?existing=yes&file=Products%2FNew+products%2Fdocument.xml"
+        "https://shop.example.com/import?existing=yes&file=Products%2FNew+products%2Fdocument-request-id.xml"
         "&response=1&updateonly=0"
     )

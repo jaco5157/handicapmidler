@@ -91,13 +91,15 @@ API_PASSWORD=...
 CATEGORY_EXPORT_ENDPOINT=https://www.handicapmidler.dk/admin/modules/export/RunExport?langid=26&exportid=5
 ```
 
-The import call is made as:
+Each generated XML file gets a unique suffix to prevent a new FTP upload from colliding with a
+file that DanDomain is still processing. The unique name is used in both the FTP upload and the
+matching import request, for example:
 
 ```text
-POST UPLOAD_ENDPOINT?file=Products/Updated/document.xml&response=1&updateonly=0
+POST UPLOAD_ENDPOINT?file=Products/Updated/document-<request-id>.xml&response=1&updateonly=0
 ```
 
-with form fields `user` and `password`.
+The request includes form fields `user` and `password`.
 
 With `response=1`, DanDomain returns an `IMPORT_RESULT` XML document. The service validates
 `STATUS`, rejects application-level failures even when the HTTP status is 200, and returns the

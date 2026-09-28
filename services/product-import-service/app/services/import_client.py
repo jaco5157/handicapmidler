@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass
-from ftplib import FTP, FTP_TLS
-from pathlib import Path
+from ftplib import FTP, FTP_TLS, Error, error_perm, error_temp
+from pathlib import Path, PurePosixPath
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
+from uuid import uuid4
 from xml.etree import ElementTree as ET
 
 import requests
@@ -27,31 +29,34 @@ class DanDomainImportError(RuntimeError):
 
 def save_xml(xml_text: str, settings: Settings) -> Path:
     settings.ensure_data_dirs()
-    xml_path = settings.data_dir / "xml" / settings.xml_file_name
+    configured_path = Path(settings.xml_file_name)
+    unique_name = f"{configured_path.stem}-{uuid4().hex}{configured_path.suffix}"
+    xml_path = settings.data_dir / "xml" / unique_name
     xml_path.write_text(xml_text, encoding="utf-8")
     return xml_path
 
 
 def upload_product_import(xml_path: Path, image_uploads: list[FileUpload], settings: Settings) -> dict[str, object]:
+    xml_upload = FileUpload(xml_path, settings.xml_ftp_dir, xml_path.name)
+    import_file_param = _import_file_param(settings, xml_upload.remote_name)
     if not settings.upload_enabled:
         return {
             "dry_run": True,
             "message": "Upload is disabled. Files were generated locally only.",
             "xml_path": str(xml_path),
             "planned_image_uploads": [upload.remote_path() for upload in image_uploads],
-            "planned_xml_upload": f"{settings.xml_ftp_dir.rstrip('/')}/{settings.xml_file_name}",
-            "planned_import_url": _build_import_url(settings),
+            "planned_xml_upload": xml_upload.remote_path(),
+            "planned_import_url": _build_import_url(settings, import_file_param),
         }
 
     settings.require_upload_config()
-    xml_upload = FileUpload(xml_path, settings.xml_ftp_dir, settings.xml_file_name)
     with _ftp_client(settings) as ftp:
         for upload in [*image_uploads, xml_upload]:
             _upload_file(ftp, upload)
 
     response = requests.post(
         settings.upload_endpoint,
-        params=_import_params(settings),
+        params=_import_params(import_file_param),
         data={"user": settings.api_username, "password": settings.api_password},
         timeout=settings.request_timeout_seconds,
     )
@@ -78,8 +83,9 @@ def upload_product_import(xml_path: Path, image_uploads: list[FileUpload], setti
 def _ftp_client(settings: Settings) -> FTP:
     host = _normalize_ftp_host(settings.ftp_host or "")
     client: FTP = FTP_TLS() if settings.ftp_use_tls else FTP()
-    client.connect(host, settings.ftp_port)
+    client.connect(host, settings.ftp_port, timeout=settings.request_timeout_seconds)
     client.login(settings.ftp_username or "", settings.ftp_password or "")
+    client.set_pasv(True)
     if isinstance(client, FTP_TLS):
         client.prot_p()
     return client
@@ -87,8 +93,41 @@ def _ftp_client(settings: Settings) -> FTP:
 
 def _upload_file(ftp: FTP, upload: FileUpload) -> None:
     _ensure_remote_dir(ftp, upload.remote_dir)
-    with upload.local_path.open("rb") as file_handle:
-        ftp.storbinary(f"STOR {upload.remote_name}", file_handle)
+    retry_delays = (1, 2, 4, 8, 16)
+    for attempt in range(len(retry_delays) + 1):
+        try:
+            with upload.local_path.open("rb") as file_handle:
+                _store_binary(ftp, f"STOR {upload.remote_name}", file_handle)
+            return
+        except (error_perm, error_temp) as error:
+            if not _is_file_lock_error(error) or attempt == len(retry_delays):
+                raise DanDomainImportError(f"FTP could not upload {upload.remote_path()}: {error}") from error
+            time.sleep(retry_delays[attempt])
+
+
+def _store_binary(ftp: FTP, command: str, file_handle) -> str:
+    if not isinstance(ftp, FTP_TLS):
+        return ftp.storbinary(command, file_handle)
+
+    # IIS can omit TLS close_notify on FTPS data connections. FTP_TLS.storbinary()
+    # waits in SSLSocket.unwrap() until IIS times out the data channel. Closing the
+    # completed data socket directly lets IIS return its normal 226 response.
+    ftp.voidcmd("TYPE I")
+    data_socket = ftp.transfercmd(command)
+    try:
+        while block := file_handle.read(64 * 1024):
+            data_socket.sendall(block)
+    finally:
+        data_socket.close()
+    return ftp.voidresp()
+
+
+def _is_file_lock_error(error: Error) -> bool:
+    message = str(error).lower()
+    return message.startswith(("450 ", "451 ", "550 ")) and any(
+        phrase in message
+        for phrase in ("being used by another process", "used by another process", "file is locked")
+    )
 
 
 def _ensure_remote_dir(ftp: FTP, remote_dir: str) -> None:
@@ -110,9 +149,14 @@ def _normalize_ftp_host(host: str) -> str:
     return parsed.hostname or host
 
 
-def _import_params(settings: Settings) -> dict[str, str]:
+def _import_file_param(settings: Settings, xml_file_name: str) -> str:
+    configured_path = PurePosixPath(settings.xml_import_file_param)
+    return str(configured_path.with_name(xml_file_name))
+
+
+def _import_params(import_file_param: str) -> dict[str, str]:
     return {
-        "file": settings.xml_import_file_param,
+        "file": import_file_param,
         "response": "1",
         # This service creates products. Per DanDomain, updateonly is enabled only by the value 1.
         "updateonly": "0",
@@ -173,9 +217,12 @@ def _parse_result_count(root: ET.Element, element_name: str) -> int:
         ) from error
 
 
-def _build_import_url(settings: Settings) -> str | None:
+def _build_import_url(settings: Settings, import_file_param: str | None = None) -> str | None:
     if not settings.upload_endpoint:
         return None
     parsed = urlparse(settings.upload_endpoint)
-    query = [*parse_qsl(parsed.query, keep_blank_values=True), *_import_params(settings).items()]
+    query = [
+        *parse_qsl(parsed.query, keep_blank_values=True),
+        *_import_params(import_file_param or settings.xml_import_file_param).items(),
+    ]
     return urlunparse(parsed._replace(query=urlencode(query)))

@@ -102,12 +102,19 @@ async function generateProduct(endpoint, successText) {
     latestXml = data.xml;
     xmlPreview.value = latestXml;
     downloadButton.disabled = false;
-    setMessage(`${successText}\n\n${JSON.stringify(data.upload || data.media, null, 2)}`);
+    setMessage(formatGenerationMessage(successText, data));
   } catch (error) {
     setMessage(error.message, true);
   } finally {
     setIdle();
   }
+}
+
+function formatGenerationMessage(successText, data) {
+  const imageCount = Array.isArray(data.media) ? data.media.length : 0;
+  const lines = [`${successText} · ${imageCount} ${imageCount === 1 ? "image" : "images"}`];
+  if (data.upload?.message) lines.push(data.upload.message);
+  return lines.join("\n");
 }
 
 function validateProductForm(focusFirst = true) {
