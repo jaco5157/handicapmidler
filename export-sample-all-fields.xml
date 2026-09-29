@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PRODUCT_EXPORT type="PRODUCTS">
+  <ELEMENTS>
+    <PRODUCT>
+      <GENERAL>
+        <PROD_NUM>302061</PROD_NUM>
+        <LANGUAGE_ID>26</LANGUAGE_ID>
+        <PROD_NAME>EVA skum sæde for badetaburet 302069, grå</PROD_NAME>
+        <PROD_WEIGHT>0,0000</PROD_WEIGHT>
+        <PROD_SORT>47</PROD_SORT>
+        <PROD_MIN_BUY>1</PROD_MIN_BUY>
+        <PROD_MAX_BUY>0</PROD_MAX_BUY>
+        <PROD_PHOTO_URL>/images/upload/Skum-sæde-for-Eva-badetaburet.jpg</PROD_PHOTO_URL>
+        <PROD_PDF_URL></PROD_PDF_URL>
+        <PROD_PDF_URL_2></PROD_PDF_URL_2>
+        <PROD_PDF_URL_3></PROD_PDF_URL_3>
+        <PROD_PDF_URL_TEXT></PROD_PDF_URL_TEXT>
+        <PROD_PDF_URL_TEXT_2></PROD_PDF_URL_TEXT_2>
+        <PROD_PDF_URL_TEXT_3></PROD_PDF_URL_TEXT_3>
+        <PROD_RETAIL_PRICE>0,00</PROD_RETAIL_PRICE>
+        <PROD_COST_PRICE>0,00</PROD_COST_PRICE>
+        <PROD_VAR_MASTER>False</PROD_VAR_MASTER>
+        <PROD_NOTES></PROD_NOTES>
+        <PROD_PICTURE_ALT_TEXT>Skum sæde til Eva trekantet badetaburet</PROD_PICTURE_ALT_TEXT>
+        <PROD_SITE_SPECIFIC_SORTING>0</PROD_SITE_SPECIFIC_SORTING>
+      </GENERAL>
+      <ADVANCED>
+        <VENDOR_NUM></VENDOR_NUM>
+        <PROD_UNIT_ID>1</PROD_UNIT_ID>
+        <PROD_TYPE_ID>0</PROD_TYPE_ID>
+        <PROD_HIDDEN>True</PROD_HIDDEN>
+        <PROD_NEW>False</PROD_NEW>
+        <PROD_FRONT_PAGE>False</PROD_FRONT_PAGE>
+        <TOPLIST_HIDDEN>False</TOPLIST_HIDDEN>
+        <INTERNAL_ID>525</INTERNAL_ID>
+        <PROD_UNIQUE_URL_NAME></PROD_UNIQUE_URL_NAME>
+        <PROD_BARCODE_NUMBER>5740001403374</PROD_BARCODE_NUMBER>
+        <OMIT_FROM_FREE_SHIPPING_LIMIT>False</OMIT_FROM_FREE_SHIPPING_LIMIT>
+        <PROD_SHOW_ON_GOOGLE_FEED>True</PROD_SHOW_ON_GOOGLE_FEED>
+        <PROD_SHOW_ON_FACEBOOK_FEED>True</PROD_SHOW_ON_FACEBOOK_FEED>
+        <PROD_SHOW_ON_PRICERUNNER_FEED>False</PROD_SHOW_ON_PRICERUNNER_FEED>
+        <PROD_SHOW_ON_KELKOO_FEED>False</PROD_SHOW_ON_KELKOO_FEED>
+        <PROD_USE_AS_GIFTCERTIFICATE>False</PROD_USE_AS_GIFTCERTIFICATE>
+        <PROD_GIFTCERTIFICATE_BACKGROUND></PROD_GIFTCERTIFICATE_BACKGROUND>
+        <PROD_IS_BUNDLE>False</PROD_IS_BUNDLE>
+        <DIRECT_LINK>https://www.handicapmidler.dk/shop/eva-skum-saede-525p.html</DIRECT_LINK>
+      </ADVANCED>
+      <STOCK>
+        <STOCK_COUNT>138</STOCK_COUNT>
+        <STOCK_LIMIT>0</STOCK_LIMIT>
+        <PROD_DELIVERY></PROD_DELIVERY>
+        <PROD_DELIVERY_NOT_IN_STOCK>0001-01-01T00:00:00</PROD_DELIVERY_NOT_IN_STOCK>
+        <PROD_LOCATION_NUMBER></PROD_LOCATION_NUMBER>
+        <PROD_PREORDER>False</PROD_PREORDER>
+        <PROD_BACKORDER>False</PROD_BACKORDER>
+        <PROD_BACKORDER_AVAILABILITY_DAYS>0</PROD_BACKORDER_AVAILABILITY_DAYS>
+      </STOCK>
+      <INFO>
+        <PROD_CREATED>17-03-2015 22:23:30</PROD_CREATED>
+        <PROD_CREATED_BY>admin</PROD_CREATED_BY>
+        <PROD_EDITED>06-05-2025 16:49:26</PROD_EDITED>
+        <PROD_EDITED_BY>admin</PROD_EDITED_BY>
+        <PROD_VIEWED>204</PROD_VIEWED>
+        <PROD_SALES_COUNT>3</PROD_SALES_COUNT>
+      </INFO>
+      <DESCRIPTION>
+        <DESC_SHORT>&lt;p&gt;&lt;span style="font-size:14px;"&gt;&lt;span style="font-family:verdana,geneva,sans-serif;"&gt;Stødabsorberende, vandafvisende, antistatisk og behagelig at sidde på&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+</DESC_SHORT>
+        <DESC_LONG>&lt;p&gt;
+	Blødt skum sæde til trekantet badetaburet med varenr. 302069.
+&lt;/p&gt;
+</DESC_LONG>
+        <DESC_LONG_2></DESC_LONG_2>
+        <PROD_SEARCHWORD>EVA sæde for Badetaburet, sæde for Badetaburet</PROD_SEARCHWORD>
+        <META_DESCRIPTION>EVA sæde for Badetaburet</META_DESCRIPTION>
+        <TITLE>EVA sæde for Badetaburet</TITLE>
+      </DESCRIPTION>
+      <PRODUCT_CATEGORIES>
+        <PROD_CAT_ID priority="1">77</PROD_CAT_ID>
+      </PRODUCT_CATEGORIES>
+      <PRICES>
+        <PRICE>
+          <CURRENCY_CODE>DKK</CURRENCY_CODE>
+          <PRICE_B2B_ID>0</PRICE_B2B_ID>
+          <AMOUNT>1</AMOUNT>
+          <UNIT_PRICE>179,00</UNIT_PRICE>
+          <AVANCE>0,00</AVANCE>
+          <SPECIAL_OFFER_PRICE>0,00</SPECIAL_OFFER_PRICE>
+        </PRICE>
+      </PRICES>
+    </PRODUCT>
+  </ELEMENTS>
+</PRODUCT_EXPORT>

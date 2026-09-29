@@ -33,7 +33,10 @@ def build_product_xml(draft: ProductDraft, media: list[MediaReference], settings
     _sub_element(general, "PROD_NUM", draft.product_number)
     _sub_element(general, "LANGUAGE_ID", str(settings.language_id))
     _sub_element(general, "PROD_NAME", draft.product_name)
+    _sub_element(general, "PROD_MIN_BUY", "1")
     _sub_element(general, "PROD_PHOTO_URL", primary_image_url)
+    if media:
+        _sub_element(general, "PROD_PICTURE_ALT_TEXT", media[0].alt_text)
 
     if draft.custom_product_url:
         advanced = ET.SubElement(product, "ADVANCED")
@@ -50,7 +53,7 @@ def build_product_xml(draft: ProductDraft, media: list[MediaReference], settings
     _sub_element(description, "TITLE", draft.title_tag)
 
     categories = ET.SubElement(product, "PRODUCT_CATEGORIES")
-    category = ET.SubElement(categories, "PROD_CAT_ID", {"priority": "0"})
+    category = ET.SubElement(categories, "PROD_CAT_ID", {"priority": "1"})
     category.text = draft.category_id
 
     prices = ET.SubElement(product, "PRICES")
@@ -61,7 +64,7 @@ def build_product_xml(draft: ProductDraft, media: list[MediaReference], settings
     _sub_element(price, "UNIT_PRICE", draft.price)
 
     media_container = ET.SubElement(product, "PRODUCT_MEDIA")
-    for media_item in media:
+    for media_item in media[1:]:
         media_element = ET.SubElement(media_container, "MEDIA")
         _sub_element(media_element, "MEDIA_URL", media_item.public_url)
         _sub_element(media_element, "MEDIA_ALT_TEXT", media_item.alt_text)

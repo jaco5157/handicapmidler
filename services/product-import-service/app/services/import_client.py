@@ -68,10 +68,16 @@ def upload_product_import(xml_path: Path, image_uploads: list[FileUpload], setti
         ) from error
 
     import_result = _parse_import_response(response.content)
+    message = "Images and XML were uploaded, and the DanDomain import completed successfully."
+    if not import_result["response_verified"]:
+        message = (
+            "Images and XML were uploaded, and DanDomain accepted the import request "
+            "but returned no result details."
+        )
 
     return {
         "dry_run": False,
-        "message": "Images and XML were uploaded, and the DanDomain import completed successfully.",
+        "message": message,
         "image_uploads": [upload.remote_path() for upload in image_uploads],
         "xml_upload": xml_upload.remote_path(),
         "import_response_status": response.status_code,
@@ -164,10 +170,40 @@ def _import_params(import_file_param: str) -> dict[str, str]:
 
 
 def _parse_import_response(content: bytes) -> dict[str, object]:
+    normalized_content = content.lstrip()
+    if not normalized_content:
+        return {
+            "type": "",
+            "status": "accepted",
+            "time": "",
+            "count": 0,
+            "completed": 0,
+            "failed": 0,
+            "created": 0,
+            "modified": 0,
+            "errors": [],
+            "response_verified": False,
+        }
+
     try:
-        root = ET.fromstring(content)
+        root = ET.fromstring(normalized_content)
     except ET.ParseError as error:
-        raise DanDomainImportError("DanDomain returned an invalid XML import response.") from error
+        result_start = content.find(b"<IMPORT_RESULT")
+        result_end = content.find(b"</IMPORT_RESULT>", result_start)
+        if result_start < 0 or result_end < 0:
+            raise DanDomainImportError("DanDomain returned an invalid XML import response.") from error
+
+        result_end += len(b"</IMPORT_RESULT>")
+        declaration_start = content.find(b"<?xml")
+        declaration_end = content.find(b"?>", declaration_start)
+        declaration = b""
+        if 0 <= declaration_start < result_start and declaration_end >= declaration_start:
+            declaration = content[declaration_start : declaration_end + 2]
+
+        try:
+            root = ET.fromstring(declaration + content[result_start:result_end])
+        except ET.ParseError as fragment_error:
+            raise DanDomainImportError("DanDomain returned an invalid XML import response.") from fragment_error
 
     if root.tag != "IMPORT_RESULT":
         raise DanDomainImportError(
@@ -192,6 +228,7 @@ def _parse_import_response(content: bytes) -> dict[str, object]:
         "created": _parse_result_count(root, "CREATED"),
         "modified": _parse_result_count(root, "MODIFIED"),
         "errors": errors,
+        "response_verified": True,
     }
 
     if status != "1":

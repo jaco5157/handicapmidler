@@ -35,7 +35,10 @@ def test_build_product_xml_maps_required_fields():
     draft = make_draft()
     xml_text = build_product_xml(
         draft,
-        [MediaReference(public_url="/images/products/badestol.jpg", alt_text="Badestol")],
+        [
+            MediaReference(public_url="/images/products/badestol.jpg", alt_text="Badestol"),
+            MediaReference(public_url="/images/products/badestol-side.jpg", alt_text="Badestol fra siden"),
+        ],
         settings,
     )
     root = ET.fromstring(xml_text)
@@ -45,14 +48,29 @@ def test_build_product_xml_maps_required_fields():
     assert root.attrib["type"] == "PRODUCTS"
     assert product.findtext("GENERAL/PROD_NUM") == "302040"
     assert product.findtext("GENERAL/LANGUAGE_ID") == "26"
+    assert product.findtext("GENERAL/PROD_MIN_BUY") == "1"
     assert product.findtext("GENERAL/PROD_PHOTO_URL") == "/images/products/badestol.jpg"
+    assert product.findtext("GENERAL/PROD_PICTURE_ALT_TEXT") == "Badestol"
     assert product.findtext("ADVANCED/PROD_UNIQUE_URL_NAME") == "badestol-med-ryg"
     assert product.findtext("DESCRIPTION/PROD_SEARCHWORD") == "badestol, hmi"
     assert product.findtext("DESCRIPTION/META_DESCRIPTION") == "Meta description"
     assert product.findtext("DESCRIPTION/TITLE") == "Badestol titel"
-    assert product.find("PRODUCT_CATEGORIES/PROD_CAT_ID").attrib["priority"] == "0"
+    assert product.find("PRODUCT_CATEGORIES/PROD_CAT_ID").attrib["priority"] == "1"
     assert product.findtext("PRICES/PRICE/UNIT_PRICE") == "149,00"
-    assert product.findtext("PRODUCT_MEDIA/MEDIA/MEDIA_URL") == "/images/products/badestol.jpg"
+    assert product.findtext("PRODUCT_MEDIA/MEDIA/MEDIA_URL") == "/images/products/badestol-side.jpg"
+
+
+def test_build_product_xml_does_not_duplicate_primary_image_in_product_media():
+    settings = Settings(data_dir="data")
+    xml_text = build_product_xml(
+        make_draft(),
+        [MediaReference(public_url="/images/products/badestol.jpg", alt_text="Badestol")],
+        settings,
+    )
+    root = ET.fromstring(xml_text)
+
+    assert root.findtext("ELEMENTS/PRODUCT/GENERAL/PROD_PHOTO_URL") == "/images/products/badestol.jpg"
+    assert root.findall("ELEMENTS/PRODUCT/PRODUCT_MEDIA/MEDIA") == []
 
 
 def test_build_product_xml_omits_desc_long_2_when_specs_are_empty():

@@ -158,6 +158,7 @@ def test_upload_product_import_matches_dandomain_contract(monkeypatch, tmp_path:
         "created": 1,
         "modified": 0,
         "errors": [],
+        "response_verified": True,
     }
     assert result["xml_upload"] == "/images/ImportExport/Products/Updated/document-request-id.xml"
 
@@ -272,6 +273,45 @@ def test_upload_product_import_rejects_non_xml_response(monkeypatch, tmp_path: P
 
     with pytest.raises(DanDomainImportError, match="unexpected import response root element"):
         upload_product_import(xml_path, [], make_settings())
+
+
+def test_upload_product_import_accepts_empty_success_response(monkeypatch, tmp_path: Path):
+    xml_path = tmp_path / "document.xml"
+    xml_path.write_text("<PRODUCT_EXPORT/>", encoding="utf-8")
+
+    monkeypatch.setattr(import_client, "_ftp_client", lambda settings: FakeFTP())
+    monkeypatch.setattr(
+        import_client.requests,
+        "post",
+        lambda *args, **kwargs: FakeResponse(b"\r\n\t"),
+    )
+
+    result = upload_product_import(xml_path, [], make_settings())
+
+    assert result["message"] == (
+        "Images and XML were uploaded, and DanDomain accepted the import request "
+        "but returned no result details."
+    )
+    assert result["import_result"]["status"] == "accepted"
+    assert result["import_result"]["response_verified"] is False
+
+
+def test_upload_product_import_extracts_xml_result_from_response_preamble(monkeypatch, tmp_path: Path):
+    xml_path = tmp_path / "document.xml"
+    xml_path.write_text("<PRODUCT_EXPORT/>", encoding="utf-8")
+    response_with_preamble = b"DanDomain import response:\r\n" + SUCCESS_RESPONSE
+
+    monkeypatch.setattr(import_client, "_ftp_client", lambda settings: FakeFTP())
+    monkeypatch.setattr(
+        import_client.requests,
+        "post",
+        lambda *args, **kwargs: FakeResponse(response_with_preamble),
+    )
+
+    result = upload_product_import(xml_path, [], make_settings())
+
+    assert result["import_result"]["status"] == "1"
+    assert result["import_result"]["response_verified"] is True
 
 
 def test_dry_run_builds_encoded_import_url(tmp_path: Path):
