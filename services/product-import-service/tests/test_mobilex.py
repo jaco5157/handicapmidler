@@ -55,6 +55,10 @@ def test_scrape_fetches_product_and_fullscreen_images(monkeypatch):
         "https://mobilex.dk/medias/badestol_800x1000px.jpg",
         "https://cdn.mobilex.dk/medias/badestol-side_800x1000px.jpg",
     ]
+    assert [image.filename_base for image in product.images] == [
+      "badestol-df-240",
+      "badestol-side-df-240",
+    ]
     assert session.get.call_args_list == [
       call(PRODUCT_URL, timeout=(7, 7)),
       call("https://mobilex.dk/async.asp?guid=abc&type=1&method=FullScreen", timeout=(7, 7)),

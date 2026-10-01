@@ -125,6 +125,12 @@ The default `COMPRESSION_BACKEND=pillow` mirrors the output naming and long-edge
 
 Set `COMPRESSION_BACKEND=external` to run an external toolchain equivalent to `compress.sh`. In that mode, `MAGICK_COMMAND` and `CAESIUM_COMMAND` must be available in the container or host environment.
 
+## Image Naming
+
+Scraped image names are normalized to lowercase ASCII with hyphens. The product number is appended when the provider filename does not already contain it as a complete hyphen-separated part. Duplicate resulting names receive the first available numeric suffix while provider names that are already unique remain unchanged.
+
+For product number `DF-240`, examples include `badestol-df-240`, `badestol-df-240-side`, and `badestol-df-240-2`.
+
 ## Tests
 
 ```bash

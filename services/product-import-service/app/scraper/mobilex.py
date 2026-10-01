@@ -13,10 +13,9 @@ from app.config import Settings
 from app.models import ScrapedImage, ScrapedProduct
 from app.utils import (
     dedupe_preserving_order,
-    ensure_unique_filename_bases,
     extract_first_number,
     extract_product_number,
-    suggest_image_name,
+    suggest_product_image_names,
 )
 
 
@@ -81,7 +80,8 @@ def scrape_mobilex_product_page(url: str, settings: Settings) -> ScrapedProduct:
 
     hmi_text = _text_or_empty(description.select_one(".hmino"))
     product_code_text = _text_or_empty(description.select_one(".productcode"))
-    suggested_names = ensure_unique_filename_bases([suggest_image_name(image_url) for image_url in image_urls])
+    product_number = extract_product_number(product_code_text)
+    suggested_names = suggest_product_image_names(image_urls, product_number)
     images = [
         ScrapedImage(source_url=image_url, filename_base=filename_base, alt_text=title)
         for image_url, filename_base in zip(image_urls, suggested_names, strict=False)
@@ -91,7 +91,7 @@ def scrape_mobilex_product_page(url: str, settings: Settings) -> ScrapedProduct:
         source_url=url,
         product_name=title,
         hmi_number=extract_first_number(hmi_text),
-        product_number=extract_product_number(product_code_text),
+        product_number=product_number,
         images=images,
     )
 

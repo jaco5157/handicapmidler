@@ -4,7 +4,7 @@ import pytest
 from app.models import ProductImageInput
 from app.services import images
 from app.services.images import build_image_plan, compress_with_pillow, download_image
-from app.utils import ensure_unique_filename_bases, suggest_image_name
+from app.utils import ensure_unique_filename_bases, suggest_image_name, suggest_product_image_names
 from PIL import Image
 
 
@@ -32,10 +32,54 @@ def test_suggest_image_name_removes_number_suffixes_and_collapses_underscores():
     assert suggest_image_name(url) == "vaegmonteret-badestol-hvid"
 
 
+def test_suggest_product_image_names_appends_missing_product_number():
+    urls = [
+        "https://mobilex.dk/images/badestol_800x1000px.jpg",
+        "https://mobilex.dk/images/badestol-side_800x1000px.jpg",
+    ]
+
+    assert suggest_product_image_names(urls, "DF-240") == [
+        "badestol-df-240",
+        "badestol-side-df-240",
+    ]
+
+
+def test_suggest_product_image_names_preserves_existing_product_number():
+    urls = ["https://mobilex.dk/images/badestol-df-240-side_800x1000px.jpg"]
+
+    assert suggest_product_image_names(urls, "DF-240") == ["badestol-df-240-side"]
+
+
+def test_suggest_product_image_names_sequences_duplicate_provider_names():
+    urls = [
+        "https://mobilex.dk/images/random-name.jpg",
+        "https://cdn.mobilex.dk/images/random-name.png",
+        "https://other.mobilex.dk/images/random-name.webp",
+    ]
+
+    assert suggest_product_image_names(urls, "302013") == [
+        "random-name-302013",
+        "random-name-302013-2",
+        "random-name-302013-3",
+    ]
+
+
 def test_ensure_unique_filename_bases_adds_suffixes():
     values = ["same_name_123", "same name", "same-name"]
 
     assert ensure_unique_filename_bases(values) == ["same-name-123", "same-name", "same-name-2"]
+
+
+def test_ensure_unique_filename_bases_does_not_reuse_an_existing_sequence_name():
+    values = ["same-name", "same-name-2", "same-name"]
+
+    assert ensure_unique_filename_bases(values) == ["same-name", "same-name-2", "same-name-3"]
+
+
+def test_ensure_unique_filename_bases_preserves_later_unique_provider_name():
+    values = ["same-name", "same-name", "same-name-2"]
+
+    assert ensure_unique_filename_bases(values) == ["same-name", "same-name-3", "same-name-2"]
 
 
 def test_build_image_plan_creates_four_variants():

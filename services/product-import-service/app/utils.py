@@ -70,12 +70,29 @@ def suggest_image_name(image_url: str) -> str:
     parts = [part for part in re.split(r"_+", stem) if part]
 
     kept_parts: list[str] = []
-    for part in parts:
-        if re.search(r"\d", part):
+    for index, part in enumerate(parts):
+        if index > 0 and re.search(r"\d", part):
             break
         kept_parts.append(part)
 
     return normalize_filename_base("-".join(kept_parts or [stem]))
+
+
+def suggest_product_image_names(image_urls: list[str], product_number: str | None) -> list[str]:
+    normalized_product_number = normalize_filename_base(product_number) if product_number else ""
+    names: list[str] = []
+
+    for image_url in image_urls:
+        provider_name = suggest_image_name(image_url)
+        if normalized_product_number and not _contains_slug_part(provider_name, normalized_product_number):
+            provider_name = f"{provider_name}-{normalized_product_number}"
+        names.append(provider_name)
+
+    return ensure_unique_filename_bases(names)
+
+
+def _contains_slug_part(value: str, part: str) -> bool:
+    return re.search(rf"(?:^|-){re.escape(part)}(?:-|$)", value) is not None
 
 
 def dedupe_preserving_order(values: list[str]) -> list[str]:
@@ -89,11 +106,18 @@ def dedupe_preserving_order(values: list[str]) -> list[str]:
 
 
 def ensure_unique_filename_bases(values: list[str]) -> list[str]:
-    counts: dict[str, int] = {}
+    normalized_values = [normalize_filename_base(value) for value in values]
+    reserved = set(normalized_values)
+    used: set[str] = set()
+    next_suffix: dict[str, int] = {}
     result: list[str] = []
-    for value in values:
-        base = normalize_filename_base(value)
-        count = counts.get(base, 0)
-        counts[base] = count + 1
-        result.append(base if count == 0 else f"{base}-{count + 1}")
+    for base in normalized_values:
+        candidate = base
+        suffix = next_suffix.get(base, 2)
+        while candidate in used:
+            while (candidate := f"{base}-{suffix}") in used or candidate in reserved:
+                suffix += 1
+        next_suffix[base] = suffix
+        used.add(candidate)
+        result.append(candidate)
     return result
