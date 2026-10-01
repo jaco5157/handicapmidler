@@ -230,36 +230,36 @@ def _get_public_image_response(url: str, timeout_seconds: int) -> requests.Respo
         redirect_location = response.headers.get("location")
         response.close()
         if not redirect_location:
-            raise ValueError("Image URL redirected without a Location header.")
+            raise ValueError("Billed-URL'en viderestillede uden en Location-header.")
         current_url = urljoin(current_url, redirect_location)
 
-    raise ValueError("Image URL redirected too many times.")
+    raise ValueError("Billed-URL'en viderestillede for mange gange.")
 
 
 def _ensure_public_http_url(url: str) -> None:
     parsed_url = urlparse(url)
     if parsed_url.scheme not in {"http", "https"}:
-        raise ValueError("Image URL must use http or https.")
+        raise ValueError("Billed-URL'en skal bruge http eller https.")
     if not parsed_url.hostname:
-        raise ValueError("Image URL must include a hostname.")
+        raise ValueError("Billed-URL'en skal indeholde et værtsnavn.")
 
     try:
         port = parsed_url.port or (443 if parsed_url.scheme == "https" else 80)
     except ValueError as error:
-        raise ValueError("Image URL contains an invalid port.") from error
+        raise ValueError("Billed-URL'en indeholder en ugyldig port.") from error
 
     try:
         address_infos = socket.getaddrinfo(parsed_url.hostname, port, type=socket.SOCK_STREAM)
     except socket.gaierror as error:
-        raise ValueError("Image URL hostname could not be resolved.") from error
+        raise ValueError("Billed-URL'ens værtsnavn kunne ikke slås op.") from error
 
     if not address_infos:
-        raise ValueError("Image URL hostname did not resolve to an address.")
+        raise ValueError("Billed-URL'ens værtsnavn blev ikke opløst til en adresse.")
 
     for address_info in address_infos:
         ip_address = ipaddress.ip_address(address_info[4][0])
         if _is_blocked_download_ip(ip_address):
-            raise ValueError("Image URL must resolve to a public internet address.")
+            raise ValueError("Billed-URL'en skal pege på en offentlig internetadresse.")
 
 
 def _is_blocked_download_ip(ip_address: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
@@ -279,13 +279,13 @@ def _supported_image_extension(url: str, content_type: str | None) -> str:
     if normalized_content_type:
         extension = _extension_from_content_type(normalized_content_type)
         if not extension:
-            raise ValueError("Downloaded file is not a supported image type.")
+            raise ValueError("Den hentede fil er ikke en understøttet billedtype.")
         return extension
 
     extension = _extension_from_url(url)
     if extension:
         return extension
-    raise ValueError("Image response must include a supported image content type or file extension.")
+    raise ValueError("Billedsvaret skal indeholde en understøttet billedtype eller filendelse.")
 
 
 def _write_limited_response(response: requests.Response, target_path: Path, max_download_bytes: int) -> None:
@@ -296,7 +296,7 @@ def _write_limited_response(response: requests.Response, target_path: Path, max_
         except ValueError:
             declared_size = 0
         if declared_size > max_download_bytes:
-            raise ValueError(f"Image download exceeds the {max_download_bytes} byte limit.")
+            raise ValueError(f"Billedet overskrider grænsen på {max_download_bytes} byte.")
 
     bytes_written = 0
     try:
@@ -306,7 +306,7 @@ def _write_limited_response(response: requests.Response, target_path: Path, max_
                     continue
                 bytes_written += len(chunk)
                 if bytes_written > max_download_bytes:
-                    raise ValueError(f"Image download exceeds the {max_download_bytes} byte limit.")
+                    raise ValueError(f"Billedet overskrider grænsen på {max_download_bytes} byte.")
                 file_handle.write(chunk)
     except Exception:
         target_path.unlink(missing_ok=True)

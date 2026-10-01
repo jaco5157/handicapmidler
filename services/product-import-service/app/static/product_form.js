@@ -34,11 +34,11 @@ addSpecRow({});
 updateGooglePreview();
 
 async function refreshCategories() {
-  setBusy("Fetching categories");
+  setBusy("Henter kategorier");
   try {
     const data = await postJson("/api/categories/refresh", {});
     replaceCategoryOptions(data.categories || []);
-    setMessage(`${data.message}\n${data.category_count} categories are available.`);
+    setMessage(`${data.message}\n${data.category_count} kategorier er tilgængelige.`);
   } catch (error) {
     setMessage(error.message, true);
   } finally {
@@ -49,7 +49,7 @@ async function refreshCategories() {
 function replaceCategoryOptions(categories) {
   const select = document.querySelector("#category-id");
   const previousValue = select.value;
-  const placeholder = new Option("Choose a category", "", true, false);
+  const placeholder = new Option("Vælg en kategori", "", true, false);
   placeholder.disabled = true;
   select.replaceChildren(placeholder);
 
@@ -64,9 +64,9 @@ function replaceCategoryOptions(categories) {
 
 async function scrapeProduct() {
   const url = document.querySelector("#supplier-url").value.trim();
-  if (!url) return setMessage("Supplier URL is required", true);
+  if (!url) return setMessage("Leverandør-URL er påkrævet", true);
 
-  setBusy("Scraping");
+  setBusy("Henter produkt");
   try {
     const data = await postJson("/api/scrape", { url });
     document.querySelector("#product-name").value = data.product_name || "";
@@ -77,7 +77,7 @@ async function scrapeProduct() {
 
     imageRows.innerHTML = "";
     for (const image of data.images || []) addImageRow(image);
-    setMessage(`Scraped ${data.images.length} image(s).`);
+    setMessage(`Produktet blev hentet med ${data.images.length} ${data.images.length === 1 ? "billede" : "billeder"}.`);
   } catch (error) {
     setMessage(error.message, true);
   } finally {
@@ -86,18 +86,18 @@ async function scrapeProduct() {
 }
 
 async function previewProduct() {
-  await generateProduct("/api/preview", "Preview ready");
+  await generateProduct("/api/preview", "Forhåndsvisningen er klar");
 }
 
 async function uploadProduct() {
-  await generateProduct("/api/upload", "Upload flow complete");
+  await generateProduct("/api/upload", "Uploadprocessen er fuldført");
 }
 
 async function generateProduct(endpoint, successText) {
   if (!validateProductForm()) return;
 
   validationAttempted = false;
-  setBusy("Generating");
+  setBusy("Genererer");
   try {
     const data = await postJson(endpoint, collectDraft());
     latestXml = data.xml;
@@ -113,7 +113,7 @@ async function generateProduct(endpoint, successText) {
 
 function formatGenerationMessage(successText, data) {
   const imageCount = Array.isArray(data.media) ? data.media.length : 0;
-  const lines = [`${successText} · ${imageCount} ${imageCount === 1 ? "image" : "images"}`];
+  const lines = [`${successText} · ${imageCount} ${imageCount === 1 ? "billede" : "billeder"}`];
   if (data.upload?.message) lines.push(data.upload.message);
   return lines.join("\n");
 }
@@ -127,34 +127,34 @@ function validateProductForm(focusFirst = true) {
   const requiredControls = [...form.querySelectorAll("input[required], select[required], textarea[required]")];
   for (const control of requiredControls) {
     if (!control.disabled && !control.value.trim()) {
-      addFieldValidationError(errors, control, `${fieldLabel(control)} is required.`);
+      addFieldValidationError(errors, control, `${fieldLabel(control)} er påkrævet.`);
     }
   }
 
   const supplierUrl = document.querySelector("#supplier-url");
   if (supplierUrl.value.trim() && supplierUrl.validity.typeMismatch) {
-    addFieldValidationError(errors, supplierUrl, "Supplier URL must be a valid URL.");
+    addFieldValidationError(errors, supplierUrl, "Leverandør-URL skal være en gyldig URL.");
   }
 
   const productNumber = document.querySelector("#product-number");
   if (productNumber.value.trim() && !/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/.test(productNumber.value.trim())) {
-    addFieldValidationError(errors, productNumber, "Product number must contain only letters, digits, and hyphens.");
+    addFieldValidationError(errors, productNumber, "Produktnummer må kun indeholde bogstaver, tal og bindestreger.");
   }
 
   const price = document.querySelector("#price");
   if (price.value.trim() && !isValidPrice(price.value)) {
-    addFieldValidationError(errors, price, "Price must be a number greater than zero.");
+    addFieldValidationError(errors, price, "Prisen skal være et tal større end nul.");
   }
 
   validateImages(errors);
 
   if (!errors.length) {
-    statusPill.textContent = "Idle";
+    statusPill.textContent = "Klar";
     return true;
   }
 
-  statusPill.textContent = "Needs input";
-  setMessage(`Please correct the highlighted fields:\n${errors.map(({ message }) => `• ${message}`).join("\n")}`, true);
+  statusPill.textContent = "Mangler oplysninger";
+  setMessage(`Ret venligst de fremhævede felter:\n${errors.map(({ message }) => `• ${message}`).join("\n")}`, true);
 
   if (focusFirst) {
     errors[0].control.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -171,7 +171,7 @@ function validateImages(errors) {
       errors,
       imageRows.closest(".table-wrap"),
       document.querySelector("#add-image"),
-      "At least one image must be enabled.",
+      "Mindst ét billede skal være valgt.",
     );
     return;
   }
@@ -183,15 +183,15 @@ function validateImages(errors) {
     const filename = row.querySelector(".image-filename");
 
     if (!isHttpUrl(sourceUrl)) {
-      addFieldValidationError(errors, filename, `Image ${rowNumber} is missing a valid source URL.`, row);
+      addFieldValidationError(errors, filename, `Billede ${rowNumber} mangler en gyldig kilde-URL.`, row);
     }
 
     if (filename.value.trim()) {
       const normalizedName = normalizeFilename(filename.value);
       if (filenames.has(normalizedName)) {
         const firstFilename = filenames.get(normalizedName);
-        addFieldValidationError(errors, firstFilename, "Image filenames must be unique.", firstFilename.closest(".image-row"));
-        addFieldValidationError(errors, filename, `Image ${rowNumber} has a duplicate filename.`, row);
+        addFieldValidationError(errors, firstFilename, "Billedfilnavne skal være unikke.", firstFilename.closest(".image-row"));
+        addFieldValidationError(errors, filename, `Billede ${rowNumber} har et filnavn, der allerede bruges.`, row);
       } else {
         filenames.set(normalizedName, filename);
       }
@@ -247,9 +247,9 @@ function fieldLabel(control) {
   if (label) return label.textContent.trim();
   if (control.classList.contains("image-filename")) {
     const rows = [...imageRows.querySelectorAll(".image-row")];
-    return `Image ${rows.indexOf(control.closest(".image-row")) + 1} filename`;
+    return `Filnavn til billede ${rows.indexOf(control.closest(".image-row")) + 1}`;
   }
-  return "This field";
+  return "Dette felt";
 }
 
 function isValidPrice(value) {
@@ -326,8 +326,8 @@ function updateGooglePreview() {
   if (customUrl) urlParts.push(customUrl.replace(/^\/+|\/+$/g, ""));
 
   googlePreviewUrl.textContent = urlParts.join(" › ");
-  googlePreviewTitle.textContent = title || "Product title";
-  googlePreviewDescription.textContent = description || "The meta description will appear here.";
+  googlePreviewTitle.textContent = title || "Produkttitel";
+  googlePreviewDescription.textContent = description || "Metabeskrivelsen vises her.";
   titleTagCount.textContent = titleInput.value.length;
   metaDescriptionCount.textContent = descriptionInput.value.length;
   titleTagCount.closest(".field-help").classList.toggle("is-over-limit", titleInput.value.length > titleLimit);
@@ -521,7 +521,7 @@ function clearForm() {
   xmlPreview.value = "";
   downloadButton.disabled = true;
   setMessage("");
-  statusPill.textContent = "Idle";
+  statusPill.textContent = "Klar";
   updateGooglePreview();
   document.querySelector("#supplier-url").focus();
 }
@@ -535,7 +535,7 @@ async function postJson(url, payload) {
   const data = await response.json();
   if (!response.ok) {
     const detail = Array.isArray(data.detail) ? data.detail.map((item) => item.msg).join("\n") : data.detail;
-    throw new Error(detail || "Request failed");
+    throw new Error(detail || "Anmodningen mislykkedes");
   }
   return data;
 }
@@ -557,7 +557,7 @@ function setBusy(text) {
 }
 
 function setIdle() {
-  statusPill.textContent = "Idle";
+  statusPill.textContent = "Klar";
   for (const button of form.querySelectorAll("button")) button.disabled = false;
   downloadButton.disabled = !latestXml;
   updateImageControls();

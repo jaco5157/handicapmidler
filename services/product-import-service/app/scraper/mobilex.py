@@ -65,16 +65,16 @@ def scrape_mobilex_product_page(url: str, settings: Settings) -> ScrapedProduct:
             page_html = page_response.text
             image_urls = _fetch_fullscreen_images(url, page_html, timeout)
     except requests.RequestException as error:
-        raise MobilexScrapeError(f"Could not fetch Mobilex product page: {error}") from error
+        raise MobilexScrapeError(f"Mobilex-produktsiden kunne ikke hentes: {error}") from error
 
     page = BeautifulSoup(page_html, "html.parser")
     description = page.select_one(".description")
     if description is None:
-        raise MobilexScrapeError("The Mobilex product page did not contain product details")
+        raise MobilexScrapeError("Mobilex-produktsiden indeholdt ingen produktoplysninger")
 
     title = _text_or_empty(description.select_one("h1"))
     if not title:
-        raise MobilexScrapeError("The Mobilex product page did not contain a product title")
+        raise MobilexScrapeError("Mobilex-produktsiden indeholdt ingen produkttitel")
 
     if not image_urls:
         image_urls = _collect_image_urls(page, url, "#preview img, .thumbs img")

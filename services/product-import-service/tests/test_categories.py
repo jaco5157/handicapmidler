@@ -126,7 +126,7 @@ def test_fetch_category_options_preserves_existing_file_when_download_is_invalid
 
   monkeypatch.setattr(category_service.requests, "post", lambda *args, **kwargs: Response())
 
-  with pytest.raises(CategoryRefreshError, match="invalid"):
+  with pytest.raises(CategoryRefreshError, match="ugyldig"):
     fetch_category_options("https://example.com/categories", "api-user", "api-pass", destination, 12)
 
   assert destination.read_text(encoding="utf-8") == "existing categories"

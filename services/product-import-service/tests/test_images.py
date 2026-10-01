@@ -81,7 +81,7 @@ def test_download_image_rejects_private_ip_addresses(monkeypatch, tmp_path):
     _mock_dns(monkeypatch, "127.0.0.1")
     monkeypatch.setattr(images.requests, "get", lambda *args, **kwargs: pytest.fail("request should not be sent"))
 
-    with pytest.raises(ValueError, match="public internet address"):
+    with pytest.raises(ValueError, match="offentlig internetadresse"):
         download_image("https://example.com/image.jpg", tmp_path, "Badestol", timeout_seconds=1)
 
 
@@ -90,7 +90,7 @@ def test_download_image_rejects_unsupported_content_type(monkeypatch, tmp_path):
     response = FakeImageResponse(headers={"content-type": "text/html"})
     monkeypatch.setattr(images.requests, "get", lambda *args, **kwargs: response)
 
-    with pytest.raises(ValueError, match="supported image type"):
+    with pytest.raises(ValueError, match="understøttet billedtype"):
         download_image("https://example.com/image.jpg", tmp_path, "Badestol", timeout_seconds=1)
 
 
@@ -99,7 +99,7 @@ def test_download_image_rejects_oversized_response(monkeypatch, tmp_path):
     response = FakeImageResponse(headers={"content-type": "image/jpeg", "content-length": "21"})
     monkeypatch.setattr(images.requests, "get", lambda *args, **kwargs: response)
 
-    with pytest.raises(ValueError, match="byte limit"):
+    with pytest.raises(ValueError, match="grænsen på .* byte"):
         download_image("https://example.com/image.jpg", tmp_path, "Badestol", timeout_seconds=1, max_download_bytes=20)
 
     assert not (tmp_path / "badestol.jpg").exists()

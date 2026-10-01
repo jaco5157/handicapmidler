@@ -8,7 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-    app_name: str = "Product Import Service"
+    app_name: str = "Produktimport"
     upload_enabled: bool = False
     data_dir: Path = Path("data")
     storefront_url: str = "https://www.handicapmidler.dk"

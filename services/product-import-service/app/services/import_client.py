@@ -43,7 +43,7 @@ def upload_product_import(xml_path: Path, image_uploads: list[FileUpload], setti
     if not settings.upload_enabled:
         return {
             "dry_run": True,
-            "message": "Upload is disabled. Files were generated locally only.",
+            "message": "Upload er deaktiveret. Filerne blev kun genereret lokalt.",
             "xml_path": str(xml_path),
             "planned_image_uploads": [upload.remote_path() for upload in image_uploads],
             "planned_xml_upload": xml_upload.remote_path(),
@@ -65,22 +65,22 @@ def upload_product_import(xml_path: Path, image_uploads: list[FileUpload], setti
         response.raise_for_status()
     except requests.HTTPError as error:
         raise DanDomainImportError(
-            f"DanDomain import endpoint returned HTTP {response.status_code}.\n\n"
-            f"DanDomain response:\n{_response_text(response.content)}"
+            f"DanDomains importtjeneste returnerede HTTP {response.status_code}.\n\n"
+            f"Svar fra DanDomain:\n{_response_text(response.content)}"
         ) from error
 
     try:
         import_result = _parse_import_response(response.content)
     except DanDomainImportError as error:
         raise DanDomainImportError(
-            f"{error}\n\nDanDomain response (HTTP {response.status_code}):\n"
+            f"{error}\n\nSvar fra DanDomain (HTTP {response.status_code}):\n"
             f"{_response_text(response.content)}"
         ) from error
-    message = "Images and XML were uploaded, and the DanDomain import completed successfully."
+    message = "Billeder og XML blev uploadet, og DanDomain-importen blev gennemført."
     if not import_result["response_verified"]:
         message = (
-            "Images and XML were uploaded, and DanDomain accepted the import request "
-            "but returned no result details."
+            "Billeder og XML blev uploadet, og DanDomain accepterede importanmodningen, "
+            "men returnerede ingen resultatoplysninger."
         )
 
     return {
@@ -115,7 +115,7 @@ def _upload_file(ftp: FTP, upload: FileUpload) -> None:
             return
         except (error_perm, error_temp) as error:
             if not _is_file_lock_error(error) or attempt == len(retry_delays):
-                raise DanDomainImportError(f"FTP could not upload {upload.remote_path()}: {error}") from error
+                raise DanDomainImportError(f"FTP kunne ikke uploade {upload.remote_path()}: {error}") from error
             time.sleep(retry_delays[attempt])
 
 
@@ -202,7 +202,7 @@ def _parse_import_response(content: bytes) -> dict[str, object]:
         result_start = content.find(b"<IMPORT_RESULT")
         result_end = content.find(b"</IMPORT_RESULT>", result_start)
         if result_start < 0 or result_end < 0:
-            raise DanDomainImportError("DanDomain returned an invalid XML import response.") from error
+            raise DanDomainImportError("DanDomain returnerede et ugyldigt XML-importsvar.") from error
 
         result_end += len(b"</IMPORT_RESULT>")
         try:
@@ -210,11 +210,11 @@ def _parse_import_response(content: bytes) -> dict[str, object]:
             # Parse the root fragment without the incorrect encoding declaration.
             root = ET.fromstring(content[result_start:result_end])
         except ET.ParseError as fragment_error:
-            raise DanDomainImportError("DanDomain returned an invalid XML import response.") from fragment_error
+            raise DanDomainImportError("DanDomain returnerede et ugyldigt XML-importsvar.") from fragment_error
 
     if root.tag != "IMPORT_RESULT":
         raise DanDomainImportError(
-            f"DanDomain returned an unexpected import response root element: {root.tag}."
+            f"DanDomain returnerede et uventet rodelement i importsvaret: {root.tag}."
         )
 
     status = (root.findtext("STATUS") or "").strip()
@@ -243,7 +243,7 @@ def _parse_import_response(content: bytes) -> dict[str, object]:
             ": ".join(part for part in (error["title"], error["message"]) if part)
             for error in errors
         )
-        message = "DanDomain reported that the product import failed"
+        message = "DanDomain oplyste, at produktimporten mislykkedes"
         if details:
             message = f"{message}: {details}"
         raise DanDomainImportError(message)
@@ -255,14 +255,14 @@ def _parse_json_import_response(content: bytes) -> dict[str, object]:
     try:
         payload = json.loads(content)
     except (json.JSONDecodeError, UnicodeDecodeError) as error:
-        raise DanDomainImportError("DanDomain returned an invalid JSON import response.") from error
+        raise DanDomainImportError("DanDomain returnerede et ugyldigt JSON-importsvar.") from error
 
     if not isinstance(payload, dict):
-        raise DanDomainImportError("DanDomain returned an unexpected JSON import response.")
+        raise DanDomainImportError("DanDomain returnerede et uventet JSON-importsvar.")
 
     raw_errors = payload.get("errors") or []
     if not isinstance(raw_errors, list):
-        raise DanDomainImportError("DanDomain returned an invalid errors value in its import response.")
+        raise DanDomainImportError("DanDomain returnerede en ugyldig fejlværdi i importsvaret.")
 
     errors = []
     for raw_error in raw_errors:
@@ -296,14 +296,14 @@ def _parse_json_import_response(content: bytes) -> dict[str, object]:
             ": ".join(part for part in (error["title"], error["message"]) if part)
             for error in errors
         )
-        message = "DanDomain reported that the product import failed"
+        message = "DanDomain oplyste, at produktimporten mislykkedes"
         response_message = str(payload.get("message") or "").strip()
         if details:
             message = f"{message}: {details}"
         elif response_message:
             message = f"{message}: {response_message}"
         elif not finished:
-            message = f"{message}: the import did not finish"
+            message = f"{message}: Importen blev ikke fuldført"
         raise DanDomainImportError(message)
 
     return result
@@ -315,14 +315,14 @@ def _parse_json_result_count(payload: dict[str, object], field_name: str) -> int
         return int(value)  # type: ignore[arg-type]
     except (TypeError, ValueError) as error:
         raise DanDomainImportError(
-            f"DanDomain returned a non-numeric {field_name} value: {value}."
+            f"DanDomain returnerede en ikke-numerisk værdi for {field_name}: {value}."
         ) from error
 
 
 def _response_text(content: bytes) -> str:
     if not content:
-        return "<empty response>"
-    return content.decode("utf-8", errors="replace").strip() or "<whitespace-only response>"
+        return "<tomt svar>"
+    return content.decode("utf-8", errors="replace").strip() or "<svar kun med blanktegn>"
 
 
 def _parse_result_count(root: ET.Element, element_name: str) -> int:
@@ -331,7 +331,7 @@ def _parse_result_count(root: ET.Element, element_name: str) -> int:
         return int(value)
     except ValueError as error:
         raise DanDomainImportError(
-            f"DanDomain returned a non-numeric {element_name} value: {value}."
+            f"DanDomain returnerede en ikke-numerisk værdi for {element_name}: {value}."
         ) from error
 
 

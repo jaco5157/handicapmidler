@@ -275,7 +275,7 @@ def test_upload_product_import_rejects_dandomain_failure(monkeypatch, tmp_path: 
 
     with pytest.raises(
         DanDomainImportError,
-        match="DanDomain reported that the product import failed: Import file: File not found",
+        match="DanDomain oplyste, at produktimporten mislykkedes: Import file: File not found",
     ):
         upload_product_import(xml_path, [], make_settings())
 
@@ -295,8 +295,8 @@ def test_upload_product_import_includes_response_body_for_http_error(monkeypatch
         upload_product_import(xml_path, [], make_settings())
 
     assert str(error_info.value) == (
-        "DanDomain import endpoint returned HTTP 503.\n\n"
-        "DanDomain response:\nUpstream service unavailable"
+        "DanDomains importtjeneste returnerede HTTP 503.\n\n"
+        "Svar fra DanDomain:\nUpstream service unavailable"
     )
 
 
@@ -346,11 +346,11 @@ def test_upload_product_import_rejects_current_dandomain_json_failure(monkeypatc
 
     with pytest.raises(
         DanDomainImportError,
-        match="DanDomain reported that the product import failed: Import file: File not found",
+        match="DanDomain oplyste, at produktimporten mislykkedes: Import file: File not found",
     ) as error_info:
         upload_product_import(xml_path, [], make_settings())
 
-    assert "DanDomain response (HTTP 200):" in str(error_info.value)
+    assert "Svar fra DanDomain (HTTP 200):" in str(error_info.value)
     assert '"errors":[{"title":"Import file","message":"File not found."}]' in str(error_info.value)
 
 
@@ -365,11 +365,11 @@ def test_upload_product_import_rejects_non_xml_response(monkeypatch, tmp_path: P
         lambda *args, **kwargs: FakeResponse(b"<html>Login required</html>"),
     )
 
-    with pytest.raises(DanDomainImportError, match="unexpected import response root element") as error_info:
+    with pytest.raises(DanDomainImportError, match="uventet rodelement i importsvaret") as error_info:
         upload_product_import(xml_path, [], make_settings())
 
     assert str(error_info.value).endswith(
-        "DanDomain response (HTTP 200):\n<html>Login required</html>"
+        "Svar fra DanDomain (HTTP 200):\n<html>Login required</html>"
     )
 
 
@@ -387,8 +387,8 @@ def test_upload_product_import_accepts_empty_success_response(monkeypatch, tmp_p
     result = upload_product_import(xml_path, [], make_settings())
 
     assert result["message"] == (
-        "Images and XML were uploaded, and DanDomain accepted the import request "
-        "but returned no result details."
+        "Billeder og XML blev uploadet, og DanDomain accepterede importanmodningen, "
+        "men returnerede ingen resultatoplysninger."
     )
     assert result["import_result"]["status"] == "accepted"
     assert result["import_result"]["response_verified"] is False

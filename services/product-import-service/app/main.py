@@ -40,7 +40,7 @@ async def require_authentication(request: Request, call_next):
 
     return Response(
         status_code=401,
-        headers={"WWW-Authenticate": 'Basic realm="Product Import Service", charset="UTF-8"'},
+        headers={"WWW-Authenticate": 'Basic realm="Produktimport", charset="UTF-8"'},
     )
 
 
@@ -78,7 +78,7 @@ def refresh_categories() -> dict[str, object]:
         raise HTTPException(status_code=502, detail=str(error)) from error
 
     return {
-        "message": "The latest categories were fetched and saved.",
+        "message": "De nyeste kategorier blev hentet og gemt.",
         "category_count": len(categories),
         "categories": [_category_payload(category) for category in categories],
     }

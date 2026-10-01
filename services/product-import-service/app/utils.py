@@ -25,7 +25,7 @@ def extract_product_number(value: str | None) -> str | None:
 def normalize_price(value: str) -> str:
     raw_value = value.strip().replace(" ", "")
     if not raw_value:
-        raise ValueError("Price is required")
+        raise ValueError("Pris er påkrævet")
 
     if "," in raw_value and "." in raw_value:
         raw_value = raw_value.replace(".", "").replace(",", ".")
@@ -35,10 +35,10 @@ def normalize_price(value: str) -> str:
     try:
         decimal_value = Decimal(raw_value)
     except InvalidOperation as error:
-        raise ValueError("Price must be a valid number") from error
+        raise ValueError("Prisen skal være et gyldigt tal") from error
 
     if decimal_value <= 0:
-        raise ValueError("Price must be greater than zero")
+        raise ValueError("Prisen skal være større end nul")
 
     rounded = decimal_value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     return f"{rounded:.2f}".replace(".", ",")

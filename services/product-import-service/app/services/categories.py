@@ -54,7 +54,7 @@ def load_category_options(xml_path: Path) -> list[CategoryOption]:
     """Load categories in parent-first order while preserving XML sibling order."""
     root = ET.parse(xml_path).getroot()
     if root.tag != "PRODUCT_CATEGORY_EXPORT":
-        raise ValueError("The category export has an unexpected XML root element")
+        raise ValueError("Kategorieksporten har et uventet XML-rodelement")
 
     categories: list[_Category] = []
     category_by_id: dict[str, _Category] = {}
@@ -63,9 +63,9 @@ def load_category_options(xml_path: Path) -> list[CategoryOption]:
         category_id = (element.findtext("PROD_CAT_ID") or "").strip()
         name = (element.findtext("PROD_CAT_NAME") or "").strip()
         if not category_id or not name:
-            raise ValueError("Every product category must have an ID and a name")
+            raise ValueError("Alle produktkategorier skal have et ID og et navn")
         if category_id in category_by_id:
-            raise ValueError(f"Duplicate product category ID: {category_id}")
+            raise ValueError(f"Produktkategori-ID'et bruges flere gange: {category_id}")
 
         parent_elements = element.findall("./PARENT_CATEGORIES/PARENT_CAT_ID")
         parent_elements.sort(key=lambda item: int(item.get("priority", "0")))
@@ -75,7 +75,7 @@ def load_category_options(xml_path: Path) -> list[CategoryOption]:
         category_by_id[category_id] = category
 
     if not categories:
-        raise ValueError("The category export does not contain any categories")
+        raise ValueError("Kategorieksporten indeholder ingen kategorier")
 
     children_by_parent: dict[str, list[_Category]] = {}
     for category in categories:
@@ -112,7 +112,7 @@ def fetch_category_options(
 ) -> list[CategoryOption]:
     """Fetch, validate, and atomically replace the persisted category export."""
     if not username or not password:
-        raise CategoryRefreshError("API_USERNAME and API_PASSWORD are required to fetch categories")
+        raise CategoryRefreshError("API_USERNAME og API_PASSWORD er påkrævet for at hente kategorier")
 
     try:
         response = requests.post(
@@ -129,12 +129,12 @@ def fetch_category_options(
             response.raise_for_status()
             content = response.content
     except requests.RequestException as error:
-        raise CategoryRefreshError(f"Could not fetch categories: {error}") from error
+        raise CategoryRefreshError(f"Kategorierne kunne ikke hentes: {error}") from error
 
     if not content:
-        raise CategoryRefreshError("The category endpoint returned an empty response")
+        raise CategoryRefreshError("Kategoritjenesten returnerede et tomt svar")
     if len(content) > MAX_CATEGORIES_XML_BYTES:
-        raise CategoryRefreshError("The category export is larger than the allowed 5 MB")
+        raise CategoryRefreshError("Kategorieksporten er større end de tilladte 5 MB")
 
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary_path: Path | None = None
@@ -147,7 +147,7 @@ def fetch_category_options(
         temporary_path.replace(destination)
         return options
     except (ET.ParseError, OSError, ValueError) as error:
-        raise CategoryRefreshError(f"The downloaded category export is invalid: {error}") from error
+        raise CategoryRefreshError(f"Den hentede kategorieksport er ugyldig: {error}") from error
     finally:
         if temporary_path is not None:
             temporary_path.unlink(missing_ok=True)

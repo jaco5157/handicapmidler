@@ -53,13 +53,13 @@ def test_product_draft_rejects_custom_product_url_over_255_characters():
 @pytest.mark.parametrize(
     ("field_name", "label"),
     [
-        ("product_name", "Title"),
-        ("product_number", "Product number"),
-        ("price", "Price"),
-        ("category_id", "Product category"),
-        ("title_tag", "Title tag"),
-        ("meta_description", "Meta description"),
-        ("meta_keywords", "Meta keywords"),
+        ("product_name", "Titel"),
+        ("product_number", "Produktnummer"),
+        ("price", "Pris"),
+        ("category_id", "Produktkategori"),
+        ("title_tag", "Sidetitel"),
+        ("meta_description", "Metabeskrivelse"),
+        ("meta_keywords", "Metanøgleord"),
     ],
 )
 def test_product_draft_reports_required_fields_by_label(field_name, label):
@@ -68,7 +68,7 @@ def test_product_draft_reports_required_fields_by_label(field_name, label):
 
     error = error_info.value.errors()[0]
     assert error["loc"] == (field_name,)
-    assert error["msg"] == f"Value error, {label} is required"
+    assert error["msg"] == f"Value error, {label} er påkrævet"
 
 
 def test_product_draft_requires_numeric_category_id():
@@ -99,7 +99,7 @@ def test_product_draft_places_primary_image_first():
 
 
 def test_product_draft_rejects_multiple_primary_images():
-    with pytest.raises(ValidationError, match="Only one enabled image can be the primary image"):
+    with pytest.raises(ValidationError, match="Kun ét valgt billede kan være det primære billede"):
         make_draft(
             images=[
                 ProductImageInput(

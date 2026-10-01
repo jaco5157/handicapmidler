@@ -78,5 +78,5 @@ def test_scrape_wraps_network_errors(monkeypatch):
     session.get.side_effect = requests.Timeout("read timed out")
     monkeypatch.setattr(mobilex, "_session", session)
 
-    with pytest.raises(MobilexScrapeError, match="Could not fetch Mobilex product page"):
+    with pytest.raises(MobilexScrapeError, match="Mobilex-produktsiden kunne ikke hentes"):
         scrape_mobilex_product_page(PRODUCT_URL, Settings())

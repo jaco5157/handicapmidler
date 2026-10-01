@@ -8,13 +8,13 @@ from app.utils import normalize_filename_base, normalize_price
 
 
 REQUIRED_FIELD_LABELS = {
-    "product_name": "Title",
-    "product_number": "Product number",
-    "price": "Price",
-    "category_id": "Product category",
-    "title_tag": "Title tag",
-    "meta_description": "Meta description",
-    "meta_keywords": "Meta keywords",
+    "product_name": "Titel",
+    "product_number": "Produktnummer",
+    "price": "Pris",
+    "category_id": "Produktkategori",
+    "title_tag": "Sidetitel",
+    "meta_description": "Metabeskrivelse",
+    "meta_keywords": "Metanøgleord",
 }
 
 
@@ -26,7 +26,7 @@ class ScrapeRequest(BaseModel):
     def validate_url(cls, value: str) -> str:
         value = value.strip()
         if not value.startswith(("http://", "https://")):
-            raise ValueError("A supplier URL must start with http:// or https://")
+            raise ValueError("En leverandør-URL skal begynde med http:// eller https://")
         return value
 
 
@@ -101,7 +101,7 @@ class ProductDraft(BaseModel):
     def strip_required_strings(cls, value: object, info: ValidationInfo) -> str:
         stripped = str(value or "").strip()
         if not stripped:
-            raise ValueError(f"{REQUIRED_FIELD_LABELS[info.field_name]} is required")
+            raise ValueError(f"{REQUIRED_FIELD_LABELS[info.field_name]} er påkrævet")
         return stripped
 
     @field_validator(
@@ -124,30 +124,30 @@ class ProductDraft(BaseModel):
     @model_validator(mode="after")
     def validate_product(self) -> "ProductDraft":
         if not re.fullmatch(r"[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*", self.product_number):
-            raise ValueError("Product number must contain only letters, digits, and hyphens")
+            raise ValueError("Produktnummer må kun indeholde bogstaver, tal og bindestreger")
 
         if not self.category_id.isdigit():
-            raise ValueError("Category ID must contain only digits")
+            raise ValueError("Kategori-ID må kun indeholde tal")
 
         self.price = normalize_price(self.price)
 
         enabled_images = [image for image in self.images if image.enabled]
         if not enabled_images:
-            raise ValueError("At least one image must be enabled")
+            raise ValueError("Mindst ét billede skal være valgt")
 
         primary_images = [image for image in enabled_images if image.is_primary]
         if len(primary_images) > 1:
-            raise ValueError("Only one enabled image can be the primary image")
+            raise ValueError("Kun ét valgt billede kan være det primære billede")
 
         filename_bases = [normalize_filename_base(image.filename_base) for image in enabled_images]
         if len(filename_bases) != len(set(filename_bases)):
-            raise ValueError("Image filenames must be unique")
+            raise ValueError("Billedfilnavne skal være unikke")
 
         for image in enabled_images:
             if not image.source_url.startswith(("http://", "https://")):
-                raise ValueError("Enabled image URLs must start with http:// or https://")
+                raise ValueError("URL'er til valgte billeder skal begynde med http:// eller https://")
             if not image.filename_base:
-                raise ValueError("Enabled images must have a filename")
+                raise ValueError("Valgte billeder skal have et filnavn")
 
         return self
 
