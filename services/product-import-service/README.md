@@ -101,12 +101,13 @@ POST UPLOAD_ENDPOINT?file=Products/Updated/document-<request-id>.xml&response=1&
 
 The request includes form fields `user` and `password`.
 
-With `response=1`, DanDomain returns an `IMPORT_RESULT` XML document. The service validates
-`STATUS`, rejects application-level failures even when the HTTP status is 200, and returns the
-import counts and any errors as structured data. A valid `IMPORT_RESULT` embedded in a response
-preamble is extracted, and an empty successful HTTP response is reported as accepted but
-unverified instead of as an XML parsing failure. DanDomain deletes the remote source XML from
-`images/ImportExport` after processing; the local copy remains in `data/xml` for troubleshooting.
+DanDomain's documentation says that `response=1` returns an `IMPORT_RESULT` XML document, while
+the current live endpoint returns an equivalent JSON object. The service supports both formats,
+rejects application-level failures even when the HTTP status is 200, and returns import counts and
+errors as structured data. A valid `IMPORT_RESULT` embedded in a response preamble is extracted,
+and an empty successful HTTP response is reported as accepted but unverified instead of as an XML
+parsing failure. DanDomain deletes the remote source XML from `images/ImportExport` after
+processing; the local copy remains in `data/xml` for troubleshooting.
 
 ## Product Categories
 

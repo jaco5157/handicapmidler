@@ -23,6 +23,26 @@ SUCCESS_RESPONSE = b"""\
 </IMPORT_RESULT>
 """
 
+JSON_SUCCESS_RESPONSE = b"""\
+{"finished":true,"message":null,"percentageDone":100,"duration":"0:1","total":1,
+"completed":1,"failed":0,"created":1,"updated":0,"type":"PRODUCTS",
+"timestampUTC":"2026-09-29T14:49:13Z","errors":[]}
+"""
+
+DANDOMAIN_UTF16_DECLARATION_RESPONSE = b"""\
+<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<IMPORT_RESULT>
+    <TYPE>PRODUCTS</TYPE>
+    <STATUS>1</STATUS>
+    <TIME>0:0</TIME>
+    <COUNT>1</COUNT>
+    <COMPLETED>1</COMPLETED>
+    <FAILED>0</FAILED>
+    <CREATED>1</CREATED>
+    <MODIFIED>0</MODIFIED>
+</IMPORT_RESULT>
+"""
+
 
 class FakeResponse:
     def __init__(self, content: bytes, status_code: int = 200):
@@ -260,6 +280,80 @@ def test_upload_product_import_rejects_dandomain_failure(monkeypatch, tmp_path: 
         upload_product_import(xml_path, [], make_settings())
 
 
+def test_upload_product_import_includes_response_body_for_http_error(monkeypatch, tmp_path: Path):
+    xml_path = tmp_path / "document.xml"
+    xml_path.write_text("<PRODUCT_EXPORT/>", encoding="utf-8")
+
+    monkeypatch.setattr(import_client, "_ftp_client", lambda settings: FakeFTP())
+    monkeypatch.setattr(
+        import_client.requests,
+        "post",
+        lambda *args, **kwargs: FakeResponse(b"Upstream service unavailable", status_code=503),
+    )
+
+    with pytest.raises(DanDomainImportError) as error_info:
+        upload_product_import(xml_path, [], make_settings())
+
+    assert str(error_info.value) == (
+        "DanDomain import endpoint returned HTTP 503.\n\n"
+        "DanDomain response:\nUpstream service unavailable"
+    )
+
+
+def test_upload_product_import_accepts_current_dandomain_json_response(monkeypatch, tmp_path: Path):
+    xml_path = tmp_path / "document.xml"
+    xml_path.write_text("<PRODUCT_EXPORT/>", encoding="utf-8")
+
+    monkeypatch.setattr(import_client, "_ftp_client", lambda settings: FakeFTP())
+    monkeypatch.setattr(
+        import_client.requests,
+        "post",
+        lambda *args, **kwargs: FakeResponse(JSON_SUCCESS_RESPONSE),
+    )
+
+    result = upload_product_import(xml_path, [], make_settings())
+
+    assert result["import_result"] == {
+        "type": "PRODUCTS",
+        "status": "1",
+        "time": "0:1",
+        "count": 1,
+        "completed": 1,
+        "failed": 0,
+        "created": 1,
+        "modified": 0,
+        "errors": [],
+        "response_verified": True,
+    }
+
+
+def test_upload_product_import_rejects_current_dandomain_json_failure(monkeypatch, tmp_path: Path):
+    xml_path = tmp_path / "document.xml"
+    xml_path.write_text("<PRODUCT_EXPORT/>", encoding="utf-8")
+    failure_response = b"""\
+{"finished":true,"message":null,"percentageDone":0,"duration":null,"total":0,
+"completed":0,"failed":0,"created":0,"updated":0,"type":null,
+"timestampUTC":"2026-09-29T14:49:13Z",
+"errors":[{"title":"Import file","message":"File not found."}]}
+"""
+
+    monkeypatch.setattr(import_client, "_ftp_client", lambda settings: FakeFTP())
+    monkeypatch.setattr(
+        import_client.requests,
+        "post",
+        lambda *args, **kwargs: FakeResponse(failure_response),
+    )
+
+    with pytest.raises(
+        DanDomainImportError,
+        match="DanDomain reported that the product import failed: Import file: File not found",
+    ) as error_info:
+        upload_product_import(xml_path, [], make_settings())
+
+    assert "DanDomain response (HTTP 200):" in str(error_info.value)
+    assert '"errors":[{"title":"Import file","message":"File not found."}]' in str(error_info.value)
+
+
 def test_upload_product_import_rejects_non_xml_response(monkeypatch, tmp_path: Path):
     xml_path = tmp_path / "document.xml"
     xml_path.write_text("<PRODUCT_EXPORT/>", encoding="utf-8")
@@ -271,8 +365,12 @@ def test_upload_product_import_rejects_non_xml_response(monkeypatch, tmp_path: P
         lambda *args, **kwargs: FakeResponse(b"<html>Login required</html>"),
     )
 
-    with pytest.raises(DanDomainImportError, match="unexpected import response root element"):
+    with pytest.raises(DanDomainImportError, match="unexpected import response root element") as error_info:
         upload_product_import(xml_path, [], make_settings())
+
+    assert str(error_info.value).endswith(
+        "DanDomain response (HTTP 200):\n<html>Login required</html>"
+    )
 
 
 def test_upload_product_import_accepts_empty_success_response(monkeypatch, tmp_path: Path):
@@ -312,6 +410,33 @@ def test_upload_product_import_extracts_xml_result_from_response_preamble(monkey
 
     assert result["import_result"]["status"] == "1"
     assert result["import_result"]["response_verified"] is True
+
+
+def test_upload_product_import_handles_incorrect_utf16_xml_declaration(monkeypatch, tmp_path: Path):
+    xml_path = tmp_path / "document.xml"
+    xml_path.write_text("<PRODUCT_EXPORT/>", encoding="utf-8")
+
+    monkeypatch.setattr(import_client, "_ftp_client", lambda settings: FakeFTP())
+    monkeypatch.setattr(
+        import_client.requests,
+        "post",
+        lambda *args, **kwargs: FakeResponse(DANDOMAIN_UTF16_DECLARATION_RESPONSE),
+    )
+
+    result = upload_product_import(xml_path, [], make_settings())
+
+    assert result["import_result"] == {
+        "type": "PRODUCTS",
+        "status": "1",
+        "time": "0:0",
+        "count": 1,
+        "completed": 1,
+        "failed": 0,
+        "created": 1,
+        "modified": 0,
+        "errors": [],
+        "response_verified": True,
+    }
 
 
 def test_dry_run_builds_encoded_import_url(tmp_path: Path):

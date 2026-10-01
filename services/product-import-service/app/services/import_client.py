@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import time
 from dataclasses import dataclass
 from ftplib import FTP, FTP_TLS, Error, error_perm, error_temp
@@ -64,10 +65,17 @@ def upload_product_import(xml_path: Path, image_uploads: list[FileUpload], setti
         response.raise_for_status()
     except requests.HTTPError as error:
         raise DanDomainImportError(
-            f"DanDomain import endpoint returned HTTP {response.status_code}."
+            f"DanDomain import endpoint returned HTTP {response.status_code}.\n\n"
+            f"DanDomain response:\n{_response_text(response.content)}"
         ) from error
 
-    import_result = _parse_import_response(response.content)
+    try:
+        import_result = _parse_import_response(response.content)
+    except DanDomainImportError as error:
+        raise DanDomainImportError(
+            f"{error}\n\nDanDomain response (HTTP {response.status_code}):\n"
+            f"{_response_text(response.content)}"
+        ) from error
     message = "Images and XML were uploaded, and the DanDomain import completed successfully."
     if not import_result["response_verified"]:
         message = (
@@ -185,6 +193,9 @@ def _parse_import_response(content: bytes) -> dict[str, object]:
             "response_verified": False,
         }
 
+    if normalized_content.startswith(b"{"):
+        return _parse_json_import_response(normalized_content)
+
     try:
         root = ET.fromstring(normalized_content)
     except ET.ParseError as error:
@@ -194,14 +205,10 @@ def _parse_import_response(content: bytes) -> dict[str, object]:
             raise DanDomainImportError("DanDomain returned an invalid XML import response.") from error
 
         result_end += len(b"</IMPORT_RESULT>")
-        declaration_start = content.find(b"<?xml")
-        declaration_end = content.find(b"?>", declaration_start)
-        declaration = b""
-        if 0 <= declaration_start < result_start and declaration_end >= declaration_start:
-            declaration = content[declaration_start : declaration_end + 2]
-
         try:
-            root = ET.fromstring(declaration + content[result_start:result_end])
+            # DanDomain can declare UTF-16 while sending UTF-8/ASCII response bytes.
+            # Parse the root fragment without the incorrect encoding declaration.
+            root = ET.fromstring(content[result_start:result_end])
         except ET.ParseError as fragment_error:
             raise DanDomainImportError("DanDomain returned an invalid XML import response.") from fragment_error
 
@@ -242,6 +249,80 @@ def _parse_import_response(content: bytes) -> dict[str, object]:
         raise DanDomainImportError(message)
 
     return result
+
+
+def _parse_json_import_response(content: bytes) -> dict[str, object]:
+    try:
+        payload = json.loads(content)
+    except (json.JSONDecodeError, UnicodeDecodeError) as error:
+        raise DanDomainImportError("DanDomain returned an invalid JSON import response.") from error
+
+    if not isinstance(payload, dict):
+        raise DanDomainImportError("DanDomain returned an unexpected JSON import response.")
+
+    raw_errors = payload.get("errors") or []
+    if not isinstance(raw_errors, list):
+        raise DanDomainImportError("DanDomain returned an invalid errors value in its import response.")
+
+    errors = []
+    for raw_error in raw_errors:
+        if isinstance(raw_error, dict):
+            errors.append(
+                {
+                    "title": str(raw_error.get("title") or "").strip(),
+                    "message": str(raw_error.get("message") or "").strip(),
+                }
+            )
+        else:
+            errors.append({"title": "", "message": str(raw_error).strip()})
+
+    failed = _parse_json_result_count(payload, "failed")
+    finished = payload.get("finished") is True
+    result: dict[str, object] = {
+        "type": str(payload.get("type") or "").strip(),
+        "status": "1" if finished and failed == 0 and not errors else "0",
+        "time": str(payload.get("duration") or "").strip(),
+        "count": _parse_json_result_count(payload, "total"),
+        "completed": _parse_json_result_count(payload, "completed"),
+        "failed": failed,
+        "created": _parse_json_result_count(payload, "created"),
+        "modified": _parse_json_result_count(payload, "updated"),
+        "errors": errors,
+        "response_verified": True,
+    }
+
+    if result["status"] != "1":
+        details = "; ".join(
+            ": ".join(part for part in (error["title"], error["message"]) if part)
+            for error in errors
+        )
+        message = "DanDomain reported that the product import failed"
+        response_message = str(payload.get("message") or "").strip()
+        if details:
+            message = f"{message}: {details}"
+        elif response_message:
+            message = f"{message}: {response_message}"
+        elif not finished:
+            message = f"{message}: the import did not finish"
+        raise DanDomainImportError(message)
+
+    return result
+
+
+def _parse_json_result_count(payload: dict[str, object], field_name: str) -> int:
+    value = payload.get(field_name, 0)
+    try:
+        return int(value)  # type: ignore[arg-type]
+    except (TypeError, ValueError) as error:
+        raise DanDomainImportError(
+            f"DanDomain returned a non-numeric {field_name} value: {value}."
+        ) from error
+
+
+def _response_text(content: bytes) -> str:
+    if not content:
+        return "<empty response>"
+    return content.decode("utf-8", errors="replace").strip() or "<whitespace-only response>"
 
 
 def _parse_result_count(root: ET.Element, element_name: str) -> int:
