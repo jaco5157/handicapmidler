@@ -72,6 +72,7 @@ async function scrapeProduct() {
     document.querySelector("#product-name").value = data.product_name || "";
     document.querySelector("#product-number").value = data.product_number || "";
     setHmiSpec(data.hmi_number);
+    addMetaKeyword(data.hmi_number);
     document.querySelector("#title-tag").value = data.product_name || "";
     updateGooglePreview();
 
@@ -471,6 +472,19 @@ function updateSpecControls() {
     row.querySelector(".order-spec-up").disabled = index === 0;
     row.querySelector(".order-spec-down").disabled = index === rows.length - 1;
   }
+}
+
+function addMetaKeyword(keyword) {
+  const value = String(keyword || "").trim();
+  if (!value) return;
+
+  const field = document.querySelector("#meta-keywords");
+  const keywords = field.value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  if (!keywords.some((item) => item.toLowerCase() === value.toLowerCase())) keywords.push(value);
+  field.value = keywords.join(", ");
 }
 
 function setHmiSpec(hmiNumber) {
