@@ -13,7 +13,7 @@ const googlePreviewTitle = document.querySelector("#google-preview-title");
 const googlePreviewDescription = document.querySelector("#google-preview-description");
 const titleTagCount = document.querySelector("#title-tag-count");
 const metaDescriptionCount = document.querySelector("#meta-description-count");
-const HMI_SPEC_NAME = "HMI-nr.";
+const customProductUrlInput = document.querySelector("#custom-product-url");
 
 let latestXml = "";
 let validationAttempted = false;
@@ -23,22 +23,25 @@ document.querySelector("#refresh-categories-button").addEventListener("click", r
 document.querySelector("#preview-button").addEventListener("click", previewProduct);
 document.querySelector("#upload-button").addEventListener("click", uploadProduct);
 document.querySelector("#download-button").addEventListener("click", downloadXml);
-document.querySelector("#clear-button").addEventListener("click", clearForm);
 document.querySelector("#add-image").addEventListener("click", () => addImageRow({}));
 document.querySelector("#add-spec").addEventListener("click", () => addSpecRow({}));
 form.addEventListener("input", refreshValidation);
 form.addEventListener("change", refreshValidation);
 form.addEventListener("input", updateGooglePreview);
+customProductUrlInput.addEventListener("change", () => {
+  customProductUrlInput.value = normalizeSlug(customProductUrlInput.value);
+  updateGooglePreview();
+});
 
 addSpecRow({});
 updateGooglePreview();
 
 async function refreshCategories() {
-  setBusy("Henter kategorier");
+  setBusy("Fetching categories");
   try {
     const data = await postJson("/api/categories/refresh", {});
     replaceCategoryOptions(data.categories || []);
-    setMessage(`${data.message}\n${data.category_count} kategorier er tilgængelige.`);
+    setMessage(`${data.message}\n${data.category_count} categories are available.`);
   } catch (error) {
     setMessage(error.message, true);
   } finally {
@@ -49,7 +52,7 @@ async function refreshCategories() {
 function replaceCategoryOptions(categories) {
   const select = document.querySelector("#category-id");
   const previousValue = select.value;
-  const placeholder = new Option("Vælg en kategori", "", true, false);
+  const placeholder = new Option("Choose a category", "", true, false);
   placeholder.disabled = true;
   select.replaceChildren(placeholder);
 
@@ -64,21 +67,20 @@ function replaceCategoryOptions(categories) {
 
 async function scrapeProduct() {
   const url = document.querySelector("#supplier-url").value.trim();
-  if (!url) return setMessage("Leverandør-URL er påkrævet", true);
+  if (!url) return setMessage("Supplier URL is required", true);
 
-  setBusy("Henter produkt");
+  setBusy("Scraping");
   try {
     const data = await postJson("/api/scrape", { url });
     document.querySelector("#product-name").value = data.product_name || "";
     document.querySelector("#product-number").value = data.product_number || "";
-    setHmiSpec(data.hmi_number);
-    addMetaKeyword(data.hmi_number);
+    document.querySelector("#hmi-number").value = data.hmi_number || "";
     document.querySelector("#title-tag").value = data.product_name || "";
     updateGooglePreview();
 
     imageRows.innerHTML = "";
     for (const image of data.images || []) addImageRow(image);
-    setMessage(`Produktet blev hentet med ${data.images.length} ${data.images.length === 1 ? "billede" : "billeder"}.`);
+    setMessage(`Scraped ${data.images.length} image(s).`);
   } catch (error) {
     setMessage(error.message, true);
   } finally {
@@ -87,36 +89,29 @@ async function scrapeProduct() {
 }
 
 async function previewProduct() {
-  await generateProduct("/api/preview", "Forhåndsvisningen er klar");
+  await generateProduct("/api/preview", "Preview ready");
 }
 
 async function uploadProduct() {
-  await generateProduct("/api/upload", "Uploadprocessen er fuldført");
+  await generateProduct("/api/upload", "Upload flow complete");
 }
 
 async function generateProduct(endpoint, successText) {
   if (!validateProductForm()) return;
 
   validationAttempted = false;
-  setBusy("Genererer");
+  setBusy("Generating");
   try {
     const data = await postJson(endpoint, collectDraft());
     latestXml = data.xml;
     xmlPreview.value = latestXml;
     downloadButton.disabled = false;
-    setMessage(formatGenerationMessage(successText, data));
+    setMessage(`${successText}\n\n${JSON.stringify(data.upload || data.media, null, 2)}`);
   } catch (error) {
     setMessage(error.message, true);
   } finally {
     setIdle();
   }
-}
-
-function formatGenerationMessage(successText, data) {
-  const imageCount = Array.isArray(data.media) ? data.media.length : 0;
-  const lines = [`${successText} · ${imageCount} ${imageCount === 1 ? "billede" : "billeder"}`];
-  if (data.upload?.message) lines.push(data.upload.message);
-  return lines.join("\n");
 }
 
 function validateProductForm(focusFirst = true) {
@@ -128,34 +123,39 @@ function validateProductForm(focusFirst = true) {
   const requiredControls = [...form.querySelectorAll("input[required], select[required], textarea[required]")];
   for (const control of requiredControls) {
     if (!control.disabled && !control.value.trim()) {
-      addFieldValidationError(errors, control, `${fieldLabel(control)} er påkrævet.`);
+      addFieldValidationError(errors, control, `${fieldLabel(control)} is required.`);
     }
   }
 
   const supplierUrl = document.querySelector("#supplier-url");
   if (supplierUrl.value.trim() && supplierUrl.validity.typeMismatch) {
-    addFieldValidationError(errors, supplierUrl, "Leverandør-URL skal være en gyldig URL.");
+    addFieldValidationError(errors, supplierUrl, "Supplier URL must be a valid URL.");
   }
 
   const productNumber = document.querySelector("#product-number");
   if (productNumber.value.trim() && !/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/.test(productNumber.value.trim())) {
-    addFieldValidationError(errors, productNumber, "Produktnummer må kun indeholde bogstaver, tal og bindestreger.");
+    addFieldValidationError(errors, productNumber, "Product number must contain only letters, digits, and hyphens.");
+  }
+
+  const hmiNumber = document.querySelector("#hmi-number");
+  if (hmiNumber.value.trim() && !/^\d+$/.test(hmiNumber.value.trim())) {
+    addFieldValidationError(errors, hmiNumber, "HMI number must contain only digits.");
   }
 
   const price = document.querySelector("#price");
   if (price.value.trim() && !isValidPrice(price.value)) {
-    addFieldValidationError(errors, price, "Prisen skal være et tal større end nul.");
+    addFieldValidationError(errors, price, "Price must be a number greater than zero.");
   }
 
   validateImages(errors);
 
   if (!errors.length) {
-    statusPill.textContent = "Klar";
+    statusPill.textContent = "Idle";
     return true;
   }
 
-  statusPill.textContent = "Mangler oplysninger";
-  setMessage(`Ret venligst de fremhævede felter:\n${errors.map(({ message }) => `• ${message}`).join("\n")}`, true);
+  statusPill.textContent = "Needs input";
+  setMessage(`Please correct the highlighted fields:\n${errors.map(({ message }) => `• ${message}`).join("\n")}`, true);
 
   if (focusFirst) {
     errors[0].control.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -166,32 +166,33 @@ function validateProductForm(focusFirst = true) {
 
 function validateImages(errors) {
   const rows = [...imageRows.querySelectorAll(".image-row")];
-  if (!rows.length) {
+  const enabledRows = rows.filter((row) => row.querySelector(".image-enabled").checked);
+  if (!enabledRows.length) {
     addSectionValidationError(
       errors,
       imageRows.closest(".table-wrap"),
       document.querySelector("#add-image"),
-      "Mindst ét billede skal være tilføjet.",
+      "At least one image must be enabled.",
     );
     return;
   }
 
   const filenames = new Map();
-  for (const row of rows) {
+  for (const row of enabledRows) {
     const rowNumber = rows.indexOf(row) + 1;
     const sourceUrl = row.querySelector(".image-source").value.trim();
     const filename = row.querySelector(".image-filename");
 
     if (!isHttpUrl(sourceUrl)) {
-      addFieldValidationError(errors, filename, `Billede ${rowNumber} mangler en gyldig kilde-URL.`, row);
+      addFieldValidationError(errors, filename, `Image ${rowNumber} is missing a valid source URL.`, row);
     }
 
     if (filename.value.trim()) {
-      const normalizedName = normalizeFilename(filename.value);
+      const normalizedName = normalizeSlug(filename.value);
       if (filenames.has(normalizedName)) {
         const firstFilename = filenames.get(normalizedName);
-        addFieldValidationError(errors, firstFilename, "Billedfilnavne skal være unikke.", firstFilename.closest(".image-row"));
-        addFieldValidationError(errors, filename, `Billede ${rowNumber} har et filnavn, der allerede bruges.`, row);
+        addFieldValidationError(errors, firstFilename, "Image filenames must be unique.", firstFilename.closest(".image-row"));
+        addFieldValidationError(errors, filename, `Image ${rowNumber} has a duplicate filename.`, row);
       } else {
         filenames.set(normalizedName, filename);
       }
@@ -247,9 +248,9 @@ function fieldLabel(control) {
   if (label) return label.textContent.trim();
   if (control.classList.contains("image-filename")) {
     const rows = [...imageRows.querySelectorAll(".image-row")];
-    return `Filnavn til billede ${rows.indexOf(control.closest(".image-row")) + 1}`;
+    return `Image ${rows.indexOf(control.closest(".image-row")) + 1} filename`;
   }
-  return "Dette felt";
+  return "This field";
 }
 
 function isValidPrice(value) {
@@ -268,7 +269,7 @@ function isHttpUrl(value) {
   }
 }
 
-function normalizeFilename(value) {
+function normalizeSlug(value) {
   return value
     .replaceAll("æ", "ae")
     .replaceAll("ø", "oe")
@@ -286,20 +287,22 @@ function normalizeFilename(value) {
 
 function collectDraft() {
   ensurePrimaryImage();
+  customProductUrlInput.value = normalizeSlug(customProductUrlInput.value);
   return {
     source_url: document.querySelector("#supplier-url").value,
     product_name: document.querySelector("#product-name").value,
     product_number: document.querySelector("#product-number").value,
+    hmi_number: document.querySelector("#hmi-number").value,
     price: document.querySelector("#price").value,
     category_id: document.querySelector("#category-id").value,
     title_tag: document.querySelector("#title-tag").value,
-    custom_product_url: document.querySelector("#custom-product-url").value,
+    custom_product_url: customProductUrlInput.value,
     meta_description: document.querySelector("#meta-description").value,
     meta_keywords: document.querySelector("#meta-keywords").value,
     short_description: document.querySelector("#short-description").value,
     long_description: document.querySelector("#long-description").value,
     images: [...document.querySelectorAll(".image-row")].map((row) => ({
-      enabled: true,
+      enabled: row.querySelector(".image-enabled").checked,
       is_primary: row.querySelector(".image-primary").checked,
       source_url: row.querySelector(".image-source").value,
       filename_base: row.querySelector(".image-filename").value,
@@ -319,15 +322,15 @@ function updateGooglePreview() {
   const descriptionLimit = Number(descriptionInput.dataset.previewMaxlength);
   const title = titleInput.value.trim().slice(0, titleLimit);
   const description = descriptionInput.value.trim().slice(0, descriptionLimit);
-  const customUrl = document.querySelector("#custom-product-url").value.trim();
+  const customUrl = normalizeSlug(customProductUrlInput.value);
   const storefrontUrl = googlePreview.dataset.storefrontUrl.replace(/\/+$/, "");
   const storefront = new URL(storefrontUrl);
   const urlParts = [storefront.hostname, "shop"];
   if (customUrl) urlParts.push(customUrl.replace(/^\/+|\/+$/g, ""));
 
   googlePreviewUrl.textContent = urlParts.join(" › ");
-  googlePreviewTitle.textContent = title || "Produkttitel";
-  googlePreviewDescription.textContent = description || "Metabeskrivelsen vises her.";
+  googlePreviewTitle.textContent = title || "Product title";
+  googlePreviewDescription.textContent = description || "The meta description will appear here.";
   titleTagCount.textContent = titleInput.value.length;
   metaDescriptionCount.textContent = descriptionInput.value.length;
   titleTagCount.closest(".field-help").classList.toggle("is-over-limit", titleInput.value.length > titleLimit);
@@ -338,12 +341,15 @@ function updateGooglePreview() {
 
 function addImageRow(image) {
   const row = imageTemplate.content.firstElementChild.cloneNode(true);
+  const enabledInput = row.querySelector(".image-enabled");
   const primaryInput = row.querySelector(".image-primary");
+  enabledInput.checked = image.enabled ?? true;
   primaryInput.checked = image.is_primary ?? false;
   row.querySelector(".image-source").value = image.source_url || "";
   row.querySelector(".image-filename").value = image.filename_base || "";
   row.querySelector(".image-alt").value = image.alt_text || "";
   row.querySelector(".image-preview").src = image.source_url || "";
+  enabledInput.addEventListener("change", ensurePrimaryImage);
   primaryInput.addEventListener("change", () => selectPrimaryImage(row));
   row.querySelector(".order-image-up").addEventListener("click", () => moveImageRow(row, -1));
   row.querySelector(".order-image-down").addEventListener("click", () => moveImageRow(row, 1));
@@ -352,7 +358,7 @@ function addImageRow(image) {
     ensurePrimaryImage();
   });
   imageRows.appendChild(row);
-  if (primaryInput.checked) {
+  if (primaryInput.checked && enabledInput.checked) {
     selectPrimaryImage(row);
   } else {
     ensurePrimaryImage();
@@ -360,20 +366,22 @@ function addImageRow(image) {
 }
 
 function selectPrimaryImage(row) {
+  if (!row.querySelector(".image-enabled").checked) return;
   row.querySelector(".image-primary").checked = true;
   if (row === imageRows.firstElementChild) {
     updateImageControls();
     return;
   }
-  animateTableReorder(row, imageRows, -1, () => imageRows.prepend(row), updateImageControls);
+  animateImageReorder(row, -1, () => imageRows.prepend(row));
 }
 
 function ensurePrimaryImage() {
   const rows = [...imageRows.querySelectorAll(".image-row")];
-  let primaryRow = rows.find((row) => row.querySelector(".image-primary").checked);
+  const enabledRows = rows.filter((row) => row.querySelector(".image-enabled").checked);
+  let primaryRow = enabledRows.find((row) => row.querySelector(".image-primary").checked);
 
-  if (!primaryRow && rows.length) {
-    primaryRow = rows[0];
+  if (!primaryRow && enabledRows.length) {
+    primaryRow = enabledRows[0];
     primaryRow.querySelector(".image-primary").checked = true;
     imageRows.prepend(primaryRow);
   }
@@ -382,34 +390,24 @@ function ensurePrimaryImage() {
 }
 
 function moveImageRow(row, direction) {
-  moveTableRow(row, imageRows, direction, updateImageControls);
-}
-
-function moveTableRow(row, container, direction, updateControls) {
   const sibling = direction < 0 ? row.previousElementSibling : row.nextElementSibling;
   if (!sibling) return;
 
-  animateTableReorder(
-    row,
-    container,
-    direction,
-    () => {
-      if (direction < 0) {
-        container.insertBefore(row, sibling);
-      } else {
-        container.insertBefore(sibling, row);
-      }
-    },
-    updateControls,
-  );
+  animateImageReorder(row, direction, () => {
+    if (direction < 0) {
+      imageRows.insertBefore(row, sibling);
+    } else {
+      imageRows.insertBefore(sibling, row);
+    }
+  });
 }
 
-function animateTableReorder(movedRow, container, direction, reorder, updateControls) {
-  const rows = [...container.children];
+function animateImageReorder(movedRow, direction, reorder) {
+  const rows = [...imageRows.querySelectorAll(".image-row")];
   const previousPositions = new Map(rows.map((row) => [row, row.getBoundingClientRect().top]));
 
   reorder();
-  updateControls();
+  updateImageControls();
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -439,8 +437,11 @@ function updateImageControls() {
   const rows = [...imageRows.querySelectorAll(".image-row")];
   const primaryRow = rows.find((row) => row.querySelector(".image-primary").checked);
   for (const [index, row] of rows.entries()) {
+    const enabled = row.querySelector(".image-enabled").checked;
     const primaryInput = row.querySelector(".image-primary");
-    row.querySelector(".image-filename").required = true;
+    row.querySelector(".image-filename").required = enabled;
+    primaryInput.disabled = !enabled;
+    if (!enabled) primaryInput.checked = false;
     row.classList.toggle("is-primary", primaryInput.checked);
     row.querySelector(".order-image-up").disabled = index === 0 || rows[index - 1] === primaryRow;
     row.querySelector(".order-image-down").disabled = index === rows.length - 1 || row === primaryRow;
@@ -451,84 +452,8 @@ function addSpecRow(spec) {
   const row = specTemplate.content.firstElementChild.cloneNode(true);
   row.querySelector(".spec-name").value = spec.name || "";
   row.querySelector(".spec-value").value = spec.value || "";
-  row.querySelector(".order-spec-up").addEventListener("click", () => moveSpecRow(row, -1));
-  row.querySelector(".order-spec-down").addEventListener("click", () => moveSpecRow(row, 1));
-  row.querySelector(".remove-row").addEventListener("click", () => {
-    row.remove();
-    updateSpecControls();
-  });
+  row.querySelector(".remove-row").addEventListener("click", () => row.remove());
   specRows.appendChild(row);
-  updateSpecControls();
-  return row;
-}
-
-function moveSpecRow(row, direction) {
-  moveTableRow(row, specRows, direction, updateSpecControls);
-}
-
-function updateSpecControls() {
-  const rows = [...specRows.querySelectorAll(".spec-row")];
-  for (const [index, row] of rows.entries()) {
-    row.querySelector(".order-spec-up").disabled = index === 0;
-    row.querySelector(".order-spec-down").disabled = index === rows.length - 1;
-  }
-}
-
-function addMetaKeyword(keyword) {
-  const value = String(keyword || "").trim();
-  if (!value) return;
-
-  const field = document.querySelector("#meta-keywords");
-  const keywords = field.value
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
-  if (!keywords.some((item) => item.toLowerCase() === value.toLowerCase())) keywords.push(value);
-  field.value = keywords.join(", ");
-}
-
-function setHmiSpec(hmiNumber) {
-  const value = String(hmiNumber || "").trim();
-  const matchingRows = [...specRows.querySelectorAll(".spec-row")].filter(
-    (row) => row.querySelector(".spec-name").value.trim().toLowerCase() === HMI_SPEC_NAME.toLowerCase(),
-  );
-
-  if (!value) {
-    for (const row of matchingRows) row.remove();
-    updateSpecControls();
-    return;
-  }
-
-  let row = matchingRows.shift();
-  if (!row) {
-    row = [...specRows.querySelectorAll(".spec-row")].find(
-      (candidate) =>
-        !candidate.querySelector(".spec-name").value.trim() && !candidate.querySelector(".spec-value").value.trim(),
-    );
-  }
-  if (!row) row = addSpecRow({});
-
-  row.querySelector(".spec-name").value = HMI_SPEC_NAME;
-  row.querySelector(".spec-value").value = value;
-  for (const duplicate of matchingRows) duplicate.remove();
-  specRows.prepend(row);
-  updateSpecControls();
-}
-
-function clearForm() {
-  form.reset();
-  clearValidationErrors();
-  validationAttempted = false;
-  imageRows.replaceChildren();
-  specRows.replaceChildren();
-  addSpecRow({});
-  latestXml = "";
-  xmlPreview.value = "";
-  downloadButton.disabled = true;
-  setMessage("");
-  statusPill.textContent = "Klar";
-  updateGooglePreview();
-  document.querySelector("#supplier-url").focus();
 }
 
 async function postJson(url, payload) {
@@ -540,7 +465,7 @@ async function postJson(url, payload) {
   const data = await response.json();
   if (!response.ok) {
     const detail = Array.isArray(data.detail) ? data.detail.map((item) => item.msg).join("\n") : data.detail;
-    throw new Error(detail || "Anmodningen mislykkedes");
+    throw new Error(detail || "Request failed");
   }
   return data;
 }
@@ -562,11 +487,10 @@ function setBusy(text) {
 }
 
 function setIdle() {
-  statusPill.textContent = "Klar";
+  statusPill.textContent = "Idle";
   for (const button of form.querySelectorAll("button")) button.disabled = false;
   downloadButton.disabled = !latestXml;
   updateImageControls();
-  updateSpecControls();
 }
 
 function setMessage(message, isError = false) {
