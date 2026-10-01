@@ -165,19 +165,18 @@ function validateProductForm(focusFirst = true) {
 
 function validateImages(errors) {
   const rows = [...imageRows.querySelectorAll(".image-row")];
-  const enabledRows = rows.filter((row) => row.querySelector(".image-enabled").checked);
-  if (!enabledRows.length) {
+  if (!rows.length) {
     addSectionValidationError(
       errors,
       imageRows.closest(".table-wrap"),
       document.querySelector("#add-image"),
-      "Mindst ét billede skal være valgt.",
+      "Mindst ét billede skal være tilføjet.",
     );
     return;
   }
 
   const filenames = new Map();
-  for (const row of enabledRows) {
+  for (const row of rows) {
     const rowNumber = rows.indexOf(row) + 1;
     const sourceUrl = row.querySelector(".image-source").value.trim();
     const filename = row.querySelector(".image-filename");
@@ -299,7 +298,7 @@ function collectDraft() {
     short_description: document.querySelector("#short-description").value,
     long_description: document.querySelector("#long-description").value,
     images: [...document.querySelectorAll(".image-row")].map((row) => ({
-      enabled: row.querySelector(".image-enabled").checked,
+      enabled: true,
       is_primary: row.querySelector(".image-primary").checked,
       source_url: row.querySelector(".image-source").value,
       filename_base: row.querySelector(".image-filename").value,
@@ -338,15 +337,12 @@ function updateGooglePreview() {
 
 function addImageRow(image) {
   const row = imageTemplate.content.firstElementChild.cloneNode(true);
-  const enabledInput = row.querySelector(".image-enabled");
   const primaryInput = row.querySelector(".image-primary");
-  enabledInput.checked = image.enabled ?? true;
   primaryInput.checked = image.is_primary ?? false;
   row.querySelector(".image-source").value = image.source_url || "";
   row.querySelector(".image-filename").value = image.filename_base || "";
   row.querySelector(".image-alt").value = image.alt_text || "";
   row.querySelector(".image-preview").src = image.source_url || "";
-  enabledInput.addEventListener("change", ensurePrimaryImage);
   primaryInput.addEventListener("change", () => selectPrimaryImage(row));
   row.querySelector(".order-image-up").addEventListener("click", () => moveImageRow(row, -1));
   row.querySelector(".order-image-down").addEventListener("click", () => moveImageRow(row, 1));
@@ -355,7 +351,7 @@ function addImageRow(image) {
     ensurePrimaryImage();
   });
   imageRows.appendChild(row);
-  if (primaryInput.checked && enabledInput.checked) {
+  if (primaryInput.checked) {
     selectPrimaryImage(row);
   } else {
     ensurePrimaryImage();
@@ -363,7 +359,6 @@ function addImageRow(image) {
 }
 
 function selectPrimaryImage(row) {
-  if (!row.querySelector(".image-enabled").checked) return;
   row.querySelector(".image-primary").checked = true;
   if (row === imageRows.firstElementChild) {
     updateImageControls();
@@ -374,11 +369,10 @@ function selectPrimaryImage(row) {
 
 function ensurePrimaryImage() {
   const rows = [...imageRows.querySelectorAll(".image-row")];
-  const enabledRows = rows.filter((row) => row.querySelector(".image-enabled").checked);
-  let primaryRow = enabledRows.find((row) => row.querySelector(".image-primary").checked);
+  let primaryRow = rows.find((row) => row.querySelector(".image-primary").checked);
 
-  if (!primaryRow && enabledRows.length) {
-    primaryRow = enabledRows[0];
+  if (!primaryRow && rows.length) {
+    primaryRow = rows[0];
     primaryRow.querySelector(".image-primary").checked = true;
     imageRows.prepend(primaryRow);
   }
@@ -444,11 +438,8 @@ function updateImageControls() {
   const rows = [...imageRows.querySelectorAll(".image-row")];
   const primaryRow = rows.find((row) => row.querySelector(".image-primary").checked);
   for (const [index, row] of rows.entries()) {
-    const enabled = row.querySelector(".image-enabled").checked;
     const primaryInput = row.querySelector(".image-primary");
-    row.querySelector(".image-filename").required = enabled;
-    primaryInput.disabled = !enabled;
-    if (!enabled) primaryInput.checked = false;
+    row.querySelector(".image-filename").required = true;
     row.classList.toggle("is-primary", primaryInput.checked);
     row.querySelector(".order-image-up").disabled = index === 0 || rows[index - 1] === primaryRow;
     row.querySelector(".order-image-down").disabled = index === rows.length - 1 || row === primaryRow;

@@ -332,21 +332,16 @@ td:last-child {
 
 .image-table th:nth-child(1),
 .image-table td:nth-child(1) {
-  width: 48px;
+  width: 66px;
 }
 
 .image-table th:nth-child(2),
 .image-table td:nth-child(2) {
-  width: 66px;
+  width: 82px;
 }
 
 .image-table th:nth-child(3),
 .image-table td:nth-child(3) {
-  width: 82px;
-}
-
-.image-table th:nth-child(4),
-.image-table td:nth-child(4) {
   width: 76px;
 }
 
@@ -419,7 +414,6 @@ td:last-child {
   background: #fff8f7;
 }
 
-.image-enabled,
 .image-primary {
   min-height: auto;
   width: auto;
