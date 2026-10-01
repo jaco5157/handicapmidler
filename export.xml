@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PRODUCT_EXPORT type="PRODUCTS">
+  <ELEMENTS>
+    <PRODUCT>
+      <GENERAL>
+        <PROD_NUM>315021</PROD_NUM>
+        <LANGUAGE_ID>26</LANGUAGE_ID>
+        <PROD_NAME>Krykke af alu med blødt plast håndtag</PROD_NAME>
+        <PROD_PHOTO_URL>/images/Krykstok-med-albuestoette.jpg</PROD_PHOTO_URL>
+      </GENERAL>
+      <DESCRIPTION>
+        <DESC_SHORT>&lt;p&gt;Behagelig krykke med blødt håndtag og albuestøtte.&lt;br /&gt;
+&lt;strong&gt;Minimumskøb 2 stk&lt;/strong&gt;.&lt;/p&gt;
+</DESC_SHORT>
+        <DESC_LONG>&lt;p&gt;
+	Krykke af aluminium med flot metallisk finish. Håndtaget er sort. Krykken &lt;b&gt;kan indstilles i højden&lt;/b&gt; mellem 94 - 121 cm.
+&lt;/p&gt;
+
+&lt;p&gt;
+	Håndtaget er &lt;b&gt;belagt med blød gummi,&lt;/b&gt; så du kan bruge krykken i længere tid af gangen uden at få ondt i hænderne.
+&lt;/p&gt;
+</DESC_LONG>
+        <DESC_LONG_2>&lt;table class="prodinfotable"&gt;
+	&lt;tbody&gt;
+		&lt;tr&gt;
+			&lt;td&gt;
+				Højdeindstillelig
+			&lt;/td&gt;
+			&lt;td&gt;
+				fra 94 til 121 cm
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;
+				Håndtagshøjde
+			&lt;/td&gt;
+			&lt;td&gt;
+				fra 72 til 95 cm
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;
+				Maks. brugervægt
+			&lt;/td&gt;
+			&lt;td&gt;
+				150 kg
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;
+				Vægt
+			&lt;/td&gt;
+			&lt;td&gt;
+				0,5 kg
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;
+				Dupsko størrelse
+			&lt;/td&gt;
+			&lt;td&gt;
+				19 mm
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;
+				HMI-nr.
+			&lt;/td&gt;
+			&lt;td&gt;
+				47496
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+</DESC_LONG_2>
+        <PROD_SEARCHWORD>Albuestok, krykke, krykker, 47496, stok</PROD_SEARCHWORD>
+        <META_DESCRIPTION>Krykke af sølvfarvet aluminium med sort håndtag og blødt greb. For øget synlighed er der en refleks på forsiden af håndtaget.
+</META_DESCRIPTION>
+        <TITLE>Krykke med albuestøtte og blødt håndtag</TITLE>
+      </DESCRIPTION>
+      <PRODUCT_CATEGORIES>
+        <PROD_CAT_ID priority="0">50</PROD_CAT_ID>
+      </PRODUCT_CATEGORIES>
+      <PRICES>
+        <PRICE>
+          <CURRENCY_CODE>DKK</CURRENCY_CODE>
+          <PRICE_B2B_ID>0</PRICE_B2B_ID>
+          <AMOUNT>1</AMOUNT>
+          <UNIT_PRICE>149,00</UNIT_PRICE>
+        </PRICE>
+      </PRICES>
+      <PRODUCT_MEDIA>
+        <MEDIA>
+          <MEDIA_ID>952</MEDIA_ID>
+          <MEDIA_URL>/images/upload/Krykken-er-udstyret-med-dupsko.jpg</MEDIA_URL>
+          <MEDIA_ALT_TEXT>Krykke med dupsko der ikke ridser gulvet</MEDIA_ALT_TEXT>
+        </MEDIA>
+        <MEDIA>
+          <MEDIA_ID>1416</MEDIA_ID>
+          <MEDIA_URL>/images/krykstok_greb_4518_480x600px.jpg</MEDIA_URL>
+          <MEDIA_ALT_TEXT />
+        </MEDIA>
+        <MEDIA>
+          <MEDIA_ID>1417</MEDIA_ID>
+          <MEDIA_URL>/images/krykstok_logo_4528_480x600px.jpg</MEDIA_URL>
+          <MEDIA_ALT_TEXT />
+        </MEDIA>
+        <MEDIA>
+          <MEDIA_ID>1418</MEDIA_ID>
+          <MEDIA_URL>/images/upload/Krykken-har-softgrip-for-bedre-komfort.jpg</MEDIA_URL>
+          <MEDIA_ALT_TEXT>Håndtaget er belagt med gummi for bedre komfort</MEDIA_ALT_TEXT>
+        </MEDIA>
+        <MEDIA>
+          <MEDIA_ID>1419</MEDIA_ID>
+          <MEDIA_URL>/images/upload/Krykken-er-udstyret-med-reflekser.jpg</MEDIA_URL>
+          <MEDIA_ALT_TEXT>Krykken er udstyret med reflekser for bedre synlighed</MEDIA_ALT_TEXT>
+        </MEDIA>
+        <MEDIA>
+          <MEDIA_ID>1420</MEDIA_ID>
+          <MEDIA_URL>/images/upload/Krykken-er-udstyret-med-reflekser.jpg</MEDIA_URL>
+          <MEDIA_ALT_TEXT>Krykken er udstyret med reflekser for bedre synlighed</MEDIA_ALT_TEXT>
+        </MEDIA>
+      </PRODUCT_MEDIA>
+    </PRODUCT>
+  </ELEMENTS>
+</PRODUCT_EXPORT>
