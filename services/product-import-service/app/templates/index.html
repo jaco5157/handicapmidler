@@ -151,12 +151,12 @@
           <section class="band">
             <div class="section-row">
               <h2>Specs</h2>
-              <button id="add-spec" type="button" class="secondary">Add</button>
             </div>
             <div class="table-wrap">
-              <table>
+              <table class="spec-table">
                 <thead>
                   <tr>
+                    <th>Order</th>
                     <th>Name</th>
                     <th>Value</th>
                     <th></th>
@@ -165,12 +165,16 @@
                 <tbody id="spec-rows"></tbody>
               </table>
             </div>
+            <div class="table-action">
+              <button id="add-spec" type="button" class="secondary">Add</button>
+            </div>
           </section>
 
           <footer class="action-bar">
             <button id="preview-button" type="button">Preview XML</button>
             <button id="download-button" type="button" class="secondary" disabled>Download XML</button>
             <button id="upload-button" type="button" class="primary">Generate Upload</button>
+            <button id="clear-button" type="button" class="danger">Clear</button>
           </footer>
         </form>
 
@@ -207,6 +211,12 @@
 
     <template id="spec-row-template">
       <tr class="spec-row">
+        <td>
+          <div class="spec-order-controls">
+            <button type="button" class="secondary order-spec-up" title="Move specification up" aria-label="Move specification up">↑</button>
+            <button type="button" class="secondary order-spec-down" title="Move specification down" aria-label="Move specification down">↓</button>
+          </div>
+        </td>
         <td><input class="spec-name" /></td>
         <td><input class="spec-value" /></td>
         <td><button type="button" class="icon-button remove-row">Remove</button></td>

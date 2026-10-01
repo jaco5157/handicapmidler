@@ -23,6 +23,7 @@ document.querySelector("#refresh-categories-button").addEventListener("click", r
 document.querySelector("#preview-button").addEventListener("click", previewProduct);
 document.querySelector("#upload-button").addEventListener("click", uploadProduct);
 document.querySelector("#download-button").addEventListener("click", downloadXml);
+document.querySelector("#clear-button").addEventListener("click", clearForm);
 document.querySelector("#add-image").addEventListener("click", () => addImageRow({}));
 document.querySelector("#add-spec").addEventListener("click", () => addSpecRow({}));
 form.addEventListener("input", refreshValidation);
@@ -368,7 +369,7 @@ function selectPrimaryImage(row) {
     updateImageControls();
     return;
   }
-  animateImageReorder(row, -1, () => imageRows.prepend(row));
+  animateTableReorder(row, imageRows, -1, () => imageRows.prepend(row), updateImageControls);
 }
 
 function ensurePrimaryImage() {
@@ -386,24 +387,34 @@ function ensurePrimaryImage() {
 }
 
 function moveImageRow(row, direction) {
+  moveTableRow(row, imageRows, direction, updateImageControls);
+}
+
+function moveTableRow(row, container, direction, updateControls) {
   const sibling = direction < 0 ? row.previousElementSibling : row.nextElementSibling;
   if (!sibling) return;
 
-  animateImageReorder(row, direction, () => {
-    if (direction < 0) {
-      imageRows.insertBefore(row, sibling);
-    } else {
-      imageRows.insertBefore(sibling, row);
-    }
-  });
+  animateTableReorder(
+    row,
+    container,
+    direction,
+    () => {
+      if (direction < 0) {
+        container.insertBefore(row, sibling);
+      } else {
+        container.insertBefore(sibling, row);
+      }
+    },
+    updateControls,
+  );
 }
 
-function animateImageReorder(movedRow, direction, reorder) {
-  const rows = [...imageRows.querySelectorAll(".image-row")];
+function animateTableReorder(movedRow, container, direction, reorder, updateControls) {
+  const rows = [...container.children];
   const previousPositions = new Map(rows.map((row) => [row, row.getBoundingClientRect().top]));
 
   reorder();
-  updateImageControls();
+  updateControls();
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -448,9 +459,27 @@ function addSpecRow(spec) {
   const row = specTemplate.content.firstElementChild.cloneNode(true);
   row.querySelector(".spec-name").value = spec.name || "";
   row.querySelector(".spec-value").value = spec.value || "";
-  row.querySelector(".remove-row").addEventListener("click", () => row.remove());
+  row.querySelector(".order-spec-up").addEventListener("click", () => moveSpecRow(row, -1));
+  row.querySelector(".order-spec-down").addEventListener("click", () => moveSpecRow(row, 1));
+  row.querySelector(".remove-row").addEventListener("click", () => {
+    row.remove();
+    updateSpecControls();
+  });
   specRows.appendChild(row);
+  updateSpecControls();
   return row;
+}
+
+function moveSpecRow(row, direction) {
+  moveTableRow(row, specRows, direction, updateSpecControls);
+}
+
+function updateSpecControls() {
+  const rows = [...specRows.querySelectorAll(".spec-row")];
+  for (const [index, row] of rows.entries()) {
+    row.querySelector(".order-spec-up").disabled = index === 0;
+    row.querySelector(".order-spec-down").disabled = index === rows.length - 1;
+  }
 }
 
 function setHmiSpec(hmiNumber) {
@@ -461,6 +490,7 @@ function setHmiSpec(hmiNumber) {
 
   if (!value) {
     for (const row of matchingRows) row.remove();
+    updateSpecControls();
     return;
   }
 
@@ -477,6 +507,23 @@ function setHmiSpec(hmiNumber) {
   row.querySelector(".spec-value").value = value;
   for (const duplicate of matchingRows) duplicate.remove();
   specRows.prepend(row);
+  updateSpecControls();
+}
+
+function clearForm() {
+  form.reset();
+  clearValidationErrors();
+  validationAttempted = false;
+  imageRows.replaceChildren();
+  specRows.replaceChildren();
+  addSpecRow({});
+  latestXml = "";
+  xmlPreview.value = "";
+  downloadButton.disabled = true;
+  setMessage("");
+  statusPill.textContent = "Idle";
+  updateGooglePreview();
+  document.querySelector("#supplier-url").focus();
 }
 
 async function postJson(url, payload) {
@@ -514,6 +561,7 @@ function setIdle() {
   for (const button of form.querySelectorAll("button")) button.disabled = false;
   downloadButton.disabled = !latestXml;
   updateImageControls();
+  updateSpecControls();
 }
 
 function setMessage(message, isError = false) {
