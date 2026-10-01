@@ -51,6 +51,12 @@ button.secondary {
   color: var(--accent);
 }
 
+button.danger {
+  background: #fff;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
 button.icon-button {
   border-color: var(--line);
   background: #fff;
