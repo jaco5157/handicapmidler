@@ -1,6 +1,6 @@
 # DanDomain CMS snippet manifest
 
-Captured on 2026-10-01. This manifest covers all 34 files tracked under `static/` before restructuring. Every file starts in **Review** because its current use could not be confirmed from the repository alone.
+Revised on 2026-10-09. This manifest covers all 18 files currently tracked under `static/`. Every unclassified file remains in **Review** because its current use could not be confirmed from the repository alone. The original 34-file inventory remains available from Git history and tag `pre-restructure-2026-10-01`.
 
 ## Status rules
 
@@ -11,30 +11,6 @@ Captured on 2026-10-01. This manifest covers all 34 files tracked under `static/
 To classify a file, only change its **Status** cell to `Active`, `Review`, or `Delete`. Files still marked `Review` will never be deleted automatically.
 
 These classifications are applied during **Phase 4 (CMS quarantine)**, not Phase 2. Phase 2 only moves the storefront assets and production services. Git history and tag `pre-restructure-2026-10-01` remain available for recovery.
-
-## Root snippets
-
-| Current file | Type / probable purpose | Status |
-| --- | --- | --- |
-| `static/backup-variantselector-new copy.js` | Variant selector script copy | Review |
-| `static/backup-variantselector-new.css` | Variant selector style backup | Review |
-| `static/backup-variantselector-new.js` | Variant selector script backup | Review |
-| `static/backup-variantselector.css` | Variant selector style backup | Review |
-| `static/backup-variantselector.js` | Variant selector script backup | Review |
-| `static/backup.css` | Unidentified style backup | Review |
-| `static/backup.html` | Unidentified HTML backup | Review |
-| `static/backup.js` | Unidentified script backup | Review |
-| `static/color-palette.css` | Shared colour definitions | Review |
-| `static/confirmationMail.html` | Order confirmation email template | Review |
-| `static/corfirmationLines.html` | Confirmation line-item template; filename contains a typo | Review |
-| `static/get-cvr.js` | CVR lookup script | Review |
-| `static/get.cvr.html` | CVR lookup markup | Review |
-| `static/inventory.html` | Inventory/availability markup | Review |
-| `static/metadata-fetcher.js` | Metadata helper script | Review |
-| `static/more-info-button.html` | Product more-information button | Review |
-| `static/orderStepRadio.css` | Checkout radio-button styling | Review |
-| `static/star-rating.css` | Product rating styling | Review |
-| `static/styles-backup.css` | General style backup | Review |
 
 ## Document snippets
 
@@ -64,7 +40,10 @@ These classifications are applied during **Phase 4 (CMS quarantine)**, not Phase
 
 | Current file | Type / probable purpose | Status |
 | --- | --- | --- |
+| `static/templates/confirmationMail.html` | Order confirmation email template | Review |
+| `static/templates/corfirmationLines.html` | Confirmation line-item template; filename contains a typo | Review |
 | `static/templates/product-info-table.html` | Product specification table template | Review |
+| `static/templates/video-wrapper.html` | Embedded product video wrapper | Review |
 
 ## Verification procedure
 
