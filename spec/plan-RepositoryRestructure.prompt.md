@@ -2,6 +2,18 @@
 
 Keep one repository, but reorganize it around clear deployment and ownership boundaries. Execute the migration as incremental, reversible commits while preserving current production behavior.
 
+## Readiness review
+
+| Phase | Status |
+| --- | --- |
+| 1 | Complete: baseline and CMS inventory recorded. |
+| 2 | Ready to implement steps 6-8 independently, subject to deployment verification. |
+| 3 | Ready to implement independently of Phase 2; dependency, path and data-safety fixes remain part of the work. |
+| 4 | Data review can start; active CMS placement needs live-location verification, and brand retention needs confirmation. |
+| 5 | Final integration waits for the moves; apply necessary ignore rules alongside each move. |
+
+Rechecked: product import **60 passed, 2 warnings**; local `/health` **HTTP 200**; inventory build **0 errors, 5 warnings**. XML generation and minification retain the October 1 baseline; production deployment checks remain pending.
+
 ## Target organization
 
 - **services**
@@ -31,19 +43,21 @@ Keep one repository, but reorganize it around clear deployment and ownership bou
    - Storefront minified output names
 3. Replace the outdated description in README.md with an index of all active components.
 4. Add architecture and deployment documentation covering:
-   - Purpose and owner
+   - Purpose
    - Runtime or invocation method
    - Inputs and outputs
    - Deployment trigger and destination
    - Required secrets
    - Test and rollback procedure
-5. Inventory every file under static. Record status, live CMS location, replacement, owner, last verification date and review deadline.
+5. Inventory every file under static. Record purpose and status.
+   - Mark all remaining CMS source files as `Active` (required) in the manifest and retain them throughout migration.
 
 ## Phase 2 — Establish production boundaries
 
 6. Move deploy into the storefront asset area.
    - Update all path filters, minification paths, verification paths and FTP source paths in deploy-workflow.yml.
    - Preserve the remote `assets/` destination and generated filenames.
+   - Fail verification unless both `javascripts.min.js` and `styles.min.css` exist; the current warning-only check is not a release gate.
    - Validate through `workflow_dispatch`.
 
 7. Move scripts/InventoryService into the services area as **inventory-sync**. This can run in parallel with step 6.
@@ -57,6 +71,8 @@ Keep one repository, but reorganize it around clear deployment and ownership bou
 8. Shorten services/product-import-service to **product-import**. This can run in parallel with steps 6–7.
    - Update commands in its README.
    - Update the DietPi guide, Docker Compose references and documentation.
+   - Back up and explicitly transfer the ignored `.env` and `data/` on existing installations; Git does not relocate them with tracked files.
+   - Preserve the existing Compose project identity or explicitly stop the old stack before starting the renamed project, avoiding duplicate stacks and port conflicts.
    - Preserve ports, environment names, volumes, authentication and deployment behavior.
    - Require identical or better test results before and after the move.
 
@@ -95,10 +111,11 @@ Steps 9–11 can proceed in parallel after the baseline is captured.
     - Ignore current supplier snapshots and generated output.
     - Do not treat live FTP downloads as source code.
 
-14. Move all unverified content from static into the CMS review quarantine.
-    - Group it into pages, components and styles.
-    - Promote files only after confirming their live DanDomain location.
-    - Delete confirmed `backup`, `copy` and superseded files after the review deadline.
+14. Retain every remaining CMS source file under static as required content.
+   - Preserve the subcategory and reusable-template groupings during relocation.
+   - Move files to `storefront/cms-snippets/active` only after confirming their live DanDomain usage.
+   - Place any still-unverified files in `storefront/cms-snippets/review` without changing their required status.
+   - Do not delete required files during migration. Any later removal needs explicit user approval and a separate reviewed commit.
     - Use the pre-migration tag and Git history instead of creating a permanent archive folder.
 
 15. Review graphics and move the SVG into the brand area only if it is a current source asset.
@@ -113,6 +130,7 @@ Steps 9–11 can proceed in parallel after the baseline is captured.
     - Secrets
     - OS metadata
     - Tool working directories
+   - Apply rules needed for each component in its move, rather than waiting for final cleanup. Ignore rules do not untrack existing data; review tracked supplier snapshots and reporting exports separately.
 
 17. Search for all obsolete path references, especially:
 
@@ -170,7 +188,6 @@ Steps 9–11 can proceed in parallel after the baseline is captured.
 
 6. **CMS snippets**
    - Verify each promoted file manually in DanDomain.
-   - Record its live location and verification date in the manifest.
    - Delete obsolete files in a separate reviewed commit.
 
 ## Decisions
@@ -179,7 +196,8 @@ Steps 9–11 can proceed in parallel after the baseline is captured.
 - Treat scheduled inventory synchronization as a production service.
 - Use incremental, reversible commits.
 - Keep and rehabilitate the scraper as a catalogue-audit tool.
-- Quarantine uncertain CMS content before deleting it.
+- Retain all remaining CMS source files as required; required status does not replace live-location verification.
+- Keep unverified required CMS content in review until its live location is confirmed.
 - Use Git history rather than permanent backup directories.
 - Preserve current production behavior and remote deployment destinations.
 - Exclude broad application rewrites, DanDomain contract changes and shared-library extraction from this restructuring.
