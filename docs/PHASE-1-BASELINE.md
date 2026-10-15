@@ -110,7 +110,6 @@ The remote workflow destination is `assets/`. Phase 2 must preserve both generat
 - Referral reporting uses a fixed relative input path.
 - The manual image script deletes all content under `./Compress/` after processing.
 - Every tracked file under `static/` lacks a verified live CMS mapping. All are quarantined administratively in the CMS manifest until manual verification.
-- Component owners are not documented. They are marked **Unassigned** rather than inferred.
 
 ## Phase 1 exit record
 
@@ -124,7 +123,6 @@ The remote workflow destination is `assets/`. Phase 2 must preserve both generat
 - [x] Root component index updated
 - [x] Architecture and deployment runbooks added
 - [x] All tracked files under `static/` entered in the CMS manifest
-- [ ] Operational owners assigned
 - [ ] CMS live locations manually verified
 
-The final two items require business/CMS knowledge and remain explicit follow-up work; no production location or owner was guessed during the repository audit.
+CMS live-location verification remains a Phase 4 promotion check.

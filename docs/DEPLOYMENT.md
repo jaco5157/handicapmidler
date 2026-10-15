@@ -130,5 +130,5 @@ For local reproduction, use the same container image against a temporary copy of
 
 - **Trigger/destination:** Manual installation into a verified DanDomain CMS location.
 - **Required access:** DanDomain administrator credentials; do not store them in this repository.
-- **Verification:** Record the exact live location, owner, and date in `docs/CMS-MANIFEST.md`; inspect the affected page at desktop and mobile widths.
+- **Verification:** Confirm live usage and inspect the affected page at desktop and mobile widths.
 - **Rollback:** Preserve the current live CMS content before replacement, then restore it if verification fails. Repository rollback uses Git history and `pre-restructure-2026-10-01`, not a permanent backup directory.

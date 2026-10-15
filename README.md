@@ -14,7 +14,7 @@ Applications, integrations, storefront assets, CMS snippets, and operational too
 | Component | Current location | Purpose | Operation |
 | --- | --- | --- | --- |
 | Automatically deployed assets | `deploy` | Storefront JavaScript and CSS | Minified on pushes to `main` affecting `deploy/**`, then synchronized to remote `assets/` |
-| CMS snippets | `static` | Manually installed DanDomain HTML, CSS, and JavaScript | Unverified content; see [CMS manifest](docs/CMS-MANIFEST.md) before use |
+| CMS snippets | `static` | Manually installed DanDomain HTML, CSS, and JavaScript | Required content; live locations await verification in the [CMS manifest](docs/CMS-MANIFEST.md) |
 | Brand candidate | `graphics` | SVG logo/brand source | Current use is not yet verified |
 
 ## Operational tools
@@ -40,4 +40,4 @@ Do not commit secrets, production exports, supplier snapshots, generated reports
 - [DanDomain CMS snippet manifest](docs/CMS-MANIFEST.md)
 - [Product-import deployment to DietPi](services/product-import-service/DEPLOY_DIETPI.md)
 
-Operational owners and CMS locations are deliberately marked unassigned/unverified where repository evidence is insufficient. Assign and verify them before promoting or deleting content.
+Verify live CMS locations before promoting content.
