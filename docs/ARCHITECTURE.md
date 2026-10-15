@@ -1,6 +1,6 @@
 # Repository architecture
 
-This repository is the monorepo for Handicapmidler.dk integrations, storefront assets, CMS snippets, and operational utilities. The paths below describe the repository before the restructuring moves begin.
+This repository is the monorepo for Handicapmidler.dk integrations, storefront assets, CMS snippets, and operational utilities. Production components and tools use the Phase 2 and 3 paths; reference data, CMS content and brand sources await Phase 4.
 
 ## System context
 
@@ -21,8 +21,7 @@ flowchart LR
 
 ### Product import
 
-- **Current path:** `services/product-import-service`
-- **Target path:** `services/product-import`
+- **Current path:** `services/product-import`
 - **Purpose:** Scrape a supplier product page, let an operator review the product, generate DanDomain product XML and image variants, and optionally upload/import them.
 - **Runtime:** Python 3.12/FastAPI in Docker Compose; production host is a 64-bit DietPi/Raspberry Pi with private access through Tailscale Serve.
 - **Invocation:** Operator-driven web UI. Deployment is a manual Git pull followed by a production Compose rebuild.
@@ -33,24 +32,22 @@ flowchart LR
 
 ### Inventory synchronization
 
-- **Current path:** `scripts/InventoryService`
-- **Target path:** `services/inventory-sync`
+- **Current path:** `services/inventory-sync`
 - **Purpose:** Convert supplier stock and movement exports into DanDomain inventory XML and trigger an update-only import.
 - **Runtime:** .NET 8 console application on a GitHub-hosted Ubuntu runner.
 - **Invocation:** `.github/workflows/inventory-workflow.yml`, manually or every day at 16:00 UTC.
 - **Inputs:** FTP files `VARER.LST`, `LAGERBEHOLD.LST`, and `LAGERBEVAEG.LST`, plus `exclude.txt`.
-- **Outputs:** `data/document.xml`, currently uploaded together with everything else under `data/` to `images/ImportExport/Inventory/Updated/`, followed by an update-only DanDomain import request.
+- **Outputs:** Only `document.xml` is staged in a separate runner-temporary upload directory and sent to `images/ImportExport/Inventory/Updated/`, followed by an update-only DanDomain import request.
 - **Secrets:** GitHub Actions secrets `ftp_server`, `ftp_username`, `ftp_password`, `api_upload_endpoint`, `api_username`, and `api_password`.
-- **Known migration constraints:** Input/output paths depend on the process working directory, and the exclusion path is separately hard-coded.
+- **Paths:** Required CLI arguments select the input directory, output XML and exclusion file. Paths are resolved once; providers do not infer repository locations.
 
 ### Storefront assets
 
-- **Current path:** `deploy`
-- **Target path:** `storefront/assets`
+- **Current path:** `storefront/assets`
 - **Purpose:** Maintain the JavaScript and CSS automatically deployed to the webshop.
 - **Runtime:** GitHub Actions using `devatherock/minify-js:1.0.3` and `SamKirkland/FTP-Deploy-Action@4.2.0`.
-- **Invocation:** A push to `main` changing `deploy/**`, or manual workflow dispatch.
-- **Inputs:** `deploy/javascripts.js` and `deploy/styles.css`.
+- **Invocation:** A push to `main` changing `storefront/assets/**` or its deployment workflow, or manual workflow dispatch.
+- **Inputs:** `storefront/assets/javascripts.js` and `storefront/assets/styles.css`.
 - **Outputs:** `javascripts.min.js` and `styles.min.css`, synchronized to the unchanged remote `assets/` destination.
 - **Secrets:** GitHub Actions secrets `ftp_server`, `ftp_username`, and `ftp_password`.
 
@@ -58,36 +55,33 @@ flowchart LR
 
 ### Catalogue audit
 
-- **Current path:** `scripts/product-scraper`
-- **Target path:** `tools/catalog-audit`
+- **Current path:** `tools/catalog-audit`
 - **Purpose:** Scrape Mobilex catalogue pages and report products missing from a DanDomain product export. This is a catalogue-gap audit, not the single-product import workflow.
 - **Runtime/invocation:** Manually executed Python scripts using Selenium, Chrome, pandas, and webdriver-manager.
-- **Inputs:** Hard-coded Mobilex category starting URLs and an exported product XML file.
+- **Inputs:** Default or CLI-selected Mobilex category starting URLs and an exported product XML file.
 - **Outputs:** Generated Mobilex and missing-product CSV reports.
 - **Secrets:** None identified.
-- **Known migration constraint:** Both scripts reference the nonexistent relative path `productService/generated`; the tool is not currently reproducible without manual path correction.
+- **Paths:** Default outputs and comparison inputs are relative to the tool's ignored `generated/` directory; CLI flags override them. Dependencies are pinned locally.
 
 ### Referral reporting
 
-- **Current path:** `scripts/statistics`
-- **Target path:** `tools/reporting/referrals`
+- **Current path:** `tools/reporting/referrals`
 - **Purpose:** Aggregate order referrer domains and display a chart.
 - **Runtime/invocation:** Manually executed Python script using pandas, matplotlib, and seaborn.
 - **Inputs:** Semicolon-delimited `referrals.csv` containing at least `REFERRER`.
-- **Outputs:** Interactive bar chart.
+- **Outputs:** Interactive bar chart or a CLI-selected image file.
 - **Secrets:** None identified, but order exports may contain sensitive production data and must not be committed.
-- **Known migration constraint:** The input path is hard-coded relative to the repository root.
+- **Data:** Input is required via `--input`; only synthetic fixtures are tracked. Real exports belong in ignored `private/` storage.
 
 ### Manual image preparation
 
-- **Current path:** `compress.sh`
-- **Target path:** `tools/image-prep`
+- **Current path:** `tools/image-prep`
 - **Purpose:** Manually trim images, convert them to JPEG, and make the four webshop image variants.
-- **Runtime/invocation:** Manual POSIX shell script requiring ImageMagick's `magick` command and Caesium CLI's `caesiumclt` command.
-- **Inputs:** Images placed in `./Compress/`.
-- **Outputs:** JPEG variants in `./Compressed/` named `name-p.jpg`, `name.jpg`, `name-r.jpg`, and `name-t.jpg`.
+- **Runtime/invocation:** Manual Bash script requiring ImageMagick's `magick` command and Caesium CLI's `caesiumclt` command.
+- **Inputs:** Explicit input, work and output directory arguments.
+- **Outputs:** JPEG variants named `name-p.jpg`, `name.jpg`, `name-r.jpg`, and `name-t.jpg` in the selected output directory.
 - **Secrets:** None.
-- **Safety:** The script recursively deletes all content under `./Compress/` after processing. The Pillow implementation in product import is authoritative for automated imports.
+- **Safety:** Only the per-run temporary workspace is deleted; `--keep-work` retains it. Original inputs are preserved. The Pillow implementation in product import is authoritative for automated imports; continued use of this manual tool remains unconfirmed.
 
 ## Reference and manually managed content
 

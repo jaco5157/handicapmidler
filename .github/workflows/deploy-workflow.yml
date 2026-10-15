@@ -3,7 +3,8 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'deploy/**'
+      - 'storefront/assets/**'
+      - '.github/workflows/deploy-workflow.yml'
     
   workflow_dispatch:
 
@@ -26,15 +27,12 @@ jobs:
       - name: Minify files
         uses: docker://devatherock/minify-js:1.0.3
         with:
-          directory: 'deploy'
+          directory: 'storefront/assets'
 
       - name: Verify minified files
         run: |
-          if [ ! -d "./deploy" ] || [ -z "$(find ./deploy -name '*.min.js' -o -name '*.min.css' 2>/dev/null)" ]; then
-            echo "Warning: No minified files found in deploy directory"
-          else
-            echo "Minified files verified successfully"
-          fi
+          test -s storefront/assets/javascripts.min.js
+          test -s storefront/assets/styles.min.css
 
       - name: Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.2.0
@@ -42,5 +40,5 @@ jobs:
           server: ${{ secrets.ftp_server }}
           username: ${{ secrets.ftp_username }}
           password: ${{ secrets.ftp_password }}
-          local-dir: ./deploy/
+          local-dir: ./storefront/assets/
           server-dir: assets/

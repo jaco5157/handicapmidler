@@ -6,8 +6,8 @@ FastAPI service for creating webshop product import XML from a supplier product 
 
 1. Scrapes title, HMI number, product number, and images from a Mobilex product URL.
 2. Lets the user edit product fields, SEO fields, image filenames/alt text, image order/primary image, descriptions, and specs.
-3. Generates a webshop product XML file matching the existing `export.xml` structure.
-4. Downloads renamed images and creates the four webshop variants used by `compress.sh`:
+3. Generates a webshop product XML file matching the existing [reference export](../../export.xml) structure.
+4. Downloads renamed images and creates the four webshop variants used by the [manual image tool](../../tools/image-prep/README.md):
    - `name-p.jpg`
    - `name.jpg`
    - `name-r.jpg`
@@ -20,7 +20,7 @@ By default the service runs in dry-run mode, so it generates files locally witho
 ## Local Setup
 
 ```bash
-cd services/product-import-service
+cd services/product-import
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -33,16 +33,17 @@ Open `http://127.0.0.1:8000`.
 ## Docker
 
 ```bash
-cd services/product-import-service
+cd services/product-import
 cp .env.example .env
 docker compose up --build
 ```
 
 Open `http://127.0.0.1:8765`.
 
-Generated files are stored in `services/product-import-service/data` when using Docker Compose.
+Generated files are stored in `services/product-import/data` when using Docker Compose. The Compose project, service and image identities remain `product-import-service`; the directory rename must not create a second stack.
 
 For Raspberry Pi/DietPi deployment, see [DEPLOY_DIETPI.md](DEPLOY_DIETPI.md).
+Existing installations must follow the [folder migration procedure](DEPLOY_DIETPI.md#existing-installation-folder-migration) to back up and transfer ignored `.env` and `data/` files before restarting.
 
 ## Access and Authentication
 
@@ -113,7 +114,7 @@ processing; the local copy remains in `data/xml` for troubleshooting.
 
 Use **Fetch latest** beside the product category field after deployment and whenever the webshop categories change. The server sends `API_USERNAME` and `API_PASSWORD` to `CATEGORY_EXPORT_ENDPOINT` as the POST form fields `user` and `password`.
 
-The downloaded file is validated before it replaces the current file and is stored as `data/categories.xml`. The `data` directory is mounted at `/app/data` by Docker Compose, so categories survive image rebuilds and container replacement until **Fetch latest** is used again. Both the legacy root `categories.xml` and the persistent `data` directory are excluded from Git.
+The downloaded file is validated before it replaces the current file and is stored as `data/categories.xml`. The `data` directory is mounted at `/app/data` by Docker Compose, so categories survive image rebuilds and container replacement until **Fetch latest** is used again. The persistent `data` directory is excluded from Git. The existing root `categories.xml` remains a tracked fallback for local runs.
 
 ## Image Download Safety
 
@@ -121,9 +122,9 @@ Uploaded product drafts contain image URLs. The service only downloads `http` an
 
 ## Image Compression
 
-The default `COMPRESSION_BACKEND=pillow` mirrors the output naming and long-edge sizing from `compress.sh` without requiring ImageMagick or Caesium in local development.
+The default `COMPRESSION_BACKEND=pillow` is authoritative for automated imports and uses the manual image tool's naming and long-edge sizes without requiring ImageMagick or Caesium.
 
-Set `COMPRESSION_BACKEND=external` to run an external toolchain equivalent to `compress.sh`. In that mode, `MAGICK_COMMAND` and `CAESIUM_COMMAND` must be available in the container or host environment.
+Set `COMPRESSION_BACKEND=external` to run the external toolchain. In that mode, `MAGICK_COMMAND` and `CAESIUM_COMMAND` must be available in the container or host environment.
 
 ## Image Naming
 
@@ -134,8 +135,16 @@ For product number `DF-240`, examples include `badestol-df-240`, `badestol-df-24
 ## Tests
 
 ```bash
-cd services/product-import-service
-pytest
+cd services/product-import
+AUTH_ENABLED=false AUTH_USERNAME= AUTH_PASSWORD_HASH= UPLOAD_ENABLED=false python -m pytest -q
+```
+
+To test in the application image from this service directory:
+
+```bash
+docker compose run --rm --no-deps \
+   -e AUTH_ENABLED=false -e AUTH_USERNAME= -e AUTH_PASSWORD_HASH= -e UPLOAD_ENABLED=false \
+   -v "$PWD:/app" product-import-service python -m pytest -q
 ```
 
 The test suite covers filename suggestions, price validation, specs table generation, XML mapping, optional specs omission, image variant planning, authentication, and image download safety.

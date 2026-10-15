@@ -8,15 +8,24 @@ namespace InventoryService.DataProviders;
 
 public class XMLDataProvider: IDataProvider
 {
+    private readonly string outputFile;
+    private readonly string exclusionFile;
+
+    public XMLDataProvider(string outputFile, string exclusionFile)
+    {
+        this.outputFile = Path.GetFullPath(outputFile);
+        this.exclusionFile = Path.GetFullPath(exclusionFile);
+    }
+
     public IEnumerable<InventoryItemDTO> GetInventoryItems()
     {
         throw new NotImplementedException();
     }
 
-    public void GenerateInventoryFile(IEnumerable<InventoryItemDTO>? items)
+    public void GenerateInventoryFile(IEnumerable<InventoryItemDTO> items)
     {
         var inventoryItemDtos = items as InventoryItemDTO[] ?? items.ToArray();
-        var excludedProductNumbers = File.ReadAllLines("InventoryService/exclude.txt");
+        var excludedProductNumbers = File.ReadAllLines(exclusionFile);
 
 
         var elements = new XElement("ELEMENTS");
@@ -32,7 +41,8 @@ public class XMLDataProvider: IDataProvider
                 elements)
             );
 
-        doc.Save(Directory.GetCurrentDirectory() + "//data//document.xml");
+        Directory.CreateDirectory(Path.GetDirectoryName(outputFile)!);
+        doc.Save(outputFile);
     }
     
     public IEnumerable<InventoryItemDTO> ConvertToDTO(IEnumerable<InventoryItemXML> items)

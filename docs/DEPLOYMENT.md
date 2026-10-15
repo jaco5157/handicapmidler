@@ -1,16 +1,16 @@
 # Build, deployment, and rollback runbook
 
-Commands in this document use the pre-restructure paths. Update them in the same commit as each Phase 2 or later move.
+Commands use the current repository paths. The Phase 1 baseline retains historical paths for comparison.
 
 ## Product import
 
 ### Local verification
 
-1. Copy `services/product-import-service/.env.example` to an untracked `.env` and keep `UPLOAD_ENABLED=false`.
+1. Copy `services/product-import/.env.example` to an untracked `.env` and keep `UPLOAD_ENABLED=false`.
 2. Build and start the local service:
 
    ```sh
-   cd services/product-import-service
+  cd services/product-import
    docker compose up --build --detach
    ```
 
@@ -32,6 +32,7 @@ Commands in this document use the pre-restructure paths. Update them in the same
 - **Destination:** Docker Compose on the DietPi host, bound to `127.0.0.1:8000` and exposed privately through Tailscale Serve.
 - **Command:** From the service directory, pull the reviewed revision and run `docker compose -f docker-compose.prod.yml up -d --build`.
 - **Persistent state:** Back up server-only `.env` and `data/` before deployment. The bind-mounted `data/` directory contains categories, generated XML, original images, and compressed images.
+- **Folder migration:** Follow [the existing-installation procedure](../services/product-import/DEPLOY_DIETPI.md#existing-installation-folder-migration) before the first pull containing the rename. Git does not move ignored state. Both Compose files retain project identity `product-import-service`; preserve any custom project-name override as well.
 - **Required secrets:** `AUTH_USERNAME`, `AUTH_PASSWORD_HASH`, `FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD`, `UPLOAD_ENDPOINT`, `API_USERNAME`, and `API_PASSWORD`. Keep uploads disabled until all upload and authentication settings are present.
 
 ### Production verification
@@ -53,8 +54,9 @@ Commands in this document use the pre-restructure paths. Update them in the same
 
 ### Build and controlled verification
 
-- Build with `.NET 8`: `dotnet build scripts/InventoryService/InventoryService.csproj --configuration Release`.
-- Run from the repository root. The current implementation expects lowercase input names under root `data/` and separately expects `InventoryService/exclude.txt` relative to the process working directory.
+- Build with `.NET 8`: `dotnet build services/inventory-sync/InventoryService.csproj --configuration Release`.
+- Test: `dotnet test services/inventory-sync/tests/InventoryService.Tests.csproj --configuration Release`.
+- Invoke with explicit paths as shown in the [inventory README](../services/inventory-sync/README.md). Lowercase input filenames are retained; no repository working directory is inferred.
 - Do not test with live supplier snapshots in Git. Use temporary controlled files with these formats:
   - `varer.LST`: product ID and product number, separated by `;`.
   - `lagerbehold.LST`: product ID and integer stock count, separated by `;`.
@@ -65,7 +67,7 @@ Commands in this document use the pre-restructure paths. Update them in the same
 ### Production deployment
 
 - **Trigger:** `.github/workflows/inventory-workflow.yml` runs manually or daily at 16:00 UTC.
-- **Destination:** The runner currently uploads all root `data/` content to `images/ImportExport/Inventory/Updated/` and then calls the update-only DanDomain import endpoint for `Inventory/Updated/document.xml`.
+- **Destination:** The runner downloads supplier files into a temporary input directory and stages only generated `document.xml` in a separate upload directory. FTP still targets `images/ImportExport/Inventory/Updated/`, followed by the update-only import endpoint for `Inventory/Updated/document.xml`.
 - **Required secrets:** `ftp_server`, `ftp_username`, `ftp_password`, `api_upload_endpoint`, `api_username`, and `api_password`.
 - **Release procedure:** Merge a reviewed revision to the workflow's checked-out branch, manually dispatch the workflow, inspect all steps and the resulting import, and only then rely on the next scheduled run.
 
@@ -80,13 +82,22 @@ Commands in this document use the pre-restructure paths. Update them in the same
 
 ### Build and verification
 
-The workflow runs `devatherock/minify-js:1.0.3` with `directory: deploy`. It creates `deploy/javascripts.min.js` and `deploy/styles.min.css`. Generated files are workflow artifacts only and should not be committed.
+The workflow runs `devatherock/minify-js:1.0.3` with `directory: storefront/assets`. Both nonempty `javascripts.min.js` and `styles.min.css` must exist before FTP runs. Generated files are ignored and must not be committed.
 
-For local reproduction, use the same container image against a temporary copy of `deploy/`; do not let a baseline run alter tracked sources. Compare output filenames first and hashes only when source content has not intentionally changed.
+From the repository root:
+
+```sh
+docker run --rm -v "$PWD:/github/workspace" -w /github/workspace \
+  -e INPUT_DIRECTORY=storefront/assets devatherock/minify-js:1.0.3
+test -s storefront/assets/javascripts.min.js
+test -s storefront/assets/styles.min.css
+```
+
+Compare output filenames first and hashes only when source content has not intentionally changed.
 
 ### Production deployment
 
-- **Trigger:** Push to `main` changing `deploy/**`, or `workflow_dispatch`.
+- **Trigger:** Push to `main` changing `storefront/assets/**` or the deployment workflow, or `workflow_dispatch`.
 - **Destination:** Remote FTP directory `assets/`.
 - **Required secrets:** `ftp_server`, `ftp_username`, and `ftp_password`.
 - **Verification:** Confirm the minification step reports both expected files, the FTP sync succeeds, and the storefront loads the updated assets without browser errors.
@@ -99,19 +110,19 @@ For local reproduction, use the same container image against a temporary copy of
 
 ## Catalogue audit
 
-- **Current invocation:** Manual Python execution of `scripts/product-scraper/scraper.py` followed by `scripts/product-scraper/product-comparer.py`.
+- **Invocation/setup/tests:** See [catalogue audit](../tools/catalog-audit/README.md). Run `scraper.py` followed by `product-comparer.py`; both accept explicit paths and default to tool-local `generated/` files.
 - **Inputs:** Mobilex catalogue pages, a DanDomain product export, Chrome/WebDriver, and Python packages pandas, selenium, and webdriver-manager.
 - **Outputs:** Generated CSV reports.
 - **Secrets:** None identified.
-- **Current support status:** Blocked by hard-coded `productService/generated` paths and unpinned dependencies. Do not present current output as a reproducible baseline until Phase 3 repairs it.
+- **Verification:** Fixture comparison tests and an opt-in browser smoke; generated CSVs remain ignored.
 - **Deployment:** None; this is a local operator tool.
 - **Rollback:** Discard generated files and return to the last reviewed script revision.
 
 ## Referral reporting
 
-- **Current invocation:** From `scripts/`, run `python statistics/referrals.py` with a semicolon-delimited `statistics/referrals.csv`. The fixed relative path does not resolve when the script is launched from the repository root or its own directory.
+- **Invocation/setup/tests:** See [referral reporting](../tools/reporting/referrals/README.md). Use `--input` for a semicolon-delimited CSV and optional `--output` for headless chart creation.
 - **Inputs:** A CSV containing `REFERRER`; order exports may be sensitive.
-- **Outputs:** Interactive seaborn/matplotlib chart.
+- **Outputs:** Interactive seaborn/matplotlib chart or a saved chart. Keep real exports in ignored `private/` storage, not fixtures.
 - **Secrets:** None identified.
 - **Deployment:** None; local-only reporting utility.
 - **Test:** Use a sanitized fixture and verify protocol/`www` removal, domain grouping, and chart creation.
@@ -119,10 +130,10 @@ For local reproduction, use the same container image against a temporary copy of
 
 ## Manual image preparation
 
-- **Invocation:** Run root `compress.sh` only from a dedicated working directory containing `Compress/`.
+- **Invocation/setup/tests:** See [manual image preparation](../tools/image-prep/README.md). Run `bash tools/image-prep/compress.sh INPUT_DIR WORK_DIR OUTPUT_DIR`.
 - **Requirements:** ImageMagick (`magick`) and Caesium CLI (`caesiumclt`).
-- **Inputs/outputs:** Reads `./Compress/`; writes variants under `./Compressed/`.
-- **Safety:** The final command deletes all content under `./Compress/`. Back up source images and confirm the current directory before running.
+- **Inputs/outputs:** Explicit directory arguments; originals are preserved and four JPEG variants are written to the output directory.
+- **Safety:** Temporary working files are deleted unless `--keep-work` is supplied. Cleanup is restricted to the workspace created by the current run.
 - **Deployment:** Result files are manually uploaded as required; no automated trigger is defined.
 - **Rollback:** Restore original images from backup. For automated product imports, use the product-import service's Pillow implementation instead.
 

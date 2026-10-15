@@ -8,14 +8,23 @@ namespace InventoryService.DataProviders;
 
 public class CSVDataProvider: IDataProvider
 {
-    private string productsFile => Path.Combine("data", "varer.LST");
-    private string inventoryFile => Path.Combine("data", "lagerbehold.LST");
-    private string movementFile => Path.Combine("data", "lagerbevaeg.LST");
+    private readonly string productsFile;
+    private readonly string inventoryFile;
+    private readonly string movementFile;
+
+    public CSVDataProvider(string inputDirectory)
+    {
+        var directory = Path.GetFullPath(inputDirectory);
+        productsFile = Path.Combine(directory, "varer.LST");
+        inventoryFile = Path.Combine(directory, "lagerbehold.LST");
+        movementFile = Path.Combine(directory, "lagerbevaeg.LST");
+    }
     public IEnumerable<InventoryItemDTO> GetInventoryItems()
     {
         var items = new Dictionary<string, InventoryItemCSV>();
         
-        var parser = new TextFieldParser(productsFile);
+        using var productsParser = new TextFieldParser(productsFile);
+        var parser = productsParser;
         parser.TextFieldType = FieldType.Delimited;
         parser.SetDelimiters(";");
 
@@ -28,7 +37,8 @@ public class CSVDataProvider: IDataProvider
             items.Add(row[0], new InventoryItemCSV(row[1]));
         }
 
-        parser = new TextFieldParser(inventoryFile);
+        using var inventoryParser = new TextFieldParser(inventoryFile);
+        parser = inventoryParser;
         parser.TextFieldType = FieldType.Delimited;
         parser.SetDelimiters(";");
 
@@ -49,7 +59,8 @@ public class CSVDataProvider: IDataProvider
             }
         }
         
-        parser = new TextFieldParser(movementFile);
+        using var movementParser = new TextFieldParser(movementFile);
+        parser = movementParser;
         parser.TextFieldType = FieldType.Delimited;
         parser.SetDelimiters(";");
 

@@ -7,12 +7,19 @@ Keep one repository, but reorganize it around clear deployment and ownership bou
 | Phase | Status |
 | --- | --- |
 | 1 | Complete: baseline and CMS inventory recorded. |
-| 2 | Ready to implement steps 6-8 independently, subject to deployment verification. |
-| 3 | Ready to implement independently of Phase 2; dependency, path and data-safety fixes remain part of the work. |
-| 4 | Data review can start; active CMS placement needs live-location verification, and brand retention needs confirmation. |
-| 5 | Final integration waits for the moves; apply necessary ignore rules alongside each move. |
+| 2 | Implemented: steps 6-8 and local verification pass. Production workflow dispatches and DietPi host migration remain pending. |
+| 3 | Implemented: steps 9-11, pinned dependencies, explicit paths, data-safety fixes and focused tests are complete. |
+| 4 | Partially ready: reference-data review and CMS review-placement can proceed; active CMS promotion and brand relocation still need live confirmation. |
+| 5 | Move-specific ignore rules and active documentation updated. Final integration and cleanup wait for Phase 4 and production verification. |
 
-Rechecked: product import **60 passed, 2 warnings**; local `/health` **HTTP 200**; inventory build **0 errors, 5 warnings**. XML generation and minification retain the October 1 baseline; production deployment checks remain pending.
+Verified 2026-10-15: product import **60 passed, 2 warnings** before and after relocation, in Docker and the recreated native environment; Compose build/start, `/health` **HTTP 200**, UI, dry-run XML/image preview and the relocated persistent mount pass. Inventory build and **8 tests** pass, including semantic baseline XML, exclusions and delivery dates. Both minified filenames and SHA-256 hashes match the October 1 baseline. Catalogue audit **6 tests** (including a live browser smoke), reporting **4 tests**, and image preparation **3 tests** plus real ImageMagick/Caesium processing pass. Workflow syntax and ignore checks pass. No production uploads or workflow dispatches were performed.
+
+Phase 4 readiness:
+
+- **Step 12:** Both root XML examples parse and contain one product each. Relocation can proceed with descriptive names, source-date/provenance notes and an explicit production-data classification; parsing alone does not establish sanitization.
+- **Step 13:** Sanitization work can proceed. The three tracked LST snapshots are approximately 0.5-0.7 MB each, not small sanitized fixtures; do not move the whole inventory directory into reference data unchanged.
+- **Step 14:** All 12 required CMS files are retained unchanged. They can move to `storefront/cms-snippets/review`, preserving subcategory/template groupings and required status. No live-location verification is recorded, so none is ready for `active` placement.
+- **Step 15:** Current use of `graphics/handicapmidler.svg` remains unconfirmed. No automated consumer was found; that is not evidence that the source can be removed or promoted as current branding.
 
 ## Target organization
 

@@ -1,3 +1,5 @@
+name: product-import-service
+
 services:
   product-import-service:
     build: .

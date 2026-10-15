@@ -6,14 +6,14 @@ Applications, integrations, storefront assets, CMS snippets, and operational too
 
 | Component | Current location | Purpose | Operation |
 | --- | --- | --- | --- |
-| Product import | [services/product-import-service](services/product-import-service/README.md) | Review supplier products and generate/upload DanDomain product XML and images | FastAPI in Docker Compose on DietPi; operator-driven UI |
-| Inventory synchronization | `scripts/InventoryService` | Generate and import stock XML from supplier exports | .NET 8 console app; scheduled and manually dispatched GitHub Actions workflow |
+| Product import | [services/product-import](services/product-import/README.md) | Review supplier products and generate/upload DanDomain product XML and images | FastAPI in Docker Compose on DietPi; operator-driven UI |
+| Inventory synchronization | [services/inventory-sync](services/inventory-sync/README.md) | Generate and import stock XML from supplier exports | .NET 8 console app; scheduled and manually dispatched GitHub Actions workflow |
 
 ## Storefront
 
 | Component | Current location | Purpose | Operation |
 | --- | --- | --- | --- |
-| Automatically deployed assets | `deploy` | Storefront JavaScript and CSS | Minified on pushes to `main` affecting `deploy/**`, then synchronized to remote `assets/` |
+| Automatically deployed assets | `storefront/assets` | Storefront JavaScript and CSS | Minified on pushes to `main` affecting `storefront/assets/**`, then synchronized to remote `assets/` |
 | CMS snippets | `static` | Manually installed DanDomain HTML, CSS, and JavaScript | Required content; live locations await verification in the [CMS manifest](docs/CMS-MANIFEST.md) |
 | Brand candidate | `graphics` | SVG logo/brand source | Current use is not yet verified |
 
@@ -21,9 +21,9 @@ Applications, integrations, storefront assets, CMS snippets, and operational too
 
 | Tool | Current location | Purpose | Current status |
 | --- | --- | --- | --- |
-| Catalogue audit | `scripts/product-scraper` | Compare Mobilex catalogue products with a DanDomain export | Retained for repair; current generated paths are broken |
-| Referral reporting | `scripts/statistics` | Summarize order referrer domains | Manual Python utility with a fixed input path |
-| Manual image preparation | `compress.sh` | Produce the four storefront JPEG variants | Manual/destructive working-directory tool; product import's Pillow flow is authoritative for automation |
+| Catalogue audit | [tools/catalog-audit](tools/catalog-audit/README.md) | Compare Mobilex catalogue products with a DanDomain export | Configurable CLI, pinned dependencies and comparison tests |
+| Referral reporting | [tools/reporting/referrals](tools/reporting/referrals/README.md) | Summarize order referrer domains | Configurable CSV input and chart output; synthetic fixture only |
+| Manual image preparation | [tools/image-prep](tools/image-prep/README.md) | Produce the four storefront JPEG variants | Explicit directories and isolated cleanup; product import's Pillow flow is authoritative for automation |
 
 ## Reference data
 
@@ -38,6 +38,6 @@ Do not commit secrets, production exports, supplier snapshots, generated reports
 - [Build, deployment, verification, and rollback runbook](docs/DEPLOYMENT.md)
 - [Phase 1 baseline](docs/PHASE-1-BASELINE.md)
 - [DanDomain CMS snippet manifest](docs/CMS-MANIFEST.md)
-- [Product-import deployment to DietPi](services/product-import-service/DEPLOY_DIETPI.md)
+- [Product-import deployment to DietPi](services/product-import/DEPLOY_DIETPI.md)
 
 Verify live CMS locations before promoting content.

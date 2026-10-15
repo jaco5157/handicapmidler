@@ -1,17 +1,28 @@
 import pandas as pd
 import xml.etree.ElementTree as ET
+import argparse
+from pathlib import Path
 
 """ This program compares the product data from Handicapmidler.dk with the scraped data from Mobilex.dk."""
-def main():
-    exported_df = get_product_data()
-    mobilex_df = get_mobilex_data()
+GENERATED_DIR = Path(__file__).resolve().parent / "generated"
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Find supplier products missing from a webshop export.")
+    parser.add_argument("--supplier-csv", type=Path, default=GENERATED_DIR / "mobilex_products.csv")
+    parser.add_argument("--export-xml", type=Path, default=GENERATED_DIR / "export.xml")
+    parser.add_argument("--output", type=Path, default=GENERATED_DIR / "products_missing_in_export.csv")
+    args = parser.parse_args(argv)
+    exported_df = get_product_data(args.export_xml)
+    mobilex_df = get_mobilex_data(args.supplier_csv)
 
     print(f"{len(mobilex_df)} products found on Mobilex.dk")
     print(f"{len(exported_df)} products found in Handicapmidler.dk")
 
     """ List products that are in Mobilex but not in the export.xml file """
     missing_df = list_products_missing_in_export(mobilex_df, exported_df)
-    missing_df.to_csv("productService/generated/products_missing_in_export.csv", index=False)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    missing_df.to_csv(args.output, index=False)
 
 def list_products_missing_in_export(mobilex_df, exported_df):
     merged_df = mobilex_df.merge(exported_df, left_on='product_number', right_on='GENERAL_PROD_NUM', how='left', indicator=True)
@@ -31,15 +42,18 @@ def filter_categories(df: pd.DataFrame) -> pd.DataFrame:
     exclude_list = spare_parts + top_level_categories
     return df[~df["category_name"].isin(exclude_list)]
 
-def get_mobilex_data(csv_file = "productService/generated/mobilex_products.csv") -> pd.DataFrame:
-    df = pd.read_csv(csv_file, sep=';')
+def get_mobilex_data(csv_file=GENERATED_DIR / "mobilex_products.csv") -> pd.DataFrame:
+    df = pd.read_csv(csv_file, sep=';', dtype=str, keep_default_na=False)
+    required = {"product_number", "product_name", "category_name", "product_url"}
+    if not required.issubset(df.columns):
+        raise ValueError(f"Supplier CSV requires columns: {', '.join(sorted(required))}")
     df = filter_categories(df)
     df = df.drop_duplicates(subset=['product_number'])
     df = df.reset_index(drop=True)
 
     return df
 
-def get_product_data(xml_file = 'productService/generated/export.xml') -> pd.DataFrame:
+def get_product_data(xml_file=GENERATED_DIR / "export.xml") -> pd.DataFrame:
     # Parse the XML file
     tree = ET.parse(xml_file)
     root = tree.getroot()
@@ -48,7 +62,10 @@ def get_product_data(xml_file = 'productService/generated/export.xml') -> pd.Dat
     products = []
     
     # Process each product element
-    for product in root.find('ELEMENTS').findall('PRODUCT'):
+    elements = root.find('ELEMENTS')
+    if root.tag != "PRODUCT_EXPORT" or elements is None:
+        raise ValueError("Expected PRODUCT_EXPORT with ELEMENTS")
+    for product in elements.findall('PRODUCT'):
         product_data = {}
         
         # Extract data from each section
@@ -73,7 +90,12 @@ def get_product_data(xml_file = 'productService/generated/export.xml') -> pd.Dat
         products.append(product_data)
     
     # Create DataFrame from the collected data
-    return pd.DataFrame(products)
+    if not products:
+        return pd.DataFrame(columns=["GENERAL_PROD_NUM"])
+    result = pd.DataFrame(products)
+    if "GENERAL_PROD_NUM" not in result.columns:
+        raise ValueError("Export products require GENERAL/PROD_NUM")
+    return result
 
 
 if __name__ == "__main__":

@@ -10,6 +10,9 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 import queue
+import argparse
+import os
+from pathlib import Path
 
 starting_urls = ["https://mobilex.dk/hjaelpemidler/rollatorer/","https://mobilex.dk/reservedele-tilbehoer/forhjul-til-koerestole/1/"]
 
@@ -61,19 +64,20 @@ def scrape_mobilex_products(url, driver) -> pd.DataFrame:
             except Exception as e:
                 print(f"Error processing a product: {e}")
         
-    except:
-        print("Timed out waiting for page to load")
+    except Exception as error:
+        raise RuntimeError(f"Could not scrape {url}") from error
     
     df = pd.DataFrame(data)
     return df
     
 
-def get_categories(driver):
+def get_categories(driver, urls=None):
     categories = []
-    for url in starting_urls:
+    for url in urls or starting_urls:
         driver.get(url)
-        time.sleep(3)
-        submenu = driver.find_element(By.CSS_SELECTOR, ".submenu")
+        submenu = WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".submenu"))
+        )
         links = submenu.find_elements(By.TAG_NAME, "a")
         for link in links:
             category_name = driver.execute_script("return arguments[0].textContent", link).strip()
@@ -88,7 +92,13 @@ def get_categories(driver):
 def get_driver():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    if os.environ.get("CHROME_BIN"):
+        chrome_options.binary_location = os.environ["CHROME_BIN"]
+    driver_path = os.environ.get("SELENIUM_DRIVER_PATH") or ChromeDriverManager().install()
+    driver = webdriver.Chrome(service=Service(driver_path), options=chrome_options)
+    driver.set_page_load_timeout(60)
     return driver
 
 def scrape_category(category_row, driver_pool):
@@ -105,27 +115,39 @@ def scrape_category(category_row, driver_pool):
 
 NUM_WORKERS = 4
 
-if __name__ == "__main__":
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Scrape the Mobilex catalogue for a gap audit.")
+    parser.add_argument("--output", type=Path, default=Path(__file__).resolve().parent / "generated/mobilex_products.csv")
+    parser.add_argument("--start-url", action="append")
+    parser.add_argument("--workers", type=int, default=NUM_WORKERS)
+    args = parser.parse_args(argv)
+    if args.workers < 1:
+        parser.error("--workers must be positive")
     driver = get_driver()
     print("Getting product categories...")
-    categories = get_categories(driver)
-    driver.quit()
+    try:
+        categories = get_categories(driver, args.start_url)
+    finally:
+        driver.quit()
+    if categories.empty:
+        raise RuntimeError("No categories found; no catalogue was written")
     print(f"Found {len(categories)} categories")
 
     category_rows = [row for _, row in categories.iterrows()]
 
     driver_pool = queue.Queue()
-    drivers = [get_driver() for _ in range(NUM_WORKERS)]
-    for d in drivers:
-        driver_pool.put(d)
-
+    drivers = []
     try:
-        with ThreadPoolExecutor(max_workers=NUM_WORKERS) as executor:
+        for _ in range(args.workers):
+            driver = get_driver()
+            drivers.append(driver)
+            driver_pool.put(driver)
+        with ThreadPoolExecutor(max_workers=args.workers) as executor:
             futures = [executor.submit(scrape_category, row, driver_pool) for row in category_rows]
             results = [f.result() for f in as_completed(futures)]
     finally:
-        for d in drivers:
-            d.quit()
+        for driver in drivers:
+            driver.quit()
 
     products_df = pd.concat(results, ignore_index=True)
 
@@ -133,8 +155,15 @@ if __name__ == "__main__":
     print(products_df.head())
 
     # Save to CSV
-    products_df.to_csv("productService/generated/mobilex_products.csv", index=False, sep=';')
-    print("\nData saved to mobilex_products.csv")
+    if products_df.empty:
+        raise RuntimeError("No products found; no catalogue was written")
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    products_df.to_csv(args.output, index=False, sep=';')
+    print(f"\nData saved to {args.output}")
+
+
+if __name__ == "__main__":
+    main()
 
 
     

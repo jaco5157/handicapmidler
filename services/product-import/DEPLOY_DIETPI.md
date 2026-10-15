@@ -87,10 +87,10 @@ Clone or copy this repository to the Pi. Example with Git:
 mkdir -p ~/apps
 cd ~/apps
 git clone <your-repo-url> handicapmidler
-cd handicapmidler/services/product-import-service
+cd handicapmidler/services/product-import
 ```
 
-If the repository is private, configure SSH keys on the Pi first, or copy the `services/product-import-service` folder with `rsync`.
+If the repository is private, configure SSH keys on the Pi first, or copy the `services/product-import` folder with `rsync`.
 
 ## 5. Create the environment file
 
@@ -142,7 +142,7 @@ Keep `.env` only on the server and do not commit it.
 
 ## 6. Build and start
 
-From `services/product-import-service` on the Pi:
+From `services/product-import` on the Pi:
 
 ```bash
 docker compose -f docker-compose.prod.yml up -d --build
@@ -195,17 +195,51 @@ Open the service from an allowed Tailscale device and log in with `AUTH_USERNAME
 The generated XML and image files are persisted in:
 
 ```text
-services/product-import-service/data
+services/product-import/data
 ```
 
 ## 8. Update the deployment
 
 ```bash
-cd ~/apps/handicapmidler/services/product-import-service
+cd ~/apps/handicapmidler/services/product-import
 git pull
 docker compose -f docker-compose.prod.yml up -d --build
 docker image prune -f
 ```
+
+### Existing-installation folder migration
+
+Do this once, **before pulling the directory rename**, on each existing installation. Git does not relocate ignored `.env` or `data/`. Stop the old stack before changing its bind mount. Both new Compose files pin the default project name to `product-import-service`; retain any custom project name with `COMPOSE_PROJECT_NAME` or the same `-p` flag on every command.
+
+From the repository root, with the old service still present:
+
+```bash
+cd ~/apps/handicapmidler
+old=services/product-import-service
+new=services/product-import
+export COMPOSE_PROJECT_NAME="$(docker compose -f "$old/docker-compose.prod.yml" config --format json | python3 -c 'import json,sys; print(json.load(sys.stdin)["name"])')"
+backup_dir="$HOME/backups/product-import-$(date +%Y%m%d-%H%M%S)"
+mkdir -p "$backup_dir"
+chmod 700 "$backup_dir"
+tar -czf "$backup_dir/state.tgz" -C "$old" .env data
+chmod 600 "$backup_dir/state.tgz"
+docker compose -f "$old/docker-compose.prod.yml" down
+git pull --ff-only
+test -d "$new"
+test ! -e "$new/.env" && test ! -e "$new/data"
+cp -p "$old/.env" "$new/.env"
+cp -a "$old/data" "$new/data"
+cd "$new"
+docker compose -f docker-compose.prod.yml up -d --build
+curl --fail http://127.0.0.1:8000/health
+docker compose -f docker-compose.prod.yml ps
+```
+
+Run each command only after the preceding command succeeds. Do not overwrite a nonempty destination; reconcile it with the backup first. If `PRODUCT_IMPORT_ENV_FILE` points outside the service, back up that file separately and preserve its absolute path instead of copying a local `.env`. For development installations, use `docker-compose.yml` and port `8765` throughout this procedure.
+
+Verify authentication, existing categories/generated files, the UI and a dry-run XML/image preview before enabling uploads. Keep the backup outside the checkout. For rollback, stop the renamed stack, restore the previous revision and state into its original directory, then start it using the same project identity. Never run both stacks against the same port or data.
+
+For non-container installations, recreate `.venv` at the new path and reinstall `requirements.txt`; virtual environments contain absolute paths and cannot be moved reliably.
 
 ## 9. Back up generated files
 
