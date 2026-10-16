@@ -9,7 +9,7 @@ Keep one repository, but reorganize it around clear deployment and ownership bou
 | 1 | Complete: baseline and CMS inventory recorded. |
 | 2 | Implemented: steps 6-8 and local verification pass. Production workflow dispatches and DietPi host migration remain pending. |
 | 3 | Implemented: steps 9-11, pinned dependencies, explicit paths, data-safety fixes and focused tests are complete. |
-| 4 | Partially ready: reference-data review and CMS review-placement can proceed; active CMS promotion and brand relocation still need live confirmation. |
+| 4 | Ready to implement: CMS live-location verification is recorded and the store logo is confirmed. XML provenance and inventory sanitization remain part of the work. |
 | 5 | Move-specific ignore rules and active documentation updated. Final integration and cleanup wait for Phase 4 and production verification. |
 
 Verified 2026-10-15: product import **60 passed, 2 warnings** before and after relocation, in Docker and the recreated native environment; Compose build/start, `/health` **HTTP 200**, UI, dry-run XML/image preview and the relocated persistent mount pass. Inventory build and **8 tests** pass, including semantic baseline XML, exclusions and delivery dates. Both minified filenames and SHA-256 hashes match the October 1 baseline. Catalogue audit **6 tests** (including a live browser smoke), reporting **4 tests**, and image preparation **3 tests** plus real ImageMagick/Caesium processing pass. Workflow syntax and ignore checks pass. No production uploads or workflow dispatches were performed.
@@ -18,8 +18,8 @@ Phase 4 readiness:
 
 - **Step 12:** Both root XML examples parse and contain one product each. Relocation can proceed with descriptive names, source-date/provenance notes and an explicit production-data classification; parsing alone does not establish sanitization.
 - **Step 13:** Sanitization work can proceed. The three tracked LST snapshots are approximately 0.5-0.7 MB each, not small sanitized fixtures; do not move the whole inventory directory into reference data unchanged.
-- **Step 14:** All 12 required CMS files are retained unchanged. They can move to `storefront/cms-snippets/review`, preserving subcategory/template groupings and required status. No live-location verification is recorded, so none is ready for `active` placement.
-- **Step 15:** Current use of `graphics/handicapmidler.svg` remains unconfirmed. No automated consumer was found; that is not evidence that the source can be removed or promoted as current branding.
+- **Step 14:** All 12 required CMS files are retained unchanged. Manual live-location verification is recorded in the [Phase 1 exit record](../docs/PHASE-1-BASELINE.md#phase-1-exit-record); they are ready for `storefront/cms-snippets/active`, preserving subcategory/template groupings and required status.
+- **Step 15:** The owner confirms `graphics/handicapmidler.svg` is the current store logo. An unchanged copy is retained at `storefront/assets/handicapmidler.svg` for the existing asset deployment; the original remains in `graphics/`.
 
 ## Target organization
 
@@ -27,10 +27,9 @@ Phase 4 readiness:
   - **product-import** — FastAPI product import application
   - **inventory-sync** — scheduled .NET inventory integration
 - **storefront**
-  - **assets** — automatically deployed CSS and JavaScript
+   - **assets** — automatically deployed CSS, JavaScript and store logo
   - **cms-snippets/active** — verified, manually installed DanDomain snippets
   - **cms-snippets/review** — quarantined content with uncertain usage
-  - **brand** — current logos and brand sources
 - **tools**
   - **catalog-audit** — repaired product scraper/comparer
   - **reporting/referrals** — statistics utility
@@ -125,7 +124,7 @@ Steps 9–11 can proceed in parallel after the baseline is captured.
    - Do not delete required files during migration. Any later removal needs explicit user approval and a separate reviewed commit.
     - Use the pre-migration tag and Git history instead of creating a permanent archive folder.
 
-15. Review graphics and move the SVG into the brand area only if it is a current source asset.
+15. Retain an unchanged copy of the confirmed store logo in `storefront/assets/handicapmidler.svg`, preserving the original in `graphics/`.
 
 ## Phase 5 — Integration and cleanup
 

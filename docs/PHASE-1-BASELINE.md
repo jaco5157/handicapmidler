@@ -123,6 +123,6 @@ The remote workflow destination is `assets/`. Phase 2 must preserve both generat
 - [x] Root component index updated
 - [x] Architecture and deployment runbooks added
 - [x] All tracked files under `static/` entered in the CMS manifest
-- [ ] CMS live locations manually verified
+- [x] CMS live locations manually verified
 
 CMS live-location verification remains a Phase 4 promotion check.
