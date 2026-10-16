@@ -1,6 +1,6 @@
 # Repository architecture
 
-This repository is the monorepo for Handicapmidler.dk integrations, storefront assets, CMS snippets, and operational utilities. Production components and tools use the Phase 2 and 3 paths; reference data, CMS content and brand sources await Phase 4.
+This repository is the monorepo for Handicapmidler.dk integrations, storefront assets, CMS snippets, and operational utilities. Production components, tools, reference data and verified CMS content use their restructured paths.
 
 ## System context
 
@@ -44,11 +44,11 @@ flowchart LR
 ### Storefront assets
 
 - **Current path:** `storefront/assets`
-- **Purpose:** Maintain the JavaScript and CSS automatically deployed to the webshop.
+- **Purpose:** Maintain the JavaScript, CSS and confirmed store logo automatically deployed to the webshop.
 - **Runtime:** GitHub Actions using `devatherock/minify-js:1.0.3` and `SamKirkland/FTP-Deploy-Action@4.2.0`.
 - **Invocation:** A push to `main` changing `storefront/assets/**` or its deployment workflow, or manual workflow dispatch.
-- **Inputs:** `storefront/assets/javascripts.js` and `storefront/assets/styles.css`.
-- **Outputs:** `javascripts.min.js` and `styles.min.css`, synchronized to the unchanged remote `assets/` destination.
+- **Inputs:** `storefront/assets/javascripts.js`, `storefront/assets/styles.css` and `storefront/assets/handicapmidler.svg`.
+- **Outputs:** `javascripts.min.js`, `styles.min.css` and the unchanged logo, synchronized to the remote `assets/` destination.
 - **Secrets:** GitHub Actions secrets `ftp_server`, `ftp_username`, and `ftp_password`.
 
 ## Supported operational tools
@@ -87,24 +87,24 @@ flowchart LR
 
 ### CMS snippets
 
-- **Current path:** `static`
-- **Target path:** `storefront/cms-snippets/review` until each snippet is verified, then optionally `storefront/cms-snippets/active`.
+- **Current path:** `storefront/cms-snippets/active`, grouped into `subcats/` and `templates/`.
+- **Review path:** `storefront/cms-snippets/review` for any future required snippets awaiting live-location verification.
 - **Purpose:** HTML, CSS, and JavaScript manually copied into DanDomain CMS locations.
 - **Invocation:** Manual review and installation in DanDomain; no automated deployment exists.
-- **Inputs/outputs:** Repository snippets are copied to an as-yet undocumented CMS page, template, or component location.
+- **Inputs/outputs:** Repository snippets are manually copied to their verified DanDomain page, template, or component location.
 - **Secrets:** DanDomain administrator access, managed outside this repository.
-- **Control:** `docs/CMS-MANIFEST.md` records required content. Retain every listed file and verify its live CMS location before active placement.
+- **Control:** [CMS manifest](CMS-MANIFEST.md) records all 12 required files. Live-location verification is recorded in the [Phase 1 exit record](PHASE-1-BASELINE.md#phase-1-exit-record). Retain all files; later removal requires explicit approval and separate review.
 
 ### Brand source
 
 - **Current path:** `graphics/handicapmidler.svg`
-- **Target path:** `storefront/brand` only if its current use is confirmed.
-- **Purpose:** Candidate vector logo/brand source.
-- **Status:** Unverified; no automated consumer was identified.
+- **Deployment copy:** `storefront/assets/handicapmidler.svg`.
+- **Purpose:** Confirmed current store logo; the original and deployment copy are byte-identical.
+- **Deployment:** The existing asset workflow publishes the copy to remote `assets/`; no current logo URL is changed.
 
 ### Reference exports and inventory samples
 
-- **Current paths:** Root `export.xml`, root `export-sample-all-fields.xml`, and `inventory/`.
-- **Target paths:** `reference/dandomain` and `reference/inventory`.
-- **Purpose:** Examples of DanDomain XML and supplier inventory formats.
-- **Control:** Production exports and supplier snapshots must be removed or sanitized before they are retained as fixtures.
+- **Current paths:** [DanDomain examples](../reference/dandomain/README.md) and [inventory fixtures](../reference/inventory/README.md).
+- **Purpose:** Preserve product XML contract references and small synthetic inventory inputs.
+- **Classification:** XML examples are unchanged, unsanitized production-derived catalogue data with documented Git source dates; actual export dates are unknown. Inventory fixtures contain only synthetic product numbers and controlled stock/movement values.
+- **Control:** Tests consume the inventory fixtures. Supplier snapshots and product CSV exports are not tracked; root `inventory/`, service-local data and generated reference XML are ignored.

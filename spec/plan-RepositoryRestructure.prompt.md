@@ -9,17 +9,19 @@ Keep one repository, but reorganize it around clear deployment and ownership bou
 | 1 | Complete: baseline and CMS inventory recorded. |
 | 2 | Implemented: steps 6-8 and local verification pass. Production workflow dispatches and DietPi host migration remain pending. |
 | 3 | Implemented: steps 9-11, pinned dependencies, explicit paths, data-safety fixes and focused tests are complete. |
-| 4 | Ready to implement: CMS live-location verification is recorded and the store logo is confirmed. XML provenance and inventory sanitization remain part of the work. |
-| 5 | Move-specific ignore rules and active documentation updated. Final integration and cleanup wait for Phase 4 and production verification. |
+| 4 | Implemented: XML examples relocated and classified, synthetic inventory fixtures tested, supplier snapshots untracked, and all 12 verified CMS files moved unchanged. The confirmed logo copy matches the original. |
+| 5 | Move-specific ignore rules and active documentation updated. Final integration and cleanup remain pending, including production verification. |
 
 Verified 2026-10-15: product import **60 passed, 2 warnings** before and after relocation, in Docker and the recreated native environment; Compose build/start, `/health` **HTTP 200**, UI, dry-run XML/image preview and the relocated persistent mount pass. Inventory build and **8 tests** pass, including semantic baseline XML, exclusions and delivery dates. Both minified filenames and SHA-256 hashes match the October 1 baseline. Catalogue audit **6 tests** (including a live browser smoke), reporting **4 tests**, and image preparation **3 tests** plus real ImageMagick/Caesium processing pass. Workflow syntax and ignore checks pass. No production uploads or workflow dispatches were performed.
 
-Phase 4 readiness:
+Phase 4 implementation (2026-10-16):
 
-- **Step 12:** Both root XML examples parse and contain one product each. Relocation can proceed with descriptive names, source-date/provenance notes and an explicit production-data classification; parsing alone does not establish sanitization.
-- **Step 13:** Sanitization work can proceed. The three tracked LST snapshots are approximately 0.5-0.7 MB each, not small sanitized fixtures; do not move the whole inventory directory into reference data unchanged.
-- **Step 14:** All 12 required CMS files are retained unchanged. Manual live-location verification is recorded in the [Phase 1 exit record](../docs/PHASE-1-BASELINE.md#phase-1-exit-record); they are ready for `storefront/cms-snippets/active`, preserving subcategory/template groupings and required status.
+- **Step 12:** Both examples are retained byte-for-byte under `reference/dandomain` with descriptive names. The local README records first-tracked Git source dates, unknown actual export dates, purpose and an explicit unsanitized production-derived catalogue-data classification.
+- **Step 13:** `reference/inventory` contains three tiny synthetic LST inputs and a synthetic exclusion list consumed by the semantic baseline test. The three supplier LST snapshots and product CSV export remain locally in ignored root `inventory/`, no longer tracked.
+- **Step 14:** All 12 required CMS files are retained byte-for-byte under `storefront/cms-snippets/active`, preserving subcategory/template groupings, filenames and required status. Manual live-location verification remains recorded in the [Phase 1 exit record](../docs/PHASE-1-BASELINE.md#phase-1-exit-record); the CMS manifest links to the current sources.
 - **Step 15:** The owner confirms `graphics/handicapmidler.svg` is the current store logo. An unchanged copy is retained at `storefront/assets/handicapmidler.svg` for the existing asset deployment; the original remains in `graphics/`.
+
+Phase 4 verification: inventory Release build and **8 tests** pass; controlled CLI generation produces valid XML with two products. Both relocated XML examples parse. All 12 CMS snippets, both XML examples and the logo copy pass byte-identity checks. Documentation links, ignore rules and whitespace checks pass; the four untracked inventory data files remain unchanged locally. No commits, workflow dispatches or production changes were performed.
 
 ## Target organization
 

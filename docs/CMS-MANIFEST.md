@@ -1,33 +1,32 @@
 # DanDomain CMS snippet manifest
 
-All files below are **Active (required)** and must be retained during restructuring.
+All 12 files below are **Active (required)** and must be retained during restructuring. Their live usage is manually verified in the [Phase 1 exit record](PHASE-1-BASELINE.md#phase-1-exit-record).
 
 ## Migration rules
 
 - `Active` records required content, not verified live usage.
 - Verify live usage before moving a file to `storefront/cms-snippets/active`.
 - Use `storefront/cms-snippets/review` for files awaiting that verification, without changing their required status.
-
-CMS relocation belongs to **Phase 4**, not Phase 2.
+- Preserve the subcategory/template groupings. Any later removal requires explicit user approval and a separate reviewed commit.
 
 ## Subcategory snippets
 
 | Current file | Purpose | Status |
 | --- | --- | --- |
-| `static/subcats/badestole.html` | Bath-chair category content | Active |
-| `static/subcats/dæk-punkterfri.html` | Puncture-free tyre category content | Active |
-| `static/subcats/dæk.html` | Tyre category content | Active |
-| `static/subcats/forhjul.html` | Front-wheel category content | Active |
-| `static/subcats/kørestole.html` | Wheelchair category content | Active |
-| `static/subcats/puder.html` | Cushion category content | Active |
-| `static/subcats/ramper.html` | Ramp category content | Active |
-| `static/subcats/toilettet.html` | Toilet-aid category content | Active |
+| [storefront/cms-snippets/active/subcats/badestole.html](../storefront/cms-snippets/active/subcats/badestole.html) | Bath-chair category content | Active |
+| [storefront/cms-snippets/active/subcats/dæk-punkterfri.html](../storefront/cms-snippets/active/subcats/dæk-punkterfri.html) | Puncture-free tyre category content | Active |
+| [storefront/cms-snippets/active/subcats/dæk.html](../storefront/cms-snippets/active/subcats/dæk.html) | Tyre category content | Active |
+| [storefront/cms-snippets/active/subcats/forhjul.html](../storefront/cms-snippets/active/subcats/forhjul.html) | Front-wheel category content | Active |
+| [storefront/cms-snippets/active/subcats/kørestole.html](../storefront/cms-snippets/active/subcats/kørestole.html) | Wheelchair category content | Active |
+| [storefront/cms-snippets/active/subcats/puder.html](../storefront/cms-snippets/active/subcats/puder.html) | Cushion category content | Active |
+| [storefront/cms-snippets/active/subcats/ramper.html](../storefront/cms-snippets/active/subcats/ramper.html) | Ramp category content | Active |
+| [storefront/cms-snippets/active/subcats/toilettet.html](../storefront/cms-snippets/active/subcats/toilettet.html) | Toilet-aid category content | Active |
 
 ## Reusable templates
 
 | Current file | Purpose | Status |
 | --- | --- | --- |
-| `static/templates/confirmationMail.html` | Order confirmation email template | Active |
-| `static/templates/corfirmationLines.html` | Confirmation line-item template; filename contains a typo | Active |
-| `static/templates/product-info-table.html` | Product specification table template | Active |
-| `static/templates/video-wrapper.html` | Embedded product video wrapper | Active |
+| [storefront/cms-snippets/active/templates/confirmationMail.html](../storefront/cms-snippets/active/templates/confirmationMail.html) | Order confirmation email template | Active |
+| [storefront/cms-snippets/active/templates/corfirmationLines.html](../storefront/cms-snippets/active/templates/corfirmationLines.html) | Confirmation line-item template; filename contains a typo | Active |
+| [storefront/cms-snippets/active/templates/product-info-table.html](../storefront/cms-snippets/active/templates/product-info-table.html) | Product specification table template | Active |
+| [storefront/cms-snippets/active/templates/video-wrapper.html](../storefront/cms-snippets/active/templates/video-wrapper.html) | Embedded product video wrapper | Active |

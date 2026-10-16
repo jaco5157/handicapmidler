@@ -109,7 +109,7 @@ The remote workflow destination is `assets/`. Phase 2 must preserve both generat
 - Catalogue-audit scripts point to nonexistent `productService/generated` paths and have no pinned dependency set.
 - Referral reporting uses a fixed relative input path.
 - The manual image script deletes all content under `./Compress/` after processing.
-- Every tracked file under `static/` lacks a verified live CMS mapping. All are quarantined administratively in the CMS manifest until manual verification.
+- At baseline capture, every tracked file under `static/` lacked a verified live CMS mapping. Manual verification is now complete as recorded below.
 
 ## Phase 1 exit record
 
@@ -125,4 +125,4 @@ The remote workflow destination is `assets/`. Phase 2 must preserve both generat
 - [x] All tracked files under `static/` entered in the CMS manifest
 - [x] CMS live locations manually verified
 
-CMS live-location verification remains a Phase 4 promotion check.
+CMS live-location verification is complete; current source paths are listed in the [CMS manifest](CMS-MANIFEST.md).

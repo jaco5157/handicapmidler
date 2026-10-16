@@ -12,4 +12,8 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" PrivateAssets="all" />
     <ProjectReference Include="../InventoryService.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="../../../reference/inventory/*.LST;../../../reference/inventory/exclude.txt"
+             Link="Fixtures/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

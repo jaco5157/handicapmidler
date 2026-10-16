@@ -57,7 +57,7 @@ Commands use the current repository paths. The Phase 1 baseline retains historic
 - Build with `.NET 8`: `dotnet build services/inventory-sync/InventoryService.csproj --configuration Release`.
 - Test: `dotnet test services/inventory-sync/tests/InventoryService.Tests.csproj --configuration Release`.
 - Invoke with explicit paths as shown in the [inventory README](../services/inventory-sync/README.md). Lowercase input filenames are retained; no repository working directory is inferred.
-- Do not test with live supplier snapshots in Git. Use temporary controlled files with these formats:
+- Use the tracked [synthetic inventory fixtures](../reference/inventory/README.md), not live supplier snapshots. The tests copy them to a temporary directory. Formats:
   - `varer.LST`: product ID and product number, separated by `;`.
   - `lagerbehold.LST`: product ID and integer stock count, separated by `;`.
   - `lagerbevaeg.LST`: product ID, description, `dd-MM-yy` date, and integer movement amount.
@@ -139,6 +139,7 @@ Compare output filenames first and hashes only when source content has not inten
 
 ## CMS snippets
 
+- **Sources:** `storefront/cms-snippets/active/subcats/` and `storefront/cms-snippets/active/templates/`; all 12 required files are listed in the [CMS manifest](CMS-MANIFEST.md).
 - **Trigger/destination:** Manual installation into a verified DanDomain CMS location.
 - **Required access:** DanDomain administrator credentials; do not store them in this repository.
 - **Verification:** Confirm live usage and inspect the affected page at desktop and mobile widths.

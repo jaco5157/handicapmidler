@@ -6,7 +6,7 @@ FastAPI service for creating webshop product import XML from a supplier product 
 
 1. Scrapes title, HMI number, product number, and images from a Mobilex product URL.
 2. Lets the user edit product fields, SEO fields, image filenames/alt text, image order/primary image, descriptions, and specs.
-3. Generates a webshop product XML file matching the existing [reference export](../../export.xml) structure.
+3. Generates a webshop product XML file matching the existing [reference export](../../reference/dandomain/product-export-example.xml) structure.
 4. Downloads renamed images and creates the four webshop variants used by the [manual image tool](../../tools/image-prep/README.md):
    - `name-p.jpg`
    - `name.jpg`

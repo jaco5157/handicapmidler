@@ -36,11 +36,10 @@ public class InventoryTests : IDisposable
     {
         var input = Path.Combine(directory, "supplier");
         Directory.CreateDirectory(input);
-        File.WriteAllText(Path.Combine(input, "varer.LST"), "1;BASELINE-001\n2;BASELINE-002\n3;3020S8\n");
-        File.WriteAllText(Path.Combine(input, "lagerbehold.LST"), "1;7\n2;0\n3;99\n");
-        File.WriteAllText(Path.Combine(input, "lagerbevaeg.LST"), "2;;15-10-26;5\n");
-        var exclusions = Path.Combine(directory, "exclude.txt");
-        File.WriteAllText(exclusions, "3020S8\n");
+        var fixtures = Path.Combine(AppContext.BaseDirectory, "Fixtures");
+        foreach (var fixture in Directory.GetFiles(fixtures, "*.LST"))
+            File.Copy(fixture, Path.Combine(input, Path.GetFileName(fixture)));
+        var exclusions = Path.Combine(fixtures, "exclude.txt");
         var output = Path.Combine(directory, "upload", "document.xml");
 
         var items = new CSVDataProvider(input).GetInventoryItems();

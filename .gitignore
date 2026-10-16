@@ -8,6 +8,7 @@ components
 **/.idea/**/*
 *test.sh
 /data/
+/inventory/
 **/generated
 **/.venv/
 **/venv/
@@ -22,6 +23,7 @@ TestResults/
 storefront/assets/*.min.js
 storefront/assets/*.min.css
 services/inventory-sync/data/
+reference/inventory/*.xml
 tools/reporting/referrals/private/
 tools/reporting/referrals/output/
 tools/image-prep/input/
