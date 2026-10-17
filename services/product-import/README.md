@@ -55,7 +55,7 @@ The recommended production setup is:
 2. Use Tailscale Serve for private tailnet HTTPS access.
 3. Enable app authentication with a strong password.
 
-The Compose files bind port 8000 to `127.0.0.1`, so remote access should go through Tailscale Serve or another private reverse proxy running on the same host.
+Development Compose binds `127.0.0.1:8765`; production Compose binds `127.0.0.1:8000`. Remote access should go through Tailscale Serve or another private reverse proxy running on the same host.
 
 Generate an app password hash from this directory:
 

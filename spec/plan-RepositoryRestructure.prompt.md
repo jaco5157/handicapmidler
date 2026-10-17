@@ -6,11 +6,11 @@ Keep one repository, but reorganize it around clear deployment and ownership bou
 
 | Phase | Status |
 | --- | --- |
-| 1 | Complete: baseline and CMS inventory recorded. |
+| 1 | Implemented: baseline and CMS inventory recorded. |
 | 2 | Implemented: steps 6-8 and local verification pass. Production workflow dispatches and DietPi host migration remain pending. |
 | 3 | Implemented: steps 9-11, pinned dependencies, explicit paths, data-safety fixes and focused tests are complete. |
 | 4 | Implemented: XML examples relocated and classified, synthetic inventory fixtures tested, supplier snapshots untracked, and all 12 verified CMS files moved unchanged. The confirmed logo copy matches the original. |
-| 5 | Move-specific ignore rules and active documentation updated. Final integration and cleanup remain pending, including production verification. |
+| 5 | Implemented locally: steps 16-19 and integration checks pass. Step 20 is reserved for the repository owner. Production workflow dispatches and DietPi host verification remain pending. |
 
 Verified 2026-10-15: product import **60 passed, 2 warnings** before and after relocation, in Docker and the recreated native environment; Compose build/start, `/health` **HTTP 200**, UI, dry-run XML/image preview and the relocated persistent mount pass. Inventory build and **8 tests** pass, including semantic baseline XML, exclusions and delivery dates. Both minified filenames and SHA-256 hashes match the October 1 baseline. Catalogue audit **6 tests** (including a live browser smoke), reporting **4 tests**, and image preparation **3 tests** plus real ImageMagick/Caesium processing pass. Workflow syntax and ignore checks pass. No production uploads or workflow dispatches were performed.
 
@@ -22,6 +22,12 @@ Phase 4 implementation (2026-10-16):
 - **Step 15:** The owner confirms `graphics/handicapmidler.svg` is the current store logo. An unchanged copy is retained at `storefront/assets/handicapmidler.svg` for the existing asset deployment; the original remains in `graphics/`.
 
 Phase 4 verification: inventory Release build and **8 tests** pass; controlled CLI generation produces valid XML with two products. Both relocated XML examples parse. All 12 CMS snippets, both XML examples and the logo copy pass byte-identity checks. Documentation links, ignore rules and whitespace checks pass; the four untracked inventory data files remain unchanged locally. No commits, workflow dispatches or production changes were performed.
+
+Phase 5 local verification (2026-10-17):
+
+- **Steps 16-19:** Ignore rules exclude local scratch/downloaded assets without deleting them. Operational references and component commands are current; historical baseline, provenance and DietPi migration paths are retained intentionally. The empty legacy `scripts/` directory is removed. No ignored artifacts are tracked, and all 50 local documentation links resolve.
+- **Integration:** Product import passes **60 tests, 2 existing warnings** in both native and rebuilt Docker environments. Isolated Compose build/start, health/UI HTTP 200, dry-run XML and four JPEG variants, and persistence across container recreation pass. Inventory builds with four existing nullable warnings and passes **8 tests** plus controlled CLI generation. Catalogue audit passes **6 tests** including the live browser smoke, reporting **4 tests**, and image preparation **3 tests**. Minified filenames and hashes match the October 1 baseline. Workflow YAML and shell syntax checks pass; FTP destinations are unchanged.
+- **Remaining:** Step 20 Git operations belong to the repository owner. Production workflow dispatches and DietPi migration/verification still require separate authorization and access; no production uploads or server changes were performed.
 
 ## Target organization
 
@@ -153,7 +159,7 @@ Steps 9–11 can proceed in parallel after the baseline is captured.
 
 19. Update every component README with exact setup, test and deployment commands.
 
-20. Merge the migration as a sequence of focused commits:
+20. Repository owner only: review, commit and merge the migration as a sequence of focused commits. The assistant does not stage, commit, merge or push:
 
     1. Documentation and CMS manifest
     2. Storefront assets and workflow

@@ -84,13 +84,18 @@ Commands use the current repository paths. The Phase 1 baseline retains historic
 
 The workflow runs `devatherock/minify-js:1.0.3` with `directory: storefront/assets`. Both nonempty `javascripts.min.js` and `styles.min.css` must exist before FTP runs. Generated files are ignored and must not be committed.
 
-From the repository root:
+From the repository root, verify a temporary copy of the three deployment sources so local scratch files are not processed:
 
 ```sh
-docker run --rm -v "$PWD:/github/workspace" -w /github/workspace \
+asset_check="$(mktemp -d)"
+mkdir -p "$asset_check/storefront/assets"
+cp storefront/assets/javascripts.js storefront/assets/styles.css \
+  storefront/assets/handicapmidler.svg "$asset_check/storefront/assets/"
+docker run --rm -v "$asset_check:/github/workspace" -w /github/workspace \
   -e INPUT_DIRECTORY=storefront/assets devatherock/minify-js:1.0.3
-test -s storefront/assets/javascripts.min.js
-test -s storefront/assets/styles.min.css
+test -s "$asset_check/storefront/assets/javascripts.min.js"
+test -s "$asset_check/storefront/assets/styles.min.css"
+rm -r "$asset_check"
 ```
 
 Compare output filenames first and hashes only when source content has not intentionally changed.

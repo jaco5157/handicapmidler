@@ -22,6 +22,8 @@ components
 TestResults/
 storefront/assets/*.min.js
 storefront/assets/*.min.css
+storefront/assets/*.tmp.css
+storefront/assets/www.handicapmidler.dk/
 services/inventory-sync/data/
 reference/inventory/*.xml
 tools/reporting/referrals/private/
