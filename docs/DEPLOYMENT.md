@@ -1,6 +1,6 @@
 # Build, deployment, and rollback runbook
 
-Commands use the current repository paths. The Phase 1 baseline retains historical paths for comparison.
+Commands run from the repository root unless a service directory is specified.
 
 ## Product import
 

@@ -11,7 +11,7 @@ dotnet build services/inventory-sync/InventoryService.csproj --configuration Rel
 dotnet test services/inventory-sync/tests/InventoryService.Tests.csproj --configuration Release
 ```
 
-Tests copy the [synthetic reference fixtures](../../reference/inventory/README.md) into a temporary directory and compare XML semantics with the Phase 1 baseline, including exclusions and delivery dates. The fixture README also provides a local generation command.
+Tests copy the [synthetic reference fixtures](../../reference/inventory/README.md) into a temporary directory and verify generated XML semantics, including stock counts, exclusions and delivery dates. The fixture README also provides a local generation command.
 
 ## Run
 

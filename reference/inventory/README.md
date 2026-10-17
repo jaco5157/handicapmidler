@@ -1,6 +1,6 @@
 # Synthetic inventory fixtures
 
-Created 2026-10-16 from the controlled Phase 1 baseline scenario, not supplier snapshots. All product numbers are synthetic; the excluded item uses `BASELINE-EXCLUDED` instead of a real product number.
+Created 2026-10-16 as synthetic test inputs, not supplier snapshots. All product numbers are synthetic; the excluded item uses `BASELINE-EXCLUDED` instead of a real product number.
 
 | File | Semicolon-delimited columns |
 | --- | --- |
@@ -9,7 +9,7 @@ Created 2026-10-16 from the controlled Phase 1 baseline scenario, not supplier s
 | `lagerbevaeg.LST` | Product ID; description; `dd-MM-yy` date; integer movement |
 | `exclude.txt` | One excluded synthetic product number per line |
 
-The three products cover stock 7 without movements, stock 0 with a +5 movement on 2026-10-15, and stock 99 excluded from the output. The [inventory tests](../../services/inventory-sync/tests/InventoryTests.cs) consume these files and compare generated XML semantically with the Phase 1 baseline.
+The three products cover stock 7 without movements, stock 0 with a +5 movement on 2026-10-15, and stock 99 excluded from the output. The [inventory tests](../../services/inventory-sync/tests/InventoryTests.cs) consume these files and verify generated XML semantics, including stock counts, exclusions and delivery dates.
 
 From the repository root, generate local XML without an upload:
 

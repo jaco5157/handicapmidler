@@ -1,8 +1,8 @@
 # DanDomain CMS snippet manifest
 
-All 12 files below are **Active (required)** and must be retained during restructuring. Their live usage is manually verified in the [Phase 1 exit record](PHASE-1-BASELINE.md#phase-1-exit-record).
+All 12 files below are **Active (required)** and must be retained. Their live usage has been manually verified.
 
-## Migration rules
+## Retention rules
 
 - `Active` records required content, not verified live usage.
 - Verify live usage before moving a file to `storefront/cms-snippets/active`.

@@ -1,6 +1,6 @@
 # Handicapmidler webshop monorepo
 
-Applications, integrations, storefront assets, CMS snippets, and operational tools for Handicapmidler.dk. The repository is being reorganized around deployment and ownership boundaries; current and target paths are documented in [Architecture](docs/ARCHITECTURE.md).
+Applications, integrations, storefront assets, CMS snippets, and operational tools for Handicapmidler.dk. Deployment and ownership boundaries are documented in [Architecture](docs/ARCHITECTURE.md).
 
 ## Production services
 
@@ -36,7 +36,6 @@ Do not commit secrets, new production exports, supplier snapshots, generated rep
 
 - [Architecture and component boundaries](docs/ARCHITECTURE.md)
 - [Build, deployment, verification, and rollback runbook](docs/DEPLOYMENT.md)
-- [Phase 1 baseline](docs/PHASE-1-BASELINE.md)
 - [DanDomain CMS snippet manifest](docs/CMS-MANIFEST.md)
 - [Product-import deployment to DietPi](services/product-import/DEPLOY_DIETPI.md)
 

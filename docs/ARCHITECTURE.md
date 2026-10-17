@@ -1,6 +1,6 @@
 # Repository architecture
 
-This repository is the monorepo for Handicapmidler.dk integrations, storefront assets, CMS snippets, and operational utilities. Production components, tools, reference data and verified CMS content use their restructured paths.
+This repository is the monorepo for Handicapmidler.dk integrations, storefront assets, CMS snippets, and operational utilities. Production components, tools, reference data and manually installed CMS content are separated by deployment and ownership boundaries.
 
 ## System context
 
@@ -93,7 +93,7 @@ flowchart LR
 - **Invocation:** Manual review and installation in DanDomain; no automated deployment exists.
 - **Inputs/outputs:** Repository snippets are manually copied to their verified DanDomain page, template, or component location.
 - **Secrets:** DanDomain administrator access, managed outside this repository.
-- **Control:** [CMS manifest](CMS-MANIFEST.md) records all 12 required files. Live-location verification is recorded in the [Phase 1 exit record](PHASE-1-BASELINE.md#phase-1-exit-record). Retain all files; later removal requires explicit approval and separate review.
+- **Control:** [CMS manifest](CMS-MANIFEST.md) records all 12 required files and their verified live usage. Retain all files; later removal requires explicit approval and separate review.
 
 ### Brand source
 
