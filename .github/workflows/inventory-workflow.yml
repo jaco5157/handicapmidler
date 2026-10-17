@@ -10,20 +10,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get codebase
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
 
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Test inventory generation
+        run: dotnet test services/inventory-sync/tests/InventoryService.Tests.csproj --configuration Release
+
       - name: Download inventory files
+        env:
+          FTP_SERVER: ${{ secrets.ftp_server }}
+          FTP_USERNAME: ${{ secrets.ftp_username }}
+          FTP_PASSWORD: ${{ secrets.ftp_password }}
         run: |
-          mkdir data
-          curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/LAGERBEHOLD.LST --user "${{ secrets.ftp_username }}":"${{ secrets.ftp_password }}" -v -o data/lagerbehold.LST
-          curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/LAGERBEVAEG.LST --user "${{ secrets.ftp_username }}":"${{ secrets.ftp_password }}" -v -o data/lagerbevaeg.LST
-          curl ${{ secrets.ftp_server }}/images/ImportExport/Inventory/VARER.LST --user "${{ secrets.ftp_username }}":"${{ secrets.ftp_password }}" -v -o data/varer.LST
-          readlink -f data/varer.LST
+          mkdir -p "$RUNNER_TEMP/inventory-input"
+          for name in LAGERBEHOLD LAGERBEVAEG VARER; do
+            curl --fail --silent --show-error "$FTP_SERVER/images/ImportExport/Inventory/$name.LST" \
+              --user "$FTP_USERNAME:$FTP_PASSWORD" -o "$RUNNER_TEMP/inventory-input/${name,,}.LST"
+          done
 
       - name: Dotnet run
-        run: dotnet run --project scripts/InventoryService/InventoryService.csproj
+        run: |
+          dotnet run --project services/inventory-sync/InventoryService.csproj --configuration Release -- \
+            --input-dir "$RUNNER_TEMP/inventory-input" \
+            --output-file "$RUNNER_TEMP/inventory-upload/document.xml" \
+            --exclude-file "$GITHUB_WORKSPACE/services/inventory-sync/exclude.txt"
+          test -s "$RUNNER_TEMP/inventory-upload/document.xml"
         
       - name: Sync inventory file
         uses: SamKirkland/FTP-Deploy-Action@4.2.0
@@ -31,7 +48,7 @@ jobs:
           server: ${{ secrets.ftp_server }}
           username: ${{ secrets.ftp_username }}
           password: ${{ secrets.ftp_password }}
-          local-dir: ./data/
+          local-dir: ${{ runner.temp }}/inventory-upload/
           server-dir: images/ImportExport/Inventory/Updated/
 
       - name: Update Inventory
