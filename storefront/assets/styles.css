@@ -397,11 +397,8 @@ span.logo span {
     height: 48px;
     float: right;
     overflow: hidden;
-    -webkit-transition: width var(--hm-duration-normal);
-    -moz-transition: width var(--hm-duration-normal);
     transition: width var(--hm-duration-normal);
     backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
 }
 
 #search .SearchField_SearchPage {
@@ -435,8 +432,6 @@ span.logo span {
     z-index: 90;
     border-radius: var(--hm-radius-pill);
     cursor: pointer;
-    -webkit-transition: border-radius var(--hm-duration-normal);
-    -moz-transition: border-radius var(--hm-duration-normal);
     transition: border-radius var(--hm-duration-normal);
     background: url("/images/logo/sprites.svg#search") no-repeat 17px 17px var(--hm-color-orange);
     background-size: 16px;
@@ -472,8 +467,6 @@ span.logo span {
 
 /* =================== LEFTCOL CATEGORYES =================== */
 #categoryes {
-    -moz-box-shadow: 0 10px 6px -6px var(--hm-color-shadow);
-    -webkit-box-shadow: 0 10px 6px -6px var(--hm-color-shadow);
     box-shadow: 0 10px 6px -6px var(--hm-color-shadow);
 }
 
@@ -715,9 +708,6 @@ select:focus,
     transform: rotate(225deg);
     display: block;
     margin: 0 auto 3px;
-}
-
-.color-picker .variant-color {
     --hvid: #fff;
     --sort: #000;
     --antrasit-grå: #383e42;
@@ -868,7 +858,7 @@ select:focus,
 }
 
 .amountWrapper button {
-    -webkit-appearance: none;
+    appearance: none;
     background-color: transparent;
     border: none;
     width: 40px;
@@ -1361,39 +1351,33 @@ figure img {
 }
 
 .payment {
-    border: 5px solid var(--hm-color-blue);
-}
-
-.payment .textbox-header {
-    background-color: var(--hm-color-blue);
-}
-
-.payment .textbox-header .textbox-logo {
-    border-color: var(--hm-color-blue)
+    --hm-textbox-accent: var(--hm-color-blue);
 }
 
 .delivery {
-    border: 5px solid var(--hm-color-green);
-}
-
-.delivery .textbox-header {
-    background-color: var(--hm-color-green);
-}
-
-.delivery .textbox-header .textbox-logo {
-    border-color: var(--hm-color-green)
+    --hm-textbox-accent: var(--hm-color-green);
 }
 
 .help {
-    border: 5px solid var(--hm-color-orange);
+    --hm-textbox-accent: var(--hm-color-orange);
 }
 
+.payment,
+.delivery,
+.help {
+    border: 5px solid var(--hm-textbox-accent);
+}
+
+.payment .textbox-header,
+.delivery .textbox-header,
 .help .textbox-header {
-    background-color: var(--hm-color-orange);
+    background-color: var(--hm-textbox-accent);
 }
 
+.payment .textbox-header .textbox-logo,
+.delivery .textbox-header .textbox-logo,
 .help .textbox-header .textbox-logo {
-    border-color: var(--hm-color-orange)
+    border-color: var(--hm-textbox-accent);
 }
 
 .textbox-content {
@@ -1572,7 +1556,7 @@ button.TextInputField_OrderStep1 {
 .SubmitButton_OrderStep1_Position,
 .SubmitButton_OrderStep2_Position,
 .SubmitButton_OrderStep3_Position {
-    border: var(--hm-color-green);
+    border: none;
     width: 170px;
     background-color: var(--hm-color-green);
     color: var(--hm-color-white);
@@ -1619,7 +1603,8 @@ button.TextInputField_OrderStep1 {
 #PayMethodsContainer .checkout-payment-method,
 #ShippingMethod_54,
 #ShippingMethod_55,
-#ShippingMethod_56 #ShippingMethod_57,
+#ShippingMethod_56,
+#ShippingMethod_57,
 #GLS_ParselShops_55 tr {
     cursor: pointer;
 }
@@ -1812,6 +1797,11 @@ button.TextInputField_OrderStep1 {
     border: 1px solid var(--hm-color-border);
 }
 
+.faq details summary:focus-visible {
+    outline: 2px solid var(--hm-color-blue);
+    outline-offset: 2px;
+}
+
 .faq details summary::after {
     content: "+";
     position: absolute;
@@ -1823,7 +1813,6 @@ button.TextInputField_OrderStep1 {
     background-color: var(--hm-color-border);
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
-    outline: 0;
 }
 
 .faq details[open] summary::after {
@@ -1901,7 +1890,7 @@ footer #copyright #rights {
 }
 
 /* =================== MEDIA =================== */
-@media only screen and (max-width: 800px) {
+@media only screen and (width < 800px) {
     #leftcol #categoryes #ProductMenu_List {
         display: none;
     }
@@ -2023,8 +2012,6 @@ footer #copyright #rights {
         padding: 0 0 var(--hm-space-lg) 0;
         border-radius: var(--hm-radius-lg);
         margin: 0 0 var(--hm-space-xl) 0;
-        -moz-box-shadow: 0px 10px 6px -6px var(--hm-color-shadow);
-        -webkit-box-shadow: 0px 10px 6px -6px var(--hm-color-shadow);
         box-shadow: 0px 10px 6px -6px var(--hm-color-shadow);
         right: 0;
     }
@@ -2443,11 +2430,8 @@ footer #copyright #rights {
         margin: var(--hm-space-2xl) 0 8px
     }
 
-
-
     .textbox {
         border-radius: var(--hm-radius-sm);
-        background-color: var(--hm-color-white)
     }
 
     .videoOverlay {
