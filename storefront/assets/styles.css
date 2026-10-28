@@ -502,7 +502,7 @@ span.logo span {
     text-decoration: none;
     display: block;
     padding: 12px 18px;
-    transition: var(--hm-duration-normal);
+    transition: background-color var(--hm-duration-normal), box-shadow var(--hm-duration-normal), color var(--hm-duration-normal);
 }
 
 #ProductMenu_List a:hover {
@@ -629,7 +629,7 @@ select:focus,
     border-color: var(--hm-color-blue);
     box-shadow: 0 0 3px var(--hm-color-blue);
     outline: none;
-    transition: all var(--hm-duration-fast);
+    transition: border-color var(--hm-duration-fast), box-shadow var(--hm-duration-fast);
 }
 
 #ShippingMethod_55:hover~#GLS_ParselShops_55 {
@@ -907,7 +907,7 @@ select:focus,
 .tab-links {
     cursor: pointer;
     padding: var(--hm-space-md);
-    transition: var(--hm-duration-normal);
+    transition: background-color var(--hm-duration-normal);
     font-size: var(--hm-font-size-lg);
 }
 
@@ -990,19 +990,28 @@ select:focus,
     width: 100%;
 }
 
+.productlist-cols .ProductList_Custom_DIV form,
+.productlist-cols .CustomersAlsoBought_Custom_DIV form {
+    display: flex;
+}
+
 #rightcol .product {
+    display: flex;
+    flex-direction: column;
     text-align: center;
     background-color: var(--hm-color-white);
     border: 1px solid var(--hm-color-border);
-    margin: auto;
+    margin: 0 auto;
     width: 100%;
     max-width: 400px;
+    min-width: 0;
     border-radius: var(--hm-radius-sm);
     cursor: pointer;
 }
 
 .product .image {
     height: 240px;
+    flex-shrink: 0;
 }
 
 .product .image a {
@@ -1024,7 +1033,7 @@ select:focus,
 .product .image img {
     max-height: 100%;
     max-width: 100%;
-    transition: all var(--hm-duration-medium) ease-in-out;
+    transition: transform var(--hm-duration-medium) ease-in-out;
 }
 
 .productlist-cols .product:hover .image img {
@@ -1032,15 +1041,18 @@ select:focus,
 }
 
 .product .listprodinfo {
-    height: 173px;
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    min-height: 173px;
     position: relative;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
 .product .listprodinfo .prodheader {
-    height: 45px;
-    border-bottom: 1px dashed var(--hm-color-border);
+    min-height: 50px;
     margin: 0;
-    overflow: hidden;
     padding: 0 var(--hm-space-xs);
 }
 
@@ -1049,15 +1061,16 @@ select:focus,
     font-family: var(--hm-font-family-heading);
     font-weight: bold;
     text-decoration: none;
+    line-height: 1.25;
 }
 
 .product .listprodinfo .teasing {
     display: block;
-    overflow: hidden;
-    height: 95px;
+    min-height: 95px;
 }
 
 .product .listprodinfo .price {
+    margin-top: auto;
     font-weight: bold;
 }
 
@@ -1067,7 +1080,7 @@ select:focus,
 }
 
 .product .prodvar {
-    height: 40px
+    min-height: 40px;
 }
 
 .product .TextInputField_ProductList,
@@ -1099,7 +1112,7 @@ img.Related_BuyButton_IMG,
     border: 1px solid var(--hm-color-green);
     border-radius: var(--hm-radius-pill);
     font-size: var(--hm-font-size-xl);
-    transition: all var(--hm-duration-medium);
+    transition: background-color var(--hm-duration-medium), color var(--hm-duration-medium);
     cursor: pointer;
 }
 
@@ -1942,7 +1955,7 @@ footer #copyright #rights {
     .usp {
         flex: 1;
         text-align: center;
-        transition: all var(--hm-duration-medium);
+        transition: background-color var(--hm-duration-medium);
     }
 
     .usp:hover {
@@ -2109,7 +2122,7 @@ footer #copyright #rights {
         background: var(--hm-color-surface);
         width: 50px;
         height: 35px;
-        transition: background var(--hm-duration-slow) ease;
+        transition: background-color var(--hm-duration-slow) ease;
         position: relative;
         vertical-align: middle
     }
@@ -2126,7 +2139,7 @@ footer #copyright #rights {
         height: 3px;
         border-radius: 2px;
         background: #595959;
-        transition: all var(--hm-duration-fast) ease, background var(--hm-duration-slow) ease;
+        transition: transform var(--hm-duration-fast) ease, right var(--hm-duration-fast) ease, width var(--hm-duration-fast) ease, margin var(--hm-duration-fast) ease, background-color var(--hm-duration-slow) ease;
         top: 16px;
         right: 14px;
     }
@@ -2248,7 +2261,7 @@ footer #copyright #rights {
     footer #footermenu li:hover,
     footer #links li:hover {
         padding-left: 3px;
-        transition: var(--hm-duration-fast) ease
+        transition: padding-left var(--hm-duration-fast) ease;
     }
 
     .centerBox {
@@ -2443,5 +2456,20 @@ footer #copyright #rights {
 
     .mapResponsive {
         height: 500px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 1ms !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+    }
+
+    .productlist-cols .product:hover .image img {
+        transform: none;
     }
 }
