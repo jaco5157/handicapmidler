@@ -1,7 +1,10 @@
 :root {
     --hm-color-green: #78BD3F;
+    --hm-color-green-soft: #eff7e8;
     --hm-color-blue: #4583ed;
+    --hm-color-blue-soft: #ecf3fd;
     --hm-color-orange: #ff9100;
+    --hm-color-orange-soft: #fef3e4;
     --hm-color-danger: #721c24;
     --hm-color-white: #fff;
     --hm-color-black: #000000;
@@ -36,6 +39,8 @@
     --hm-radius-md: 10px;
     --hm-radius-lg: 15px;
     --hm-radius-pill: 40px;
+
+    --hm-shadow-sm: 0 1px 2px rgba(29, 29, 29, .06), 0 1px 3px rgba(29, 29, 29, .08);
 
     --hm-duration-fast: .15s;
     --hm-duration-medium: 200ms;
@@ -180,6 +185,11 @@ html {
 
 .border-box {
     box-sizing: border-box;
+}
+
+.box-shadow
+{
+    box-shadow: var(--hm-shadow-sm);
 }
 
 .flex-center,
@@ -1374,72 +1384,77 @@ figure img {
     height: auto;
 }
 
+.textbox-wrapper {
+    --gap: 16px;
+    gap: var(--gap);
+    margin-top: 16px;
+}
+
 .textbox {
-    float: left;
-    height: 100%;
     display: block;
+    box-sizing: border-box;
+    overflow: hidden;
+    font-size: 16px;
+    line-height: 1.6;
     background-color: var(--hm-color-white);
+    border-top: 4px solid var(--hm-textbox-accent, var(--hm-color-green));
+    border-radius: 20px;
 }
 
 .textbox-header {
-    height: 36px;
-    position: relative;
-    padding: 0 0 0 8px;
-    font-size: 1.1em;
-    font-weight: bold;
-    font-family: var(--hm-font-family-heading);
-    line-height: 34px
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px 0;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.25;
+    text-align: left;
 }
 
 .textbox-header .textbox-logo {
-    height: 46px;
-    width: 46px;
-    border: 4px solid;
-    border-radius: 30px;
-    position: absolute;
-    right: 5px;
-    bottom: 0;
-    padding: 3px;
-    background-color: var(--hm-color-white);
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: center;
+    align-items: center;
+    width: 56px;
+    height: 56px;
+    background-color: var(--hm-textbox-accent-soft, var(--hm-color-surface));
+    border-radius: 50%;
+}
+
+.textbox-header .textbox-logo img {
+    width: 40px;
+    height: 40px;
 }
 
 .payment {
     --hm-textbox-accent: var(--hm-color-blue);
+    --hm-textbox-accent-soft: var(--hm-color-blue-soft);
 }
 
 .delivery {
     --hm-textbox-accent: var(--hm-color-green);
+    --hm-textbox-accent-soft: var(--hm-color-green-soft);
 }
 
 .help {
-    --hm-textbox-accent: var(--hm-color-orange);
-}
-
-.payment,
-.delivery,
-.help {
-    border: 5px solid var(--hm-textbox-accent);
-}
-
-.payment .textbox-header,
-.delivery .textbox-header,
-.help .textbox-header {
-    background-color: var(--hm-textbox-accent);
-}
-
-.payment .textbox-header .textbox-logo,
-.delivery .textbox-header .textbox-logo,
-.help .textbox-header .textbox-logo {
-    border-color: var(--hm-textbox-accent);
+    --hm-textbox-accent: #f8991d;
+    --hm-textbox-accent-soft: var(--hm-color-orange-soft);
 }
 
 .textbox-content {
-    margin: 0 8px;
+    margin: 0;
+    padding: 8px 24px 24px;
+    text-align: left;
 }
 
 .creditcard {
+    display: block;
     max-width: 100%;
     height: auto;
+    margin: 4px 0;
 }
 
 .Text2_Frontpage {
@@ -2492,12 +2507,7 @@ footer #copyright #rights {
     }
 
     .textbox-wrapper {
-        height: 300px;
-        margin: var(--hm-space-2xl) 0 8px
-    }
-
-    .textbox {
-        border-radius: var(--hm-radius-sm);
+        margin-top: 24px;
     }
 
     .videoOverlay {
