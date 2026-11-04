@@ -1034,7 +1034,7 @@ select:focus,
 /* =================== VARELISTE =================== */
 .productlist-cols .ProductList_Custom_DIV,
 .productlist-cols .CustomersAlsoBought_Custom_DIV {
-    --gap: 12px;
+    --gap: 16px;
     gap: var(--gap);
 }
 
@@ -1080,7 +1080,7 @@ select:focus,
 }
 
 #rightcol .product.box-shadow:hover {
-    box-shadow: 0 18px 40px rgba(29, 29, 29, .14), 0 4px 10px rgba(29, 29, 29, .06);
+    box-shadow: 0 8px 18px rgba(29, 29, 29, .14), 0 4px 8px rgba(29, 29, 29, .08);
 }
 
 @media (prefers-reduced-motion: reduce) {
