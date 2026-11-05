@@ -196,6 +196,10 @@ html {
     box-shadow: var(--hm-shadow-sm);
 }
 
+.box-shadow-md {
+    box-shadow: var(--hm-shadow-md);
+}
+
 .flex-center,
 .productlist-cols .ProductList_Custom_DIV>div,
 .productlist-cols .CustomersAlsoBought_Custom_DIV>div {
@@ -738,10 +742,6 @@ select:focus,
     border-radius: var(--hm-radius-lg);
     border: 1px solid var(--hm-color-line);
     height: fit-content;
-}
-
-.product-info.box-shadow {
-    box-shadow: var(--hm-shadow-md);
 }
 
 .product-info .product-info-wrapper {
