@@ -892,18 +892,14 @@ select:focus,
 }
 
 .warning {
+    box-sizing: border-box;
     color: var(--hm-color-danger);
     background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: var(--hm-radius-sm);
-    margin: var(--hm-space-sm) 0 var(--hm-space-xs);
-}
-
-.product-info .warning {
-    box-sizing: border-box;
     padding: 10px 14px;
+    border: 1px solid #f5c6cb;
     border-left: 4px solid var(--hm-color-danger);
     border-radius: var(--hm-radius-field);
+    margin: var(--hm-space-sm) 0 var(--hm-space-xs);
 }
 
 .inventory-container {
