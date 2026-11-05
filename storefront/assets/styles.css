@@ -191,7 +191,7 @@ html {
     box-sizing: border-box;
 }
 
-.box-shadow
+.box-shadow-sm
 {
     box-shadow: var(--hm-shadow-sm);
 }
