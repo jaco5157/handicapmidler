@@ -412,7 +412,7 @@ span.logo span {
 
 #search {
     position: absolute;
-    top: 75px;
+    top: 88px;
     right: 0;
     width: 0%;
     min-width: 48px;
@@ -477,11 +477,11 @@ span.logo span {
 
 #cart {
     position: absolute;
-    top: 4px;
-    right: 52px;
+    top: 0px;
+    right: 48px;
     z-index: 5;
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     overflow: hidden;
     font-size: var(--hm-font-size-sm);
     background-color: var(--hm-color-green);
@@ -494,7 +494,7 @@ span.logo span {
 }
 
 #cart .Heading_Basket {
-    height: 40px;
+    height: 48px;
     padding: 0;
     text-align: center;
     background: url("/images/logo/sprites.svg#cart") no-repeat center / 20px;
@@ -511,14 +511,12 @@ span.logo span {
     align-items: center;
     justify-content: center;
     gap: var(--hm-space-sm);
-    width: calc(50% - 8px);
-    height: 40px;
-    margin: 4px;
+    width: 50%;
+    height: 48px;
     font-size: 17px;
     font-weight: 700;
     line-height: 1;
     background-color: var(--hm-color-surface-alt);
-    border-radius: var(--hm-radius-pill);
     cursor: pointer;
     -webkit-user-select: none;
     user-select: none;
