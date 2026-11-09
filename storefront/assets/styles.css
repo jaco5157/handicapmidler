@@ -714,13 +714,11 @@ select:focus,
 #ShippingMethod_56:hover,
 #ShippingMethod_57:hover {
     border-color: var(--hm-color-blue);
-    box-shadow: 0 0 3px var(--hm-color-blue);
-    outline: none;
-    transition: border-color var(--hm-duration-fast), box-shadow var(--hm-duration-fast);
+    box-shadow: 0 0 0 1px var(--hm-color-blue);
 }
 
 #ShippingMethod_55:hover~#GLS_ParselShops_55 {
-    box-shadow: 0 3px 3px var(--hm-color-blue);
+    box-shadow: -1px 0 0 var(--hm-color-blue), 1px 0 0 var(--hm-color-blue), 0 1px 0 var(--hm-color-blue);
 }
 
 /* =================== VAREKORT =================== */
@@ -1911,9 +1909,7 @@ button.TextInputField_OrderStep1 {
     overflow: hidden;
 }
 
-.SubmitButton_OrderStep1,
-.SubmitButton_OrderStep2,
-.SubmitButton_OrderStep3 {
+.SubmitButton_OrderStep1 {
     border: 1px solid var(--hm-color-border);
     border-radius: var(--hm-radius-pill);
     background-color: var(--hm-color-surface);
@@ -1924,22 +1920,63 @@ button.TextInputField_OrderStep1 {
     height: 40px;
 }
 
-.SubmitButton_OrderStep1_Position,
-.SubmitButton_OrderStep2_Position,
-.SubmitButton_OrderStep3_Position {
+.SubmitButton_OrderStep1_Position {
     border: none;
     width: 170px;
     background-color: var(--hm-color-green);
     color: var(--hm-color-white);
 }
 
+.SubmitButton_OrderStep2,
+.SubmitButton_OrderStep3 {
+    box-sizing: border-box;
+    width: 130px;
+    height: 44px;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--hm-color-text);
+    background-color: var(--hm-color-white);
+    border: 1px solid var(--hm-color-field-border);
+    border-radius: var(--hm-radius-pill);
+    cursor: pointer;
+    transition: background-color var(--hm-duration-fast), border-color var(--hm-duration-fast), box-shadow var(--hm-duration-fast);
+}
+
+.SubmitButton_OrderStep2:hover,
+.SubmitButton_OrderStep3:hover {
+    background-color: var(--hm-color-surface-alt);
+    border-color: var(--hm-color-text);
+}
+
+.SubmitButton_OrderStep2_Position,
+.SubmitButton_OrderStep3_Position {
+    width: 170px;
+    color: var(--hm-color-white);
+    background-color: var(--hm-color-green);
+    border: none;
+}
+
+.SubmitButton_OrderStep2_Position:hover,
+.SubmitButton_OrderStep3_Position:hover {
+    background-color: #5e9e2e;
+    border-color: #5e9e2e;
+}
+
+#PayMethodsContainer,
+#PayMethodsContainer *,
+#ShippingMethodsContainer,
+#ShippingMethodsContainer * {
+    box-sizing: border-box;
+}
+
 .OrderStep2_PayMethods_Header_TD,
 .OrderStep2_PayMethods_TD,
 .OrderStep2_ShippingMethods_Header_TD,
 .OrderStep2_ShippingMethods_TD {
-    background-color: var(--hm-color-surface);
-    padding: var(--hm-space-sm);
-    border: 1px solid var(--hm-color-border);
+    background-color: var(--hm-color-surface-alt);
+    padding: var(--hm-space-sm) 16px;
+    border: 1px solid var(--hm-color-line);
     margin: 0 var(--hm-space-sm);
     display: block;
     box-sizing: border-box
@@ -1947,16 +1984,17 @@ button.TextInputField_OrderStep1 {
 
 .OrderStep2_PayMethods_Header_TD,
 .OrderStep2_ShippingMethods_Header_TD {
-    border-radius: var(--hm-radius-md) var(--hm-radius-md) 0 0;
+    border-radius: var(--hm-radius-lg) var(--hm-radius-lg) 0 0;
     border-bottom: 0;
     font-size: var(--hm-font-size-xl);
-    padding: var(--hm-space-lg) var(--hm-space-sm) 0 var(--hm-space-sm)
+    font-weight: 800;
+    padding: var(--hm-space-lg) 16px 0;
 }
 
 .OrderStep2_PayMethods_TD,
 .OrderStep2_ShippingMethods_TD {
     border-top: 0;
-    border-radius: 0 0 var(--hm-radius-md) var(--hm-radius-md)
+    border-radius: 0 0 var(--hm-radius-lg) var(--hm-radius-lg)
 }
 
 #PayMethodsContainer .checkout-payment-method,
@@ -1964,11 +2002,17 @@ button.TextInputField_OrderStep1 {
     background-color: var(--hm-color-white);
     margin: var(--hm-space-sm) 0 0;
     width: 100%;
-    padding: var(--hm-space-sm) 0;
-    border: 1px solid var(--hm-color-border);
-    border-radius: var(--hm-radius-sm);
+    padding: 12px 0;
+    border: 1px solid var(--hm-color-line);
+    border-radius: var(--hm-radius-md);
     overflow: hidden;
-    box-sizing: border-box
+    transition: border-color var(--hm-duration-fast), box-shadow var(--hm-duration-fast);
+}
+
+#PayMethodsContainer .checkout-payment-method img,
+#ShippingMethodsContainer tr img {
+    max-width: 100%;
+    height: auto;
 }
 
 #PayMethodsContainer .checkout-payment-method,
@@ -1991,9 +2035,9 @@ button.TextInputField_OrderStep1 {
 }
 
 #ShippingMethodsContainer #GLS_ParselShops_55 {
-    margin-top: -6px;
+    margin-top: -9px;
     border-top: 0;
-    border-radius: 0 0 var(--hm-radius-sm) var(--hm-radius-sm)
+    border-radius: 0 0 var(--hm-radius-md) var(--hm-radius-md)
 }
 
 #ShippingMethodsContainer .gls-parsel-shops--container {
@@ -2014,10 +2058,11 @@ button.TextInputField_OrderStep1 {
 .OrderStep3_AcceptTerms_2,
 .OrderStep3_ReadTerms {
     display: block;
-    background-color: var(--hm-color-surface);
-    padding: var(--hm-space-xs);
-    border: 1px solid var(--hm-color-border);
-    border-radius: var(--hm-radius-sm)
+    box-sizing: border-box;
+    background-color: var(--hm-color-surface-alt);
+    padding: 8px 12px;
+    border: 1px solid var(--hm-color-line);
+    border-radius: var(--hm-radius-md);
 }
 
 .basketLineHeader td {
@@ -2027,7 +2072,7 @@ button.TextInputField_OrderStep1 {
 
 .OrderStep3_ReadTerms {
     margin-top: var(--hm-space-lg);
-    border-radius: var(--hm-radius-sm) var(--hm-radius-sm) 0 0;
+    border-radius: var(--hm-radius-md) var(--hm-radius-md) 0 0;
     border-bottom: none
 }
 
@@ -2035,13 +2080,13 @@ button.TextInputField_OrderStep1 {
     border-radius: 0;
     border-top: none;
     border-bottom: none;
-    padding: 0 var(--hm-space-xs);
+    padding: 0 12px;
     font-weight: 700;
 }
 
 .OrderStep3_AcceptTerms_2 {
     margin-bottom: var(--hm-space-lg);
-    border-radius: 0 0 var(--hm-radius-sm) var(--hm-radius-sm);
+    border-radius: 0 0 var(--hm-radius-md) var(--hm-radius-md);
     border-top: none;
 }
 
@@ -2681,19 +2726,26 @@ footer #copyright #rights {
     }
 
     .Order_back_basket img,
-    .SubmitButton_OrderStep1,
-    .SubmitButton_OrderStep2,
-    .SubmitButton_OrderStep3 {
+    .SubmitButton_OrderStep1 {
         width: 170px;
         height: 42px;
     }
 
     .Basket_Order img,
-    .SubmitButton_OrderStep1_Position,
+    .SubmitButton_OrderStep1_Position {
+        width: 204px;
+        height: 42px;
+    }
+
+    .SubmitButton_OrderStep2,
+    .SubmitButton_OrderStep3 {
+        width: 170px;
+        height: 48px;
+    }
+
     .SubmitButton_OrderStep2_Position,
     .SubmitButton_OrderStep3_Position {
         width: 204px;
-        height: 42px;
     }
 
     .pagingOrder {
@@ -2803,7 +2855,7 @@ footer #copyright #rights {
     }
 
     .OrderStep2_ShippingMethods_Header_TD {
-        margin-top: -43px
+        margin-top: -53px
     }
 
     #who,
