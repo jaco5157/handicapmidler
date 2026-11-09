@@ -1909,58 +1909,39 @@ button.TextInputField_OrderStep1 {
     overflow: hidden;
 }
 
-.SubmitButton_OrderStep1 {
-    border: 1px solid var(--hm-color-border);
-    border-radius: var(--hm-radius-pill);
-    background-color: var(--hm-color-surface);
-    font-size: var(--hm-font-size-lg);
-    color: #202020;
-    cursor: pointer;
-    width: 130px;
-    height: 40px;
-}
-
-.SubmitButton_OrderStep1_Position {
-    border: none;
-    width: 170px;
-    background-color: var(--hm-color-green);
-    color: var(--hm-color-white);
-}
-
+.SubmitButton_OrderStep1,
 .SubmitButton_OrderStep2,
 .SubmitButton_OrderStep3 {
     box-sizing: border-box;
-    width: 130px;
+    width: var(--hm-order-button-width, 170px);
     height: 44px;
     font-family: inherit;
     font-size: 17px;
     font-weight: 700;
-    color: var(--hm-color-text);
-    background-color: var(--hm-color-white);
-    border: 1px solid var(--hm-color-field-border);
+    color: var(--hm-order-button-color, var(--hm-color-white));
+    background-color: var(--hm-order-button-background, var(--hm-color-green));
+    border: var(--hm-order-button-border, none);
     border-radius: var(--hm-radius-pill);
     cursor: pointer;
     transition: background-color var(--hm-duration-fast), border-color var(--hm-duration-fast), box-shadow var(--hm-duration-fast);
 }
 
+.SubmitButton_OrderStep1:hover,
 .SubmitButton_OrderStep2:hover,
 .SubmitButton_OrderStep3:hover {
-    background-color: var(--hm-color-surface-alt);
-    border-color: var(--hm-color-text);
+    background-color: var(--hm-order-button-hover-background, #5e9e2e);
+    border-color: var(--hm-order-button-hover-border, #5e9e2e);
 }
 
-.SubmitButton_OrderStep2_Position,
-.SubmitButton_OrderStep3_Position {
-    width: 170px;
-    color: var(--hm-color-white);
-    background-color: var(--hm-color-green);
-    border: none;
-}
-
-.SubmitButton_OrderStep2_Position:hover,
-.SubmitButton_OrderStep3_Position:hover {
-    background-color: #5e9e2e;
-    border-color: #5e9e2e;
+.BackButton_OrderStep1,
+.BackButton_OrderStep2,
+.SubmitButton_OrderStep3:not(.SubmitButton_OrderStep3_Position) {
+    --hm-order-button-width: 130px;
+    --hm-order-button-color: var(--hm-color-text);
+    --hm-order-button-background: var(--hm-color-white);
+    --hm-order-button-border: 1px solid var(--hm-color-field-border);
+    --hm-order-button-hover-background: var(--hm-color-surface-alt);
+    --hm-order-button-hover-border: var(--hm-color-text);
 }
 
 #PayMethodsContainer,
@@ -2725,27 +2706,27 @@ footer #copyright #rights {
         padding-top: 24px;
     }
 
-    .Order_back_basket img,
-    .SubmitButton_OrderStep1 {
+    .Order_back_basket img {
         width: 170px;
         height: 42px;
     }
 
-    .Basket_Order img,
-    .SubmitButton_OrderStep1_Position {
+    .Basket_Order img {
         width: 204px;
         height: 42px;
     }
 
+    .SubmitButton_OrderStep1,
     .SubmitButton_OrderStep2,
     .SubmitButton_OrderStep3 {
-        width: 170px;
+        width: var(--hm-order-button-width, 204px);
         height: 48px;
     }
 
-    .SubmitButton_OrderStep2_Position,
-    .SubmitButton_OrderStep3_Position {
-        width: 204px;
+    .BackButton_OrderStep1,
+    .BackButton_OrderStep2,
+    .BackButton_OrderStep3 {
+        --hm-order-button-width: 170px;
     }
 
     .pagingOrder {
