@@ -176,7 +176,6 @@ html {
 }
 
 .inline,
-.Text2_Frontpage,
 .Heading_Terms_Wrapper {
     display: inline-block
 }
@@ -1598,11 +1597,16 @@ figure img {
 /* =================== FORSIDE =================== */
 .frontpage #rightcol {
     padding: 0 0 var(--hm-space-lg);
-    background-color: var(--hm-color-white)
+    background-color: transparent;
+}
+
+.frontpage #rightcol.box-shadow-sm {
+    box-shadow: none;
 }
 
 .banner {
-    font-size: var(--hm-font-size-lg)
+    font-size: var(--hm-font-size-lg);
+    background-color: var(--hm-color-white);
 }
 
 .banner h1 span.logo {
@@ -1713,7 +1717,8 @@ figure img {
     margin: 4px 0;
 }
 
-.Text2_Frontpage {
+.top-products {
+    display: inline-block;
     background-color: var(--hm-color-white);
     border-radius: var(--hm-radius-lg);
     padding: var(--hm-space-lg)
@@ -2860,15 +2865,10 @@ footer #copyright #rights {
         overflow: hidden;
     }
 
-    .frontpage #rightcol {
-        background-color: transparent
-    }
-
     .banner {
         height: 500px;
         overflow: hidden;
         border-radius: var(--hm-radius-lg);
-        background-color: var(--hm-color-white)
     }
 
     .banner .text,
