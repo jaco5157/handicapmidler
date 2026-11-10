@@ -585,9 +585,7 @@ span.logo span {
     text-decoration: none;
 }
 
-#ProductMenu_List .Activ_ProductMenu,
-#ProductMenu_List .SubCategory1_Productmenu.active,
-#ProductMenu_List .SubCategory2_Productmenu.active {
+#ProductMenu_List .Activ_ProductMenu {
     color: var(--hm-color-blue-strong);
     font-weight: 700;
     background-color: var(--hm-color-blue-soft);
