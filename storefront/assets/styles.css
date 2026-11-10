@@ -43,6 +43,10 @@
     --hm-radius-lg: 15px;
     --hm-radius-pill: 40px;
 
+    --hm-button-height-sm: 24px;
+    --hm-button-height-md: 38px;
+    --hm-button-height-lg: 44px;
+
     --hm-shadow-sm: 0 1px 2px rgba(29, 29, 29, .06), 0 1px 3px rgba(29, 29, 29, .08);
     --hm-shadow-md: 0 6px 16px rgba(29, 29, 29, .08), 0 2px 4px rgba(29, 29, 29, .05);
 
@@ -112,6 +116,25 @@ body {
 
 html {
     scroll-behavior: smooth
+}
+
+button,
+input[type=button],
+input[type=submit],
+input[type=reset],
+input[type=image],
+[role=button],
+.cookie-policy-button,
+.knap {
+    box-sizing: border-box;
+    height: var(--hm-button-height-lg);
+    min-height: var(--hm-button-height-lg);
+}
+
+[role=button] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* =================== GUIDECLASSES =================== */
@@ -367,7 +390,7 @@ div.CookiePolicyText {
     font-size: var(--hm-font-size-lg);
     cursor: pointer;
     flex: 0 1 300px;
-    padding: var(--hm-space-sm);
+    padding: 0 var(--hm-space-sm);
     margin: var(--hm-space-xs);
 }
 
@@ -415,8 +438,8 @@ span.logo span {
     top: 88px;
     right: 0;
     width: 0%;
-    min-width: 48px;
-    height: 48px;
+    min-width: var(--hm-button-height-lg);
+    height: var(--hm-button-height-lg);
     float: right;
     overflow: hidden;
     transition: width var(--hm-duration-normal);
@@ -429,7 +452,8 @@ span.logo span {
     right: 0;
     border: 0px;
     width: 100% !important;
-    height: 48px;
+    height: var(--hm-button-height-lg);
+    min-height: var(--hm-button-height-lg);
     margin: 0;
     z-index: 10;
     padding: var(--hm-space-sm) 65px var(--hm-space-sm) var(--hm-space-lg);
@@ -445,8 +469,8 @@ span.logo span {
 }
 
 #search .nbsp {
-    width: 48px;
-    height: 48px;
+    width: var(--hm-button-height-lg);
+    height: var(--hm-button-height-lg);
     position: absolute;
     right: 0;
     top: 0;
@@ -478,10 +502,10 @@ span.logo span {
 #cart {
     position: absolute;
     top: 0px;
-    right: 48px;
+    right: var(--hm-button-height-lg);
     z-index: 5;
-    width: 48px;
-    height: 48px;
+    width: var(--hm-button-height-lg);
+    height: var(--hm-button-height-lg);
     overflow: hidden;
     font-size: var(--hm-font-size-sm);
     background-color: var(--hm-color-green);
@@ -494,7 +518,7 @@ span.logo span {
 }
 
 #cart .Heading_Basket {
-    height: 48px;
+    height: var(--hm-button-height-lg);
     padding: 0;
     text-align: center;
     background: url("/images/logo/sprites.svg#cart") no-repeat center / 20px;
@@ -512,7 +536,7 @@ span.logo span {
     justify-content: center;
     gap: var(--hm-space-sm);
     width: 50%;
-    height: 48px;
+    height: var(--hm-button-height-lg);
     font-size: 17px;
     font-weight: 700;
     line-height: 1;
@@ -995,6 +1019,8 @@ select:focus,
     box-sizing: border-box;
     border: 0;
     border-radius: 0;
+    height: var(--hm-button-height-lg);
+    min-height: var(--hm-button-height-lg);
     padding: 10px 4px;
     max-width: 56px;
     font-size: 18px;
@@ -1051,7 +1077,7 @@ select:focus,
 
 .buyWrapper input {
     max-width: 100%;
-    height: auto;
+    height: var(--hm-button-height-lg);
     width: 380px;
     border-radius: var(--hm-radius-pill);
     transition: transform var(--hm-duration-fast), box-shadow var(--hm-duration-fast);
@@ -1351,7 +1377,7 @@ select:focus,
     box-sizing: content-box;
     width: calc(100% - var(--hm-space-sm) - var(--hm-space-sm));
     max-width: 317px;
-    height: 44px;
+    height: var(--hm-button-height-lg);
     padding: var(--hm-space-sm);
 }
 
@@ -1359,9 +1385,10 @@ select:focus,
 img.BuyButton_ProductList,
 img.Related_BuyButton_IMG,
 .product .basket-button {
-    max-height: 40px;
+    box-sizing: border-box;
+    max-height: var(--hm-button-height-lg);
     width: 100%;
-    height: 100%;
+    height: var(--hm-button-height-lg);
 }
 
 .product .basket-button {
@@ -1415,7 +1442,8 @@ img.Related_BuyButton_IMG,
 }
 
 .productlistTable .BuyButton_ProductList {
-    height: 38px;
+    height: var(--hm-button-height-md);
+    min-height: var(--hm-button-height-md);
     vertical-align: middle;
 }
 
@@ -1516,12 +1544,13 @@ figure img {
 }
 
 .line-amount a {
+    box-sizing: border-box;
     display: inline-flex;
     flex-shrink: 0;
     justify-content: center;
     align-items: center;
-    width: 32px;
-    height: 32px;
+    width: var(--hm-button-height-sm);
+    height: var(--hm-button-height-sm);
     border: 1px solid var(--hm-color-field-border);
     border-radius: 50%;
     transition: background-color var(--hm-duration-fast);
@@ -1567,24 +1596,17 @@ figure img {
 
 .Order_back_basket img,
 .Basket_Order img {
+    height: var(--hm-button-height-md);
     border-radius: var(--hm-radius-pill);
     transition: transform var(--hm-duration-fast), box-shadow var(--hm-duration-fast);
 }
 
-.Order_back_basket img:hover,
-.Basket_Order img:hover {
-    box-shadow: 0 8px 16px -8px rgba(29, 29, 29, .5);
-    transform: translateY(-1px);
-}
-
 .Order_back_basket img {
     width: 130px;
-    height: 32px;
 }
 
 .Basket_Order img {
     width: 156px;
-    height: 32px;
 }
 
 .remaining {
@@ -1780,7 +1802,7 @@ figure img {
 }
 
 .subcat .info {
-    padding-bottom: calc(1.5em + 28px);
+    padding-bottom: calc(var(--hm-button-height-lg) + 16px);
 }
 
 .subcat .info p {
@@ -1797,10 +1819,14 @@ figure img {
 
 .subcat .more::after {
     content: "Læs mere \2192";
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    height: var(--hm-button-height-lg);
     position: absolute;
     right: var(--hm-space-lg);
     bottom: 16px;
-    padding: 6px 14px;
+    padding: 0 14px;
     font-size: var(--hm-font-size-md);
     font-weight: 700;
     color: var(--hm-color-blue-strong);
@@ -1864,6 +1890,8 @@ select.OptionSelect_OrderStep1 {
 
 button.TextInputField_OrderStep1 {
     width: 90px;
+    height: var(--hm-button-height-lg);
+    min-height: var(--hm-button-height-lg);
     margin-left: 0;
     border-radius: 0 var(--hm-radius-sm) var(--hm-radius-sm) 0;
     border: 1px solid var(--hm-color-border);
@@ -1914,7 +1942,7 @@ button.TextInputField_OrderStep1 {
 .SubmitButton_OrderStep3 {
     box-sizing: border-box;
     width: var(--hm-order-button-width, 170px);
-    height: 44px;
+    height: var(--hm-button-height-lg);
     font-family: inherit;
     font-size: 17px;
     font-weight: 700;
@@ -2435,7 +2463,7 @@ footer #copyright #rights {
 
     #search.SearchPage_TD .nbsp,
     #search.SearchPage_TD-open .nbsp {
-        background-position: 14px 16px;
+        background-position: center;
         border-radius: var(--hm-radius-sm) var(--hm-radius-pill) var(--hm-radius-pill) var(--hm-radius-sm);
     }
 
@@ -2525,7 +2553,7 @@ footer #copyright #rights {
 
     #cart #viewbasket .knap {
         display: block;
-        line-height: 44px;
+        line-height: var(--hm-button-height-lg);
         font-weight: 700;
         color: var(--hm-color-white);
         text-align: center;
@@ -2707,20 +2735,25 @@ footer #copyright #rights {
     }
 
     .Order_back_basket img {
-        width: 170px;
-        height: 42px;
+        height: var(--hm-button-height-lg);
+        width: 183px;
     }
 
     .Basket_Order img {
-        width: 204px;
-        height: 42px;
+        height: var(--hm-button-height-lg);
+        width: 220px;
+    }
+
+    .Order_back_basket img:hover,
+    .Basket_Order img:hover {
+        box-shadow: 0 8px 16px -8px rgba(29, 29, 29, .5);
+        transform: translateY(-1px);
     }
 
     .SubmitButton_OrderStep1,
     .SubmitButton_OrderStep2,
     .SubmitButton_OrderStep3 {
         width: var(--hm-order-button-width, 204px);
-        height: 48px;
     }
 
     .BackButton_OrderStep1,
