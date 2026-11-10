@@ -1080,11 +1080,10 @@ select:focus,
     height: var(--hm-button-height-lg);
     width: 380px;
     border-radius: var(--hm-radius-pill);
-    transition: transform var(--hm-duration-fast), box-shadow var(--hm-duration-fast);
+    transition: transform var(--hm-duration-fast);
 }
 
 .buyWrapper input:hover {
-    box-shadow: 0 10px 20px -8px rgba(94, 158, 46, .8);
     transform: translateY(-1px);
 }
 
@@ -1598,7 +1597,7 @@ figure img {
 .Basket_Order img {
     height: var(--hm-button-height-md);
     border-radius: var(--hm-radius-pill);
-    transition: transform var(--hm-duration-fast), box-shadow var(--hm-duration-fast);
+    transition: transform var(--hm-duration-fast);
 }
 
 .Order_back_basket img {
@@ -2746,7 +2745,6 @@ footer #copyright #rights {
 
     .Order_back_basket img:hover,
     .Basket_Order img:hover {
-        box-shadow: 0 8px 16px -8px rgba(29, 29, 29, .5);
         transform: translateY(-1px);
     }
 
