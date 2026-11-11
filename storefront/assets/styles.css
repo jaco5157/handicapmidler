@@ -448,7 +448,7 @@ span.logo span {
 
 #search {
     position: absolute;
-    top: 88px;
+    top: 83.5px;
     right: 0;
     width: 0%;
     min-width: var(--hm-button-height-lg);
