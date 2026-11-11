@@ -336,7 +336,6 @@ input[type=image],
 #cart #viewbasket,
 #ProductMenu_List #ActiveCategory_A,
 #ShippingMethodsContainer #GLS_ParselShops_54,
-.addon img,
 .amountWrapperHeadline,
 .documentation:empty,
 #ProductFilter-Container:empty,
@@ -1234,6 +1233,121 @@ select:focus,
 .documentation a img {
     width: 200px;
     height: 40px;
+}
+
+.Related_Custom_DIV {
+    border: 1px solid var(--hm-color-border);
+    border-radius: var(--hm-radius-sm);
+    background-color: var(--hm-color-white);
+}
+
+.Related_Custom_DIV div:not(:last-child) .addon {
+    border-bottom: 1px solid var(--hm-color-border);
+}
+
+.addon label {
+    display: flex;
+    align-items: center;
+    gap: var(--hm-space-sm);
+    min-width: 0;
+    padding: var(--hm-space-xs);
+    cursor: pointer;
+}
+
+.addon-checkbox {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+}
+
+.addon-check {
+    flex: 0 0 50px;
+    width: 50px;
+    height: 35px;
+    border: 1px solid var(--hm-color-border);
+    border-radius: var(--hm-radius-sm);
+    background: var(--hm-color-surface-alt);
+    transition: background-color var(--hm-duration-slow) ease;
+    position: relative;
+}
+
+.addon-check:hover {
+    background-color: var(--hm-color-surface);
+}
+
+.addon-check:after,
+.addon-check:before {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 3px;
+    border-radius: 2px;
+    background: #595959;
+    transition: transform var(--hm-duration-fast) ease, right var(--hm-duration-fast) ease, width var(--hm-duration-fast) ease, margin var(--hm-duration-fast) ease, background-color var(--hm-duration-slow) ease;
+    top: 16px;
+    right: 14px;
+}
+
+.addon-check:after {
+    transform: rotate(90deg);
+}
+
+.addon .addon-checkbox:checked~.addon-check {
+    background: var(--hm-color-green);
+    border: 1px solid var(--hm-color-green);
+}
+
+.addon .addon-checkbox:checked~.addon-check:before {
+    right: 10px;
+    transform: rotate(135deg);
+    background: var(--hm-color-white);
+}
+
+.addon .addon-checkbox:checked~.addon-check:after {
+    margin: 3px 13px 0 0;
+    width: 13px;
+    right: 12px;
+    transform: rotate(45deg);
+    background: var(--hm-color-white);
+}
+
+.addon .addon-checkbox:focus-visible~.addon-check {
+    outline: 2px solid var(--hm-color-blue);
+    outline-offset: 2px;
+}
+
+.addon-image {
+    display: flex;
+    flex: 0 0 34px;
+    align-items: center;
+    justify-content: center;
+}
+
+.addon img {
+    display: block;
+    flex: none;
+    width: 34px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.addon-name,
+.addon .RelatedProdName {
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.addon-price {
+    flex: none;
+    margin-left: auto;
+    white-space: nowrap;
+    text-align: right;
+    line-height: 40px;
 }
 
 /* =================== VARELISTE =================== */
@@ -2607,94 +2721,6 @@ footer #copyright #rights {
         padding: var(--hm-space-lg);
         border-radius: var(--hm-radius-lg);
         width: calc(100% - 300px);
-    }
-
-    .Related_Custom_DIV {
-        border: 1px solid var(--hm-color-border);
-        border-radius: var(--hm-radius-sm);
-        background-color: var(--hm-color-white)
-    }
-
-    .Related_Custom_DIV div:not(:last-child) .addon {
-        border-bottom: 1px solid var(--hm-color-border)
-    }
-
-    .addon label {
-        padding: var(--hm-space-xs);
-        display: block;
-        cursor: pointer
-    }
-
-    .addon-check {
-        display: inline-block;
-        border: 1px solid var(--hm-color-border);
-        border-radius: var(--hm-radius-sm);
-        background: var(--hm-color-surface-alt);
-        width: 50px;
-        height: 35px;
-        transition: background-color var(--hm-duration-slow) ease;
-        position: relative;
-        vertical-align: middle
-    }
-
-    .addon-check:hover {
-        background-color: var(--hm-color-surface)
-    }
-
-    .addon-check:after,
-    .addon-check:before {
-        content: "";
-        position: absolute;
-        width: 22px;
-        height: 3px;
-        border-radius: 2px;
-        background: #595959;
-        transition: transform var(--hm-duration-fast) ease, right var(--hm-duration-fast) ease, width var(--hm-duration-fast) ease, margin var(--hm-duration-fast) ease, background-color var(--hm-duration-slow) ease;
-        top: 16px;
-        right: 14px;
-    }
-
-    .addon-check:after {
-        transform: rotate(90deg)
-    }
-
-    .addon .addon-checkbox:checked~.addon-check {
-        background: var(--hm-color-green);
-        border: 1px solid var(--hm-color-green)
-    }
-
-    .addon .addon-checkbox:checked~.addon-check:before {
-        right: 10px;
-        transform: rotate(135deg);
-        background: var(--hm-color-white)
-    }
-
-    .addon .addon-checkbox:checked~.addon-check:after {
-        margin: 3px 13px 0 0;
-        width: 13px;
-        right: 12px;
-        transform: rotate(45deg);
-        background: var(--hm-color-white)
-    }
-
-    .addon img {
-        display: inline-block;
-        width: 34px;
-        vertical-align: middle;
-        margin: 0 var(--hm-space-sm);
-    }
-
-    .addon .RelatedProdName {
-        display: inline-block;
-        width: calc(100% - 200px);
-        height: 22px;
-        overflow: hidden;
-        vertical-align: middle;
-    }
-
-    .addon .addon-price {
-        float: right;
-        line-height: 40px;
     }
 
     .product-filter-column:nth-child(1) .product-filter-container {
